@@ -1,0 +1,23 @@
+{
+  "skill_name": "create-flow-documentation",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create flow documentation for Journey 2: Submitting a Talk. Andrea (speaker) needs to submit a talk proposal to an event's Call for Papers. Steps: 1) Lands on CfP page, 2) Creates account/logs in, 3) Fills title, abstract, uploads photo, 4) Adds co-speaker via invite link, 5) Submits proposal and receives confirmation email. Include edge cases: validation errors, co-speaker invite failures, file upload issues, duplicate submissions.",
+      "expected_output": "Complete flow document at docs/product/bounded-contexts/submission/flows/journey-02-submit-proposal.md with 3 Mermaid diagrams (sequence with error paths, flowchart, state diagram), step-by-step walkthrough table, Gherkin acceptance criteria, edge cases covering business/technical/validation failures, API specs, Zod schemas, and domain events",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Generate flow specification for Journey 3: Selection & Program Creation. Fernando (organizer) needs to close the CfP, rate sessions, select final talks, and assign schedule slots. The flow involves: closing CfP (status change to Voting), reviewing and scoring submissions, bulk updating status to Accepted, and assigning rooms/times. Include scenarios for: successful review submission, missing score validation, concurrent review conflicts, and schedule conflict detection.",
+      "expected_output": "Flow document with sequence diagram showing multi-step review workflow, flowchart with decision points for selection process, state diagram for Submission entity (SUBMITTED → UNDER_REVIEW → ACCEPTED/REJECTED), at least 3 error paths, and technical notes for review API endpoints",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Create flow spec for Journey 4: Acceptance & Logistics. After review period, Fernando publishes results and Andrea (speaker) receives acceptance notification and accesses travel info dashboard. Flow includes: publishing results (bulk status update), sending acceptance emails, speaker clicking email link, viewing travel guides, and confirming attendance. Edge cases: email delivery failures, speaker already confirmed, travel info not available, authentication issues.",
+      "expected_output": "Comprehensive flow document covering cross-context workflow (Submission, Communication, Speaker Dashboard), with proper state transitions, domain events (ResultsPublished, AttendanceConfirmed), and integration points for email service",
+      "files": []
+    }
+  ]
+}

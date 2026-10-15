@@ -1,0 +1,34 @@
+{
+  "name": "sdlc-skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Universal SDLC agent skills for real engineering: Lean Inception, Story Mapping, Flow Specs, DDD, TDD, ADR governance, and Living Documentation auditing.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/faparicior/sdlc-skills"
+  },
+  "license": "MIT",
+  "scripts": {
+    "link": "bash scripts/link-skills.sh",
+    "list": "bash scripts/list-skills.sh",
+    "changeset": "changeset",
+    "version": "changeset version"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1"
+  },
+  "keywords": [
+    "skills",
+    "agent-skills",
+    "sdlc",
+    "ddd",
+    "tdd",
+    "lean-inception",
+    "user-story-mapping",
+    "claude-code",
+    "codex",
+    "copilot",
+    "cursor",
+    "antigravity"
+  ]
+}

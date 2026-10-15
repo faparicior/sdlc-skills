@@ -1,0 +1,24 @@
+{
+  "name": "sdlc-skills",
+  "version": "0.1.0",
+  "description": "Universal SDLC agent skills for real engineering: Lean Inception, Story Mapping, Flow & Feature Specs, Domain-Driven Design (DDD), TDD implementation, ADR governance, and Living Documentation auditing. Plug-and-play across agents.",
+  "author": {
+    "name": "Fernando Aparicio",
+    "url": "https://github.com/faparicior"
+  },
+  "homepage": "https://github.com/faparicior/sdlc-skills",
+  "repository": "https://github.com/faparicior/sdlc-skills",
+  "license": "MIT",
+  "keywords": [
+    "sdlc",
+    "skills",
+    "tdd",
+    "ddd",
+    "lean-inception",
+    "user-story-mapping",
+    "adr",
+    "architecture",
+    "living-docs",
+    "engineering"
+  ]
+}

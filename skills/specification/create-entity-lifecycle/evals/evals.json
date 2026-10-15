@@ -1,0 +1,23 @@
+{
+  "skill_name": "create-entity-lifecycle",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create entity lifecycle documentation for the Event entity in the Event Bounded Context. This is the aggregate root for event management. States include: DRAFT, CFP_OPEN, CFP_CLOSED, VOTING, PUBLISHED, COMPLETED. Core methods: create(), publishCfp(), closeCfp(), reopenCfp(), publishSchedule(), complete(). It has a child entity CfpConfig.",
+      "expected_output": "Complete entity lifecycle document at docs/product/bounded-contexts/event/entities/event.md with state machine diagram, transition matrix, state definitions, and extracted business rules and invariants",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Generate entity lifecycle documentation for the Submission entity in the Submission Bounded Context. This is the aggregate root for speaker submissions. States include: DRAFT, SUBMITTED, UNDER_REVIEW, ACCEPTED, REJECTED, WITHDRAWN. Core methods: submit(), withdraw(), accept(), reject(). Related to Event entity via eventId.",
+      "expected_output": "Entity lifecycle document with complete state transitions, domain behavior, and at least 3 business rules and 3 invariants extracted",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Create entity lifecycle for CfpConfig (child entity of Event). This entity manages Call for Papers configuration. States: ACTIVE, CLOSED, REOPENED. Properties: startDate, endDate, maxSubmissions, requiresApproval. Must enforce invariant that endDate must be after startDate.",
+      "expected_output": "Child entity lifecycle with proper aggregate relationship documentation, state machine, and invariants for date validation",
+      "files": []
+    }
+  ]
+}
