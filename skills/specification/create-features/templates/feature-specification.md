@@ -7,7 +7,7 @@
 * **Status:** 📋 Planned | 🔄 In Progress | ✅ Complete
 * **Priority:** High | Medium | Low
 
-> **Architecture Reference**: See `AGENTS.md` (or `CLAUDE.md`) and `docs/ARCHITECTURE.md` for project folder layout, layer conventions, and verification commands.
+> **Architecture Reference**: See `AGENTS.md` (or `CLAUDE.md`) and the repo's architecture doc (e.g. `docs/ARCHITECTURE.md`) for project folder layout, layer conventions, and verification commands.
 
 ---
 
@@ -33,7 +33,7 @@
 ### Non-Functional Requirements
 - [ ] Performance: [e.g., API response <200ms]
 - [ ] Security: [e.g., authentication & authorization rules]
-- [ ] Architecture: [DDD layer rules from docs/ARCHITECTURE.md]
+- [ ] Architecture: [DDD layer rules from the repo's architecture doc]
 
 ---
 
@@ -85,7 +85,7 @@
 ---
 
 ## 📦 Implementation Scope by Layer
-*(Consult `AGENTS.md` / `docs/ARCHITECTURE.md` for exact paths)*
+*(Consult `AGENTS.md` and the repo's architecture doc for exact paths)*
 
 - **Contracts / Schemas Layer**: [Data schemas / validation DTOs]
 - **Domain Layer**: [Entities, Value Objects, Domain Events, Repository Interfaces]

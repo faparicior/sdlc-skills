@@ -37,6 +37,10 @@ This skill accepts inputs from either **Lean Inception** OR **User Story Mapping
 - **Release Slice:** `docs/user-story-mapping/4-slice-out-a-release-strategy.md` (Wave 1 MVP vs Wave 2)
 - **Persona:** Extracted from Step 1 (`docs/user-story-mapping/1-frame-the-problem.md`) or Story Narrative
 
+### Source C: Direct Request (Brownfield)
+
+- **Journey Reference:** the user's request itself — the repo may have no inception or story-mapping docs; derive persona, goal, and steps from the description plus what the code actually does. Do not invent upstream docs that do not exist.
+
 ### Common Metadata
 
 - **Active Event Status:** [e.g., Draft → CFP_OPEN]
@@ -197,7 +201,7 @@ Once the flow specification document (`journey-XX-[name].md`) is created and app
 
 ## 🔗 External Documentation (Optional)
 
-- [User Journey Mapping](../../../../docs/inception/5-user-journeys/README.md)
+- User journey mapping docs, if the repo has them — discover the path (do not assume `docs/inception/...`).
 
 ---
 

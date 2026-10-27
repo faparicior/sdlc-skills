@@ -85,7 +85,7 @@ Scenario: Attempted violation of the invariant
 
 Why this invariant exists.
 
-* Journey: [Journey XX — Title](../../../../inception/5-user-journeys/[journey-XX]-[name].md)
+* Journey: [Journey XX — Title](<docs-root>/inception/5-user-journeys/[journey-XX]-[name].md)
 * Flow: [Flow — Journey XX](../flows/[journey-XX]-[name].md)
 
 ### Related rules

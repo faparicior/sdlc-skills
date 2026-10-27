@@ -198,8 +198,8 @@ Two parts, so a PM can stop after Part A:
 
 ## 🔗 Related Documentation
 
-- [User Journey Mapping](../../../../docs/inception/5-user-journeys/README.md)
-- [Bounded Contexts & Flows](../../../../docs/product/README.md)
+- User journey docs: the repo's journey/inception documentation — discover the path, don't assume `docs/inception/`.
+- Bounded contexts: the repo's product docs tree — discover the path, don't assume `docs/product/`.
 
 ---
 

@@ -65,7 +65,7 @@ pi skill user-story-mapping --mode from-inception --step 2
 pi skill user-story-mapping --mode standalone --step 1
 
 # Batch generate story map from context
-pi skill user-story-mapping --mode standalone --batch --context "SessioFlow"
+pi skill user-story-mapping --mode standalone --batch --context "<product-name>"
 
 # Validate Step 3 output
 pi skill user-story-mapping --mode validate --step 3 --file docs/user-story-mapping/3-explore-to-fill-the-body.md

@@ -14,7 +14,7 @@ disable-model-invocation: true
 This skill guides feature implementation through flow-driven analysis, document review, and phased, user-controlled TDD development.
 
 > **Single Source of Truth**:
-> - Consult **`AGENTS.md`** and **`docs/ARCHITECTURE.md`** for folder layout, coding style, naming conventions, layer boundaries, and exact verification commands.
+> - Consult **`AGENTS.md`** (or **`CLAUDE.md`** if absent) and the repo's architecture doc (e.g. **`docs/ARCHITECTURE.md`**) for folder layout, coding style, naming conventions, layer boundaries, and exact verification commands.
 > - Consult **`docs/adr/README.md`** for architectural decision records.
 
 ---
@@ -47,7 +47,7 @@ flowchart TD
    - If feature specifications do NOT exist yet, stop and invoke **`/create-features`** first to slice and specify the features before planning implementation.
 
 2. **Inspect Existing Codebase & Artifacts First (Search-First)**:
-   - Consult **`AGENTS.md`** and **`docs/ARCHITECTURE.md`** (or **`CLAUDE.md`** if `AGENTS.md` is absent) to determine the repository's folder structure, bounded context paths, and framework transport layers.
+   - Consult **`AGENTS.md`** (or **`CLAUDE.md`** if `AGENTS.md` is absent) and the repo's architecture doc (e.g. `docs/ARCHITECTURE.md`) to determine the repository's folder structure, bounded context paths, and framework transport layers.
    - **Check for cross-repo dependencies**: Read the `CLAUDE.md` (or `AGENTS.md`) **Cross-Repo Dependencies** section. If this flow touches other repositories, declare them in the plan's `🔗 Cross-Repo Dependencies` table **before writing the plan**. Flag any deploy-order constraint to the user at the summary step.
    - Check if the target bounded context module already exists in the codebase before scaffolding. **Never re-scaffold or overwrite existing modules**.
 
@@ -66,8 +66,8 @@ flowchart TD
    - This catalogue is the primary input for Phase 0 test writing. Every item must map to at least one test before implementation begins.
 
 5. **Consult Architectural Documents & ADRs (Single Sources of Truth)**:
-   - **`AGENTS.md` & `docs/ARCHITECTURE.md`**: For directory layout, package boundaries, framework routes/entrypoints, and verification commands.
-   - **`docs/ARCHITECTURE-RULES.md`**: For strict DDD templates (Value Objects, Entities, Domain Events, Exceptions, CQRS Handlers, Response DTOs, and Repositories).
+   - **`AGENTS.md`** and the repo's architecture doc (e.g. `docs/ARCHITECTURE.md`): For directory layout, package boundaries, framework routes/entrypoints, and verification commands.
+   - The repo's architecture-rules/conventions doc, if present (e.g. `docs/ARCHITECTURE-RULES.md`): For strict DDD templates (Value Objects, Entities, Domain Events, Exceptions, CQRS Handlers, Response DTOs, and Repositories).
    - **`docs/adr/README.md`**: For architectural decisions relevant to this flow (CQRS, Auth, Storage, Data Access, Outbox, API Contracts).
 
 6. **Summarize Understanding & Scope**:

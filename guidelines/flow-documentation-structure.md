@@ -96,8 +96,8 @@ Complete flow spec (all diagrams inline)
 
 ## 🛠️ Templates & Commands
 
-- **Template:** `docs/templates/product/flows.md`
-- **Command:** `docs/commands/product/create-flow.md`
+- **Template:** bundled with the skill — `create-flow-documentation/templates/flows.md` (each skill carries its own copies under `templates/`)
+- **Command:** the `/create-flow-documentation` skill
 - **Flow Catalog:** `docs/product/flows/README.md`
 
 ## 📝 Example Flow Structure

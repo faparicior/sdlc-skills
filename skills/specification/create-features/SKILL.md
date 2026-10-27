@@ -29,7 +29,7 @@ flowchart LR
     P2b & P3 --> P4["Phase 4: Implementation<br/>(/implement-flow)"]
 ```
 
-* **Inputs**: `docs/product/bounded-contexts/[context]/flows/[flow-name].md` + Architectural references (`AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/adr/`).
+* **Inputs**: `docs/product/bounded-contexts/[context]/flows/[flow-name].md` + Architectural references (`AGENTS.md`/`CLAUDE.md`, the repo's architecture doc e.g. `docs/ARCHITECTURE.md`, `docs/adr/`).
 * **Outputs**: `docs/product/working-on/active/[change]/features/feature-[01]-[feature-name].md`, `feature-[02]-[feature-name].md`...
 * **Next Steps**:
   * If domain entities/rules need modeling: Invoke **`/create-entity-lifecycle`** (Phase 3).
@@ -48,7 +48,7 @@ flowchart LR
 
 2. **Inspect Existing Features & Bounded Context Layout**:
    - Check `docs/product/working-on/active/[change]/features/` for existing specs and determine the next sequential number (`01`, `02`, `03`...). Don't look in the living tree.
-   - Check `AGENTS.md` and `docs/ARCHITECTURE.md` for directory layout, DDD package boundaries, and verification commands.
+   - Check `AGENTS.md` (or `CLAUDE.md`) and the repo's architecture doc (e.g. `docs/ARCHITECTURE.md`) for directory layout, DDD package boundaries, and verification commands.
    - Review relevant ADRs in `docs/adr/README.md` (e.g., CQRS, Transactional Outbox, Auth, Error Mapping).
 
 3. **Identify Vertical Slices (Feature Boundaries)**:
@@ -90,7 +90,7 @@ For each feature slice, conduct a thorough technical analysis:
 
 1. **Define Functional & Non-Functional Requirements**:
    - Use checklist items with explicit IDs: `F[X]-R1`, `F[X]-R2`, etc.
-   - Map requirements to existing or planned acceptance tests (e.g., Playwright E2E spec or integration tests).
+   - Map requirements to existing or planned acceptance tests (e.g., an E2E spec or integration tests).
 
 2. **Construct HTTP Error Contract Table**:
    - Map every potential failure condition to:

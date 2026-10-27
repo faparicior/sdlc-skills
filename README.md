@@ -192,6 +192,30 @@ npm run link
 npm run list
 ```
 
+## 🧭 Portability & Stack-Specific Skills
+
+The pack's conventions are language- and framework-agnostic: traceability, flow structure and the
+BR/INV/flow templates use placeholders (`<source-root>`, `<test-root>`, `<docs-root>`) instead of any
+stack's real paths, and the skills that write into a repository discover its layout (Step 0) instead
+of assuming one. A few skills are deliberately stack- or origin-specific — know what you are
+installing:
+
+| Skill | Scope | Notes |
+|-------|-------|-------|
+| `create-module` | **TypeScript / Turborepo only** | Scaffolds npm-workspace packages with `tsconfig.json` project references and Drizzle examples. Not usable as-is in other stacks. |
+| `adr-create`, `adr-review-alternatives`, `adr-validate` | Generic process; **examples reference the TypeScript ecosystem** (Zod, Next.js, Supabase, Drizzle) | Replace the sample technology rows in the ADR templates with your own stack before use — they get copied into real ADRs. |
+| `inception-workshop` | Generic workshop method; **assumes the origin repo's automation layout** (`docs/templates/inception/`, `docs/commands/inception/`) | Validators/commands must exist in the target repo or those steps must be dropped. |
+| `agents-maintainer` | Generic purpose; **example AGENTS.md sections are npm/TypeScript-flavoured** (`npm run lint`, Zod, ts-archunit) | Treat the examples as patterns to adapt, not literal content. |
+| `evals/` fixtures | Reference the origin product's flows | Test data only; never copied into target repositories. |
+
+### Paths & configuration
+
+Skills default to the pack's canonical layout (`docs/product/bounded-contexts/`, `docs/product/working-on/`,
+`docs/adr/`). `/setup-sdlc` writes `.sdlc/config.json`, which can override `docsRoot`, `productDocsDir`,
+`guidelinesDir`, `adrDir` and `modulesDir`; when that file exists, honour it over the defaults shown in
+the skills. Skills that operate on existing documentation (`audit-docs`, `modify-flow`,
+`reverse-engineer-domain`) never assume paths — they discover the docs tree fresh on every run.
+
 ## 📄 License
 
 MIT © [Fernando Aparicio](https://github.com/faparicior)

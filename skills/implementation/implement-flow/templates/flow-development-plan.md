@@ -5,7 +5,7 @@
 * **Flow File:** `docs/product/bounded-contexts/[context]/flows/[flow-filename].md`
 * **Bounded Context:** `[context]`
 
-> **Architecture & Commands Reference**: Consult **`AGENTS.md`** and **`docs/ARCHITECTURE.md`** for exact folder paths, naming rules, test runner commands, and Definition of Done.
+> **Architecture & Commands Reference**: Consult **`AGENTS.md`** (or `CLAUDE.md`) and the repo's architecture doc (e.g. `docs/ARCHITECTURE.md`) for exact folder paths, naming rules, test runner commands, and Definition of Done.
 
 ---
 
@@ -148,6 +148,6 @@ Fill this section only if this flow touches more than one repository. Remove it 
 - [ ] **5.2 Fast Architecture Verification**: Run architecture check from `AGENTS.md` (0 errors)
 - [ ] **5.3 Architecture Test Suite**: Run full architecture test suite from `AGENTS.md` (0 errors)
 - [ ] **5.4 Unit & Integration Test Suites**: Run all unit and integration tests (0 errors)
-- [ ] **5.5 TypeScript Typecheck**: Run typecheck from `AGENTS.md` (0 errors)
+- [ ] **5.5 Typecheck**: Run typecheck from `AGENTS.md` (0 errors)
 - [ ] **5.6 Linting & Formatting**: Run lint from `AGENTS.md` (0 errors)
 - [ ] **5.7 Mark Plan Complete**: Update status to `✅ Complete`
