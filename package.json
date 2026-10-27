@@ -1,6 +1,6 @@
 {
   "name": "sdlc-skills",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Universal SDLC agent skills for real engineering: Lean Inception, Story Mapping, Flow Specs, DDD, TDD, ADR governance, and Living Documentation auditing.",
   "repository": {
@@ -12,7 +12,7 @@
     "link": "bash scripts/link-skills.sh",
     "list": "bash scripts/list-skills.sh",
     "changeset": "changeset",
-    "version": "changeset version"
+    "version": "changeset version && node scripts/sync-versions.js"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1"
