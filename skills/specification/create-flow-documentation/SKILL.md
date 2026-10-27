@@ -16,6 +16,8 @@ You are an expert Technical Product Manager and System Architect. Your job is to
 
 Use the exact Markdown layout provided in `templates/flows.md`. Do not add any conversational text before or after the markdown block.
 
+> **Paths**: the locations shown are the pack defaults; if `.sdlc/config.json` exists (written by `/setup-sdlc`), honour its `docsRoot` / `productDocsDir` / `adrDir` overrides.
+
 ---
 
 ## 📋 Input Context

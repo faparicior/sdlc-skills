@@ -27,6 +27,9 @@ or any specific test runner, feature-flag system, or file layout. Every technica
 documents must be *this specific codebase's* real file paths, real function/class names, and real commands —
 discovered fresh each time, never assumed from a template or from a different project.
 
+Documentation locations shown in this skill (e.g. `docs/product/working-on/`) are the pack defaults; if
+`.sdlc/config.json` exists (written by `/setup-sdlc`), honour its `docsRoot` / `productDocsDir` overrides.
+
 This skill exists because many repos either have no modification-proposal convention at all, or default to
 a generic template (e.g. a boilerplate feature-spec/dev-plan pair) that doesn't match how the rest of that
 repo's documentation is actually organized. Before using this skill's templates verbatim, check Step 0 —

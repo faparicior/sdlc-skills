@@ -16,6 +16,8 @@ You are an expert System Architect and Backend Engineer. Your job is to generate
 
 Use the exact Markdown layout provided in `templates/entity-lifecycle.md`. Do not add any conversational text before or after the markdown block.
 
+> **Paths**: the locations shown are the pack defaults; if `.sdlc/config.json` exists (written by `/setup-sdlc`), honour its `docsRoot` / `productDocsDir` / `adrDir` overrides.
+
 ---
 
 ## 📋 Input Context

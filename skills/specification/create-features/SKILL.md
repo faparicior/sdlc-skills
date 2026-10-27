@@ -18,6 +18,8 @@ Each feature specification bridges the high-level user journey and the detailed 
 
 Use the template provided in `templates/feature-specification.md`.
 
+> **Paths**: the locations shown are the pack defaults; if `.sdlc/config.json` exists (written by `/setup-sdlc`), honour its `docsRoot` / `productDocsDir` / `adrDir` overrides.
+
 ---
 
 ## 🔄 Position in the SDLC Workflow

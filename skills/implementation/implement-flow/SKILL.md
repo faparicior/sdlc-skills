@@ -16,6 +16,7 @@ This skill guides feature implementation through flow-driven analysis, document 
 > **Single Source of Truth**:
 > - Consult **`AGENTS.md`** (or **`CLAUDE.md`** if absent) and the repo's architecture doc (e.g. **`docs/ARCHITECTURE.md`**) for folder layout, coding style, naming conventions, layer boundaries, and exact verification commands.
 > - Consult **`docs/adr/README.md`** for architectural decision records.
+> - Paths shown are the pack defaults; if `.sdlc/config.json` exists (written by `/setup-sdlc`), honour its `docsRoot` / `productDocsDir` / `adrDir` overrides.
 
 ---
 
