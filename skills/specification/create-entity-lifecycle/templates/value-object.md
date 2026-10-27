@@ -50,8 +50,7 @@
 ## 🔒 Invariants
 
 *The `Enforces` edge: every rule this value object is responsible for upholding. Both ends or it didn't
-ship — each rule listed here must link back to this value object in its `Enforced by` table.
-Convention: [Traceability](../guidelines/traceability.md).*
+ship — each rule listed here must link back to this value object in its `Enforced by` table.*
 
 * [INV-[XXX]](../invariants/INV-[XXX]-[invariant-name].md): [Short invariant title]
 * [BR-[XXX]](../business-rules/BR-[XXX]-[rule-name].md): [Short business rule title]

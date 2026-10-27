@@ -37,7 +37,7 @@ stateDiagram-v2
 > you believe it but did not look, `⏳ Planned` when no code exists yet. A `⏳` row is written in the
 > future tense ("will publish `X`"), never in the present tense — present tense asserts the code ships.
 > A state machine that documents the whole target product as if it were Wave 1 is the single most
-> expensive drift this document can carry. Convention: [Traceability](../guidelines/traceability.md).
+> expensive drift this document can carry.
 
 ---
 
@@ -78,8 +78,7 @@ stateDiagram-v2
 ## 🔒 Invariants & Business Rules
 
 *The `Enforces` edge: every rule this entity is responsible for upholding. Both ends or it didn't
-ship — each rule listed here must link back to this entity in its `Enforced by` table.
-Convention: [Traceability](../guidelines/traceability.md).*
+ship — each rule listed here must link back to this entity in its `Enforced by` table.*
 
 * **Invariants:**
   * [INV-[XXX]](../invariants/INV-[XXX]-[invariant-name].md): [Short invariant strict title]

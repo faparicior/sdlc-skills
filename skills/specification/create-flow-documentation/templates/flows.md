@@ -242,8 +242,7 @@ Response: 201 Created
 ### Enforced Business Rules
 
 *The `Enforces` edge. Both ends or it didn't ship: listing a rule here means that rule's
-`Traces up to` list must link back to this flow.
-Convention: [Traceability](../guidelines/traceability.md).*
+`Traces up to` list must link back to this flow.*
 
 * [BR-[XXX]](../business-rules/BR-[XXX]-[rule-name].md): [Short business rule active title]
 
@@ -257,11 +256,11 @@ Convention: [Traceability](../guidelines/traceability.md).*
 
 | Concern | Where |
 | ------- | ----- |
-| Entry point | `apps/frontend/src/app/api/v1/[endpoint]/route.ts` |
-| Application | `packages/modules/[context]/src/application/commands/[name].handler.ts` |
-| Domain | `packages/modules/[context]/src/domain/[entity].ts` |
-| Tests (unit) | `tests/unit/modules/[context]/application/commands/[name].test.ts` |
-| Tests (E2E) | `tests/e2e/[feature].spec.ts` |
+| Entry point | `<source-root>/<interface>/[endpoint]` |
+| Application | `<source-root>/<application>/[use-case]` |
+| Domain | `<source-root>/<domain>/[entity]` |
+| Tests (unit) | `<test-root>/<application>/[use-case]-test` |
+| Tests (E2E) | `<test-root>/e2e/[feature]` |
 
 ### Domain Events Published
 

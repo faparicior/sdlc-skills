@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the structure and standards for user flow documentation in SessioFlow.
+This document defines the structure and standards for user flow documentation.
 
 ## 📁 Directory Structure
 
@@ -28,7 +28,7 @@ docs/product/
 5. **Step-by-Step Walkthrough** - Detailed action/reaction table
 6. **Acceptance Criteria** - Gherkin scenarios
 7. **Edge Cases** - Business logic, technical, and validation failures
-8. **Technical Notes** - API specs, Zod schemas, DB constraints, RLS policies
+8. **Technical Notes** - API contract, validation schemas, DB constraints, access-control policies
 9. **Linked Documentation** - References to entities, value objects, ADRs
 
 ## 📊 Diagram Requirements

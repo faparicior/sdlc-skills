@@ -126,8 +126,8 @@ override it. In every tier the living doc changes in the same PR as the code tha
    data backfill scripts, or API contract versioning for backward compatibility with clients.
 9. **Read the rule/invariant document's own traceability section before grepping.** If this repo links
    rules to the artifacts that enforce them (a `Traceability` / `Enforced by` / `Verified by` section —
-   convention shared with this skill: [../guidelines/traceability.md](../guidelines/traceability.md);
-   canonical in this repo at `docs/product/guidelines/traceability.md`), that section *is* the
+   convention shared across SDLC skills at [../guidelines/traceability.md](../guidelines/traceability.md)),
+   that section *is* the
    pre-computed blast radius: one row per enforcing layer with a file + guard, plus the tests that pin it.
    Start there, then grep the ID to catch enforcement nobody linked. Read the row statuses honestly:
    ✅ Verified means somebody saw the guard, ⚠️ Unverified means it is a lead to confirm by opening the
@@ -141,7 +141,7 @@ override it. In every tier the living doc changes in the same PR as the code tha
 
 ## Step 2: Write the Proposal
 
-Use `templates/proposal.md`. In SessioFlow, proposals must be saved strictly under:
+Use `templates/proposal.md`. Proposals must be saved strictly under:
 `docs/product/working-on/active/[change-name]/proposal.md`
 (Never save directly in `working-on/` root or `grace-period/`, to prevent LLM context bleeding across worktrees/branches).
 
@@ -384,8 +384,7 @@ If this repo has skills for first-time flow/entity documentation (any name — e
 document structure and, where applicable, invoke them directly to regenerate an existing doc rather than
 hand-editing it.
 
-If this repo has a traceability convention document (SessioFlow:
-`docs/product/guidelines/traceability.md`; shared across SDLC skills at
+If this repo has a traceability convention document (shared across SDLC skills at
 `../guidelines/traceability.md`), it is binding for Step 1.9 and Step 5.4 — the markdown links are
 the record; code comments that cite rule IDs are optional corroboration, never a substitute.
 

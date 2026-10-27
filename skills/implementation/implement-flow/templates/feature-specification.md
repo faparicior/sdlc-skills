@@ -1,8 +1,8 @@
 # Feature [01]: [Feature Name] - Feature Specification
 
 * **Feature ID:** `F[01]`
-* **Specification File:** `docs/product/bounded-contexts/[context]/flows/features/[journey-id]/feature-[01]-[feature-name].md`
-* **Parent Flow:** [Flow filename] (e.g., `../../journey-01-setup-conference.md`)
+* **Specification File:** `docs/product/working-on/active/[change]/features/feature-[01]-[feature-name].md`
+* **Parent Flow:** [Flow filename] (e.g., `../../../../bounded-contexts/[context]/flows/journey-01-setup-conference.md`)
 * **Bounded Context:** [Context Name] (e.g., `conference`)
 * **Status:** 📋 Planned | 🔄 In Progress | ✅ Complete
 * **Priority:** High | Medium | Low

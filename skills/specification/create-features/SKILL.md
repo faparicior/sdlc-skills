@@ -12,7 +12,7 @@ disable-model-invocation: true
 
 # Create Features Skill
 
-You are an expert Technical Product Architect and Systems Engineer. Your job is to break down an end-to-end User Flow document (`journey-XX-[name].md`) into **sequentially numbered feature specifications** (vertical slices) grouped by journey under `docs/product/bounded-contexts/[context]/flows/features/[journey-id]/`.
+You are an expert Technical Product Architect and Systems Engineer. Your job is to break down an end-to-end User Flow document (`journey-XX-[name].md`) into **sequentially numbered feature specifications** (vertical slices) saved in the change folder `docs/product/working-on/active/[change]/features/`, never in the living bounded-contexts/ tree.
 
 Each feature specification bridges the high-level user journey and the detailed domain model (Phase 3) & implementation (Phase 4), establishing the executable requirements, HTTP error contracts, concurrency safeguards, and architectural boundaries before coding begins.
 
@@ -30,7 +30,7 @@ flowchart LR
 ```
 
 * **Inputs**: `docs/product/bounded-contexts/[context]/flows/[flow-name].md` + Architectural references (`AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/adr/`).
-* **Outputs**: `docs/product/bounded-contexts/[context]/flows/features/[journey-id]/feature-[01]-[feature-name].md`, `feature-[02]-[feature-name].md`...
+* **Outputs**: `docs/product/working-on/active/[change]/features/feature-[01]-[feature-name].md`, `feature-[02]-[feature-name].md`...
 * **Next Steps**:
   * If domain entities/rules need modeling: Invoke **`/create-entity-lifecycle`** (Phase 3).
   * If domain models already exist: Invoke **`/implement-flow`** (Phase 4) with the target feature.
@@ -47,7 +47,7 @@ flowchart LR
    - Extract the user value, primary actor, and boundaries.
 
 2. **Inspect Existing Features & Bounded Context Layout**:
-   - Check `docs/product/bounded-contexts/[context]/flows/features/[journey-id]/` (e.g. `journey-01`) to identify pre-existing feature specs for this journey and determine the next sequential number (`01`, `02`, `03`...).
+   - Check `docs/product/working-on/active/[change]/features/` for existing specs and determine the next sequential number (`01`, `02`, `03`...). Don't look in the living tree.
    - Check `AGENTS.md` and `docs/ARCHITECTURE.md` for directory layout, DDD package boundaries, and verification commands.
    - Review relevant ADRs in `docs/adr/README.md` (e.g., CQRS, Transactional Outbox, Auth, Error Mapping).
 
@@ -112,10 +112,9 @@ For each feature slice, conduct a thorough technical analysis:
 ### Step 4: Generate Feature Specification File(s)
 
 1. **File Location**:
-   - **Modification of an already-documented flow (part of a `/modify-flow` proposal):** save under `docs/product/working-on/active/[change]/features/feature-NN-[name].md`, never in the living tree. For a multi-slice proposal write detailed specs **only for the slice about to start**; later slices stay outlines in the proposal's Delivery Slices table and are specified when resumed (features may change or become obsolete before they ship).
-   - **New flow:**
-   `docs/product/bounded-contexts/[context]/flows/features/[journey-id]/feature-[01]-[feature-name].md`
-   (where `[journey-id]` corresponds to the flow identifier, e.g. `journey-01`; ensure two-digit zero-padded prefixes: `01`, `02`, `03`...).
+   - Always save under `docs/product/working-on/active/[change]/features/feature-NN-[name].md`, never in the living tree. This holds for modifications and for brand-new flows. If no change folder exists, create it with its `proposal.md` first.
+   - For multi-slice proposals, write detailed specs **only for the slice about to start**; later slices stay outlines in the proposal's Delivery Slices table and are specified when resumed (features may change or become obsolete before they ship).
+   - Lifecycle: the change folder moves to `working-on/grace-period/` and is purged later (`/modify-flow` Step 6). Living docs get the shipped behaviour in the same PR as the code and must not link to feature specs.
 
 2. **Template Compliance**:
    - Follow `templates/feature-specification.md` strictly.

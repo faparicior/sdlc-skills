@@ -1,7 +1,7 @@
 ---
 name: implement-flow
 description: >-
-  Implement features following SessioFlow's DDD structure, flow-driven development, and workflows with step-by-step user review.
+  Implement features following the repository's DDD structure, flow-driven development, and workflows with step-by-step user review.
   LOAD THIS SKILL when user mentions: implement feature, add feature, create feature, 
   develop feature, build feature, implement [feature name], add [feature name], 
   implement flow, develop flow, flow journey, or any feature/flow implementation task. 
@@ -32,7 +32,7 @@ The user maintains explicit control over every stage and execution step:
 
 ```mermaid
 flowchart TD
-    A["1. Read Feature Specs & Architecture<br/>(features/, flows/, AGENTS.md, ARCHITECTURE.md)"] --> B["2. Create Development Plan<br/>([flow]-plan.md)"]
+    A["1. Read Feature Specs & Architecture<br/>(features/, flows/, AGENTS.md, ARCHITECTURE.md)"] --> B["2. Create Development Plan<br/>(implementation-plan-sN.md)"]
     B --> R1{{"🛑 USER REVIEW & APPROVAL<br/>(Inspect Flow Plan)"}}
     R1 -->|Approved| C["3. Apply / Execute<br/>(Phased TDD with per-phase gates)"]
     R1 -->|Changes requested| B
@@ -43,7 +43,7 @@ flowchart TD
 ### Step 1: Read Feature Specifications, Flow Documentation & Architecture
 
 1. **Verify Prerequisites (Feature Specs Must Exist)**:
-   - Check `docs/product/bounded-contexts/[context]/flows/features/[journey-id]/` for the feature specification(s) to implement (e.g. `feature-01-[name].md`).
+   - Check `docs/product/working-on/active/[change]/features/` for the feature specification(s) to implement (e.g. `feature-01-[name].md`).
    - If feature specifications do NOT exist yet, stop and invoke **`/create-features`** first to slice and specify the features before planning implementation.
 
 2. **Inspect Existing Codebase & Artifacts First (Search-First)**:
@@ -52,7 +52,7 @@ flowchart TD
    - Check if the target bounded context module already exists in the codebase before scaffolding. **Never re-scaffold or overwrite existing modules**.
 
 3. **Read Feature Specification & Domain Rules**:
-   - Read the target feature specification: `docs/product/bounded-contexts/[context]/flows/features/[journey-id]/feature-[XX]-[feature-name].md`.
+   - Read the target feature specification: `docs/product/working-on/active/[change]/features/feature-[XX]-[feature-name].md`.
    - Read the parent flow document: `docs/product/bounded-contexts/[context]/flows/[flow-name].md`.
    - Read any associated domain models: `entities/`, `business-rules/`, `invariants/`.
    - Extract the HTTP error contract table, concurrency safeguards, acceptance criteria, and layer scope.
@@ -77,8 +77,7 @@ flowchart TD
 
 ### Step 2: Create Flow Development Plan
 
-1. For a `/modify-flow` proposal, implement **one slice at a time**: save the plan as `working-on/active/[change]/implementation-plan-sN.md` (only when slice N starts) and record "Grounded against commit X" in it. Otherwise create a flow-level or feature-level development plan alongside the flow document:
-   `docs/product/bounded-contexts/[context]/flows/[flow-name]-plan.md`
+1. Save the plan in the change folder as `working-on/active/[change]/implementation-plan-sN.md`, one slice at a time and only when slice N starts; record "Grounded against commit X" in it. A single-slice change uses `implementation-plan.md`. Never put it alongside the flow doc in the living tree.
 2. Use the template: `templates/flow-development-plan.md` (located in this skill).
 3. **Populate the Lack of Information Log**:
    - Consolidate all architectural decisions, runtime configurations, and tie-breakers in the `🧠 Agent Design Decisions & Assumptions` table.
@@ -92,7 +91,7 @@ flowchart TD
 
 ### Step 3: Apply & Execute (Phase-by-Phase TDD with User Control)
 
-Execute one phase at a time according to `[flow-name]-plan.md`. Within each phase, strictly follow the 4-step micro-cycle:
+Execute one phase at a time according to `implementation-plan-sN.md`. Within each phase, strictly follow the 4-step micro-cycle:
 
 ```mermaid
 flowchart LR
@@ -119,7 +118,7 @@ flowchart LR
 4. **After: Run Linter & Typecheck**
    - Run project linter and typecheck commands defined in `AGENTS.md` (e.g. `npm run lint:fix && npm run typecheck`).
 5. **Update State & Checkpoint**:
-   - Mark completed checkboxes (`- [x]`) in `[flow-name]-plan.md`.
+   - Mark completed checkboxes (`- [x]`) in `implementation-plan-sN.md`.
    - **🛑 Phase Checkpoint**: Report the phase completion and verification results to the user.
    - Ask for user confirmation before beginning the next phase.
 
@@ -134,7 +133,7 @@ flowchart LR
 
 ## ✅ Definition of Done
 A flow/feature is considered complete when:
-1. All checkboxes in `[flow-name]-plan.md` are marked `[x]`.
+1. All checkboxes in `implementation-plan-sN.md` are marked `[x]`.
 2. All Definition of Done criteria listed in `AGENTS.md` pass (Architecture tests, Unit/Integration tests, E2E tests, Linting, and Typechecking).
 3. For a `/modify-flow` proposal: the slice's `drafts/` are copied into their living docs (links fixed, re-checked against the code, traceability filled in) and deleted, and the slice is marked `Shipped` in the proposal. Every domain-service doc touched by the feature is updated: Part A1–A3 and Part B rows describe the shipped behaviour (Methods status, Traceability with real file/guard/test title), and the feature's row is removed from Part A4 (Pending Changes).
 4. Final verification results have been presented to and approved by the user.

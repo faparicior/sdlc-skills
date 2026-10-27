@@ -51,10 +51,10 @@ Configure your repository to use the full Spec-Driven, DDD & TDD Software Develo
      - `docs/product/working-on/grace-period/`
      - `docs/adr/`
    - Copy canonical guidelines from this skill package into `docs/product/guidelines/`:
-     - `traceability.md`
      - `business-rules-vs-invariants.md`
      - `flow-documentation-structure.md`
      - `adr-naming-conventions.md`
+   - **Do not copy `traceability.md`**: it stays in the skills pack (`../guidelines/traceability.md`) as the single source of the convention; product docs carry the sections it defines but never link to it.
 
 5. **Confirm Ready**:
    Provide the developer with a summary and suggest the next step:

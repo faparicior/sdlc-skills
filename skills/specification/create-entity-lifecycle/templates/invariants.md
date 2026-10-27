@@ -79,7 +79,7 @@ Scenario: Attempted violation of the invariant
 
 ## 6. Traceability
 
-*Every edge is a relative link, and every edge has two ends: adding one here means adding the reciprocal link in that document, in the same commit. Convention: [Traceability](../guidelines/traceability.md).*
+*Every edge is a relative link, and every edge has two ends: adding one here means adding the reciprocal link in that document, in the same commit.*
 
 ### Traces up to
 
@@ -87,7 +87,6 @@ Why this invariant exists.
 
 * Journey: [Journey XX — Title](../../../../inception/5-user-journeys/[journey-XX]-[name].md)
 * Flow: [Flow — Journey XX](../flows/[journey-XX]-[name].md)
-* Feature: [Feature XX — Title](../flows/features/[journey-id]/[feature-XX]-[name].md)
 
 ### Related rules
 
@@ -104,15 +103,15 @@ name the file **and** the guard, because "enforced in the domain" is not actiona
 
 | Layer | Where | Guard | Status |
 | ----- | ----- | ----- | ------ |
-| Domain — aggregate root | `packages/modules/[context]/src/domain/[entity].ts` | `[Entity].[mutator]()` | ✅ Verified |
-| Domain — value object | `packages/modules/[context]/src/domain/value-objects/[vo].ts` | `[ValueObject].create()` | ✅ Verified |
-| Database | `packages/shared/database/src/schema.ts` | `[unique index / constraint name]` | ⚠️ Unverified |
+| Domain — aggregate root | `<source-root>/<domain>/[entity]` | `[Entity].[mutator]()` | ✅ Verified |
+| Domain — value object | `<source-root>/<domain>/[value-object]` | `[ValueObject].create()` | ✅ Verified |
+| Database | `<migrations>/[file]` | `[unique index / constraint name]` | ⚠️ Unverified |
 
 ### Verified by
 
 Tests that fail when this invariant stops holding.
 
-* `tests/unit/modules/[context]/domain/[entity].test.ts` — "[exact test title]"
+* `<test-root>/<domain>/[entity]-test` — "[exact test title]"
 
 ### In flight
 

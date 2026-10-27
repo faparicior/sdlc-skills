@@ -1,19 +1,14 @@
 # Traceability: Linking Rules to Flows, Entities and Code
 
-> **This file is mirrored, byte-for-byte, into the SDLC skills pack**: it is stored centrally at
-> `.agents/skills/sessioflow-sdlc/guidelines/traceability.md` (shared across `create-entity-lifecycle`,
-> `create-flow-documentation`, `modify-flow` and `audit-docs` via `../guidelines/traceability.md`),
-> so the skill pack carries the whole convention when it moves to another repository. Two rules keep the
-> mirror honest: this file holds **no relative links outside its fenced examples** (paths are `code` spans,
-> so it reads the same anywhere), and only the canonical copy — `docs/product/guidelines/traceability.md` —
-> is edited; propagate with `cp`. `/audit-docs` diffs the shared copy and reports any difference as ⚠️ Stale.
-> The examples below are SessioFlow-shaped (`packages/modules/**`, `docs/product/bounded-contexts/**`): map
-> them onto your own layering when using the convention in another repository, and keep the edge
-> vocabulary and the status legend unchanged.
+> **This file is the single source of the convention.** It lives in the skills pack, shared by
+> `create-entity-lifecycle`, `create-flow-documentation`, `modify-flow` and `audit-docs` via
+> `../guidelines/traceability.md`. Product docs must not link to it: they carry the sections it
+> defines, not a pointer to this file. The convention is language- and framework-agnostic; paths
+> and names in the examples are placeholders (`<source-root>`, `<test-root>`, `<docs-root>`, `Item`).
 
 A business rule or invariant is only useful if you can answer two questions in one hop:
 
-- **Up (`⬆️`)** — why does this rule exist? Which journey, flow and feature realize it?
+- **Up (`⬆️`)** — why does this rule exist? Which journey and flow realize it?
 - **Down (`⬇️`)** — if I change this rule, what breaks? Which entities, code layers and tests enforce it?
 
 Both directions are **relative markdown links inside the documents themselves**. No index file, no
@@ -33,7 +28,7 @@ Use these names for the edges. Synonyms fragment the graph; consistency is what 
 
 | Direction | Edge | Written in | Means |
 | --- | --- | --- | --- |
-| ⬆️ | `Traces up to` | rule doc | Journey / flow / feature that realizes the rule |
+| ⬆️ | `Traces up to` | rule doc | Journey / flow that realizes the rule. Never a feature spec: features live in `working-on/` and are purged after shipping, so use `In flight` while a change is active |
 | ⬆️ | `Enforces` | entity, value-object & flow docs | Rule this artifact is responsible for upholding |
 | ⬆️ | `Related rules` | rule doc | Other `BR-*` / `INV-*` it depends on or overlaps |
 | ⬇️ | `Enforced by` | rule doc | Every layer where the policy actually lives |
@@ -50,14 +45,15 @@ number and never by prose ("the free-tier rule"), because an ID is greppable and
 | `business-rules/BR-*.md`, `invariants/INV-*.md` | `Traces up to`, `Enforced by`, `Verified by` |
 | `entities/*.md` | `🔒 Invariants & Business Rules` (`Enforces`) + `Enforcement & tests` |
 | `value-objects/*.md` | `🔒 Invariants & Business Rules` (`Enforces`) |
-| `flows/*.md`, `flows/features/[journey-id]/*.md` | `Enforced Business Rules`, `Enforced Invariants`, `Implementation & tests` |
+| `flows/*.md` | `Enforced Business Rules`, `Enforced Invariants`, `Implementation & tests` |
+| `working-on/active/[change]/features/*.md` | Not part of the living graph; copied into the living docs in the PR that ships the slice |
 
 An ID cited in prose does **not** count as an edge — `enforces BR-003 (checked before the free-tier
 rule)` inside a sequence diagram is commentary. The edge is the link in the section above it.
 
 ## The `Enforced by` Table: One Rule Can Be Split Across Layers
 
-Most policies are enforced more than once — contract validation, a domain guard, a database
+Most policies are enforced more than once — boundary validation (request, schema or DTO), a domain guard, a database
 constraint, the UI surfacing the failure. List **every** layer; a reader deciding what to edit needs
 the complete picture, and "it's also checked somewhere" is not actionable.
 
@@ -66,11 +62,11 @@ the complete picture, and "it's also checked somewhere" is not actionable.
 
 | Layer | Where | Guard | Status |
 | ----- | ----- | ----- | ------ |
-| Contract (shared schema) | `packages/api-definitions/src/zod/conference.ts` | `ConferenceCreateSchema` date-order refinement | ✅ Verified |
-| Domain — value object | `packages/modules/conference/src/domain/value-objects/cfp-config.ts` | `CfpConfig.create()` | ✅ Verified |
-| Database | `packages/shared/database/src/schema.ts` | `conferences_slug_unique` | ⚠️ Unverified |
-| UI | `apps/frontend/src/modules/conference/conference-form.tsx` | error rendering | ✅ Verified |
-| Domain — aggregate | `packages/modules/conference/src/domain/conference.ts` | `Conference.publishCfp()` | ⏳ Planned |
+| Boundary validation (request, schema or DTO) | `<source-root>/<boundary>/[file]` | `[Schema]` refinement | ✅ Verified |
+| Domain — value object | `<source-root>/<domain>/[value-object]` | `[ValueObject].create()` | ✅ Verified |
+| Database | `<migrations>/<NNN>_create_items` | `[unique index / constraint name]` | ⚠️ Unverified |
+| UI | `<ui-root>/item-form` | error rendering | ✅ Verified |
+| Domain — aggregate | `<source-root>/<domain>/[entity]` | `[Entity].[method]()` | ⏳ Planned |
 ```
 
 Status vocabulary — the honest states, and the only reason the table stays trustworthy:
@@ -79,7 +75,7 @@ Status vocabulary — the honest states, and the only reason the table stays tru
 | --- | --- | --- |
 | ✅ **Verified** | You opened the file and saw the guard | Safe to treat as current |
 | ⚠️ **Unverified** | Believed to be enforced (legacy/brownfield, hearsay, or inferred from behaviour) | Goes on the audit queue; **never** treat as fact |
-| ⏳ **Planned** | Documented, not built yet (later wave) | `R3`-style gap; expected, not drift |
+| ⏳ **Planned** | Documented, not built yet (later wave) | a known gap; expected, not drift |
 
 Anything unlabeled is a rumor. An empty `Enforced by` table on a rule that a flow already exercises
 is the single most dangerous row in the tree: either the code is unlinked or the policy is missing,
@@ -121,41 +117,40 @@ anything:
 
 ## Worked Example: One Edge, Both Ends
 
-Rule side — `business-rules/BR-004-free-tier-conference-limit.md`:
+Rule side — `business-rules/BR-004-open-items-limit.md`:
 
 ```markdown
 ## 5. Traceability
 
 ### Traces up to
 
-* Journey: [Journey 01 — Setup Conference](../../../../inception/5-user-journeys/journey-01-setup-conference.md)
-* Flow: [Journey 01 — Setup Conference](../flows/journey-01-setup-conference.md)
-* Feature: [Feature 01 — Conference Creation with CfP](../flows/features/journey-01/feature-01-conference-creation-with-cfp.md)
+* Journey: [Journey 01 — Manage Items](<docs-root>/inception/5-user-journeys/journey-01-manage-items.md)
+* Flow: [Journey 01 — Manage Items](../flows/journey-01-manage-items.md)
 
 ### Enforced by
 
 | Layer | Where | Guard | Status |
 | ----- | ----- | ----- | ------ |
-| Application | `packages/modules/conference/src/application/commands/create-conference/create-conference.handler.ts` | `CreateConferenceHandler.execute()` | ✅ Verified |
-| Infrastructure | `packages/modules/conference/src/infrastructure/database/conference.repository.ts` | `countActiveByOrganizerId()` | ✅ Verified |
+| Application | `<source-root>/<application>/CreateItem` | `CreateItem.execute()` | ✅ Verified |
+| Infrastructure | `<source-root>/<infrastructure>/item-repository` | `ItemRepository.countOpenByOwner()` | ✅ Verified |
 
 ### Verified by
 
-* `tests/unit/modules/conference/application/commands/create-conference/create-conference.test.ts` — "runs the BR-003 slug check before the BR-004 free-tier check"
+* `<test-root>/<application>/CreateItemTest` — "runs the BR-003 duplicate-name check before the BR-004 open-items limit"
 ```
 
-Entity side — `entities/conference.md`, in the `🔒 Invariants & Business Rules` section that already
+Entity side — `entities/item.md`, in the `🔒 Invariants & Business Rules` section that already
 exists:
 
 ```markdown
 * **Business Rules:**
-  * [BR-004](../business-rules/BR-004-free-tier-conference-limit.md): Free Tier Conference Creation Limit
+  * [BR-004](../business-rules/BR-004-open-items-limit.md): Open Items Limit
 
 ### Enforcement & tests
 
 | Rule | Enforcing member | Test |
 | ---- | ---------------- | ---- |
-| [BR-004](../business-rules/BR-004-free-tier-conference-limit.md) | `CreateConferenceHandler.execute()` + `countActiveByOrganizerId()` | `tests/unit/modules/conference/application/commands/create-conference/create-conference.test.ts` |
+| [BR-004](../business-rules/BR-004-open-items-limit.md) | `CreateItem.execute()` + `ItemRepository.countOpenByOwner()` | `<test-root>/<application>/CreateItemTest` |
 ```
 
 Each edge is written twice — once per side — and each side is written by whoever knows it. Nothing
@@ -171,18 +166,15 @@ else to maintain.
 | Mark a legacy guess ✅ Verified | Mark it ⚠️ Unverified and audit it |
 | Add a new ID for a modified rule | Keep the ID, add a dated `History & Evolution` entry |
 | Hand-maintain a second copy of the graph elsewhere | Keep edges in the docs; link, don't copy |
-| Rename a file and fix only your own links | Fix the reciprocal links too — `grep -rn "old-name.md" docs` |
+| Rename a file and fix only your own links | Fix the reciprocal links too — `grep -rn "old-name.md" <docs-root>` |
 
 ## Related
 
-Read alongside this convention (paths relative to the repository root, deliberately not links so the
-mirrors stay byte-identical):
+Read alongside this convention (sibling files in this pack, deliberately not links so copies stay
+byte-identical):
 
-- `docs/product/guidelines/business-rules-vs-invariants.md` — deciding whether a constraint is a `BR-*`
-  or an `INV-*`
-- `docs/product/guidelines/flow-documentation-structure.md` — the shape of a flow document
-- Templates that emit the sections defined here: `docs/templates/product/business-rules.md`,
-  `docs/templates/product/invariants.md`, `docs/templates/product/entity-lifecycle.md`,
-  `docs/templates/product/flows.md` — each skill bundles its own copies under `templates/`
+- `business-rules-vs-invariants.md` — deciding whether a constraint is a `BR-*` or an `INV-*`
+- `flow-documentation-structure.md` — the shape of a flow document
+- Templates that emit the sections defined here — each skill bundles its own copies under `templates/`
 - Where the convention is applied: `create-entity-lifecycle` Step 5 and Step 6.3, `create-flow-documentation`
   Step 6, `modify-flow` Step 1.9–1.10 and Step 5.4, `audit-docs` Traceability check table

@@ -42,7 +42,7 @@
 
 ## 5. Traceability
 
-*Every edge is a relative link, and every edge has two ends: adding one here means adding the reciprocal link in that document, in the same commit. Convention: [Traceability](../guidelines/traceability.md).*
+*Every edge is a relative link, and every edge has two ends: adding one here means adding the reciprocal link in that document, in the same commit.*
 
 ### Traces up to
 
@@ -50,7 +50,6 @@ Why this rule exists.
 
 * Journey: [Journey XX — Title](../../../../inception/5-user-journeys/[journey-XX]-[name].md)
 * Flow: [Flow — Journey XX](../flows/[journey-XX]-[name].md)
-* Feature: [Feature XX — Title](../flows/features/[journey-id]/[feature-XX]-[name].md)
 
 ### Related rules
 
@@ -67,18 +66,18 @@ all. Name the file **and** the guard. Status: ✅ Verified (you read the guard) 
 
 | Layer | Where | Guard | Status |
 | ----- | ----- | ----- | ------ |
-| Contract (shared schema) | `packages/api-definitions/src/zod/[file].ts` | `[Schema]` refinement | ✅ Verified |
-| Application | `packages/modules/[context]/src/application/commands/[name].handler.ts` | `[Handler].execute()` | ✅ Verified |
-| Domain | `packages/modules/[context]/src/domain/[entity].ts` | `[Entity].[method]()` | ✅ Verified |
-| Infrastructure | `packages/modules/[context]/src/infrastructure/[file].ts` | `[repository].[method]()` | ✅ Verified |
-| Database | `packages/shared/database/src/schema.ts` | `[unique index / constraint name]` | ⚠️ Unverified |
-| UI | `apps/frontend/src/modules/[context]/[form].tsx` | [what it does with the failure] | ✅ Verified |
+| Boundary validation (request, schema or DTO) | `<source-root>/<boundary>/[file]` | `[Schema]` refinement | ✅ Verified |
+| Application | `<source-root>/<application>/[use-case]` | `[Handler].execute()` | ✅ Verified |
+| Domain | `<source-root>/<domain>/[entity]` | `[Entity].[method]()` | ✅ Verified |
+| Infrastructure | `<source-root>/<infrastructure>/[file]` | `[repository].[method]()` | ✅ Verified |
+| Database | `<migrations>/[file]` | `[unique index / constraint name]` | ⚠️ Unverified |
+| UI | `<ui-root>/[form]` | [what it does with the failure] | ✅ Verified |
 
 ### Verified by
 
 Tests that fail when this policy changes.
 
-* `tests/unit/modules/[context]/application/commands/[name].test.ts` — "[exact test title]"
+* `<test-root>/<application>/[use-case]-test` — "[exact test title]"
 
 ### In flight
 

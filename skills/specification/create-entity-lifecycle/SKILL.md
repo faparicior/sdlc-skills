@@ -28,7 +28,7 @@ Use the exact Markdown layout provided in `templates/entity-lifecycle.md`. Do no
 - **Value Objects:** [List value objects used by the entity]
 - **State Machine:** [List all possible states]
 - **Domain Behavior:** [List core domain methods]
-- **Feature References:** `docs/product/bounded-contexts/[context]/flows/features/[journey-id]/` (feature specifications to establish bidirectional traceability in `BR-XXX` and `INV-XXX` docs)
+- **Feature References:** `docs/product/working-on/active/[change]/features/` (feature specs as **input only** — use them to establish bidirectional traceability in `BR-XXX` and `INV-XXX` docs, but never link them from `BR-*` / `INV-*` docs)
 
 ---
 
@@ -122,7 +122,7 @@ During entity lifecycle creation, you MUST identify all business rules and invar
    - `docs/product/bounded-contexts/{bounded-context-name}/invariants/INV-[XXX]-[invariant-name].md`
 4. Ensure the generated entity lifecycle document links to these extracted files under its **Invariants & Business Rules** section using relative markdown links (e.g., `../business-rules/BR-[XXX]-[rule-name].md`)
 5. **Complete the `Traceability` section of every rule/invariant you create** (`templates/business-rules.md`
-   §5, `templates/invariants.md` §6) — `Traces up to` (journey, flow, feature), `Enforced by` (one row per
+   §5, `templates/invariants.md` §6) — `Traces up to` (journey, flow), `Enforced by` (one row per
    layer that can reject the policy, naming the file **and** the guard, each marked ✅ Verified /
    ⚠️ Unverified / ⏳ Planned according to what you read in the code) and `Verified by` (test file **and**
    test title). A rule with an empty `Enforced by` table is not finished; a ✅ you did not earn by opening

@@ -19,7 +19,7 @@ When you ask to create a flow from a journey, this skill will:
    - Step-by-step walkthrough table
    - Acceptance criteria (Gherkin format)
    - Edge cases (business, technical, validation)
-   - Technical notes (API, Zod, DB constraints, RLS)
+   - Technical notes (API contract, validation, DB constraints, access control)
    - Business rules and invariants
    - Domain events documentation
 
@@ -99,7 +99,7 @@ The skill ensures all flow documents include:
 - [ ] Walkthrough steps aligned with sequence diagram
 - [ ] Gherkin acceptance criteria
 - [ ] Edge cases (business, technical, validation)
-- [ ] Technical notes (API, Zod, DB, RLS)
+- [ ] Technical notes (API contract, validation, DB, access control)
 - [ ] Business rules and invariants extracted
 - [ ] Domain events documented
 - [ ] ADR compliance checklist

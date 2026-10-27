@@ -97,18 +97,18 @@ Same checks as BRs, plus:
 ### Traceability (applies to every doc type)
 
 Rules and invariants are only findable if their links exist at **both ends**. These checks are
-mechanical — run them before judging content quality. Full convention (shared across SDLC skills):
-[../guidelines/traceability.md](../guidelines/traceability.md) — canonical in this repo at
-`docs/product/guidelines/traceability.md`.
+mechanical — run them before judging content quality. Full convention (the single source; product
+docs carry the sections it defines but do not link to it):
+[../guidelines/traceability.md](../guidelines/traceability.md).
 
 | Check | How to run it | Verdict when it fails |
 | --- | --- | --- |
 | **Reciprocity** | For each `BR-*`/`INV-*` in a flow/entity/value-object `Enforces` list, confirm the rule doc lists that flow/entity back (in `Traces up to` / `Enforced by`); and vice versa | ⚠️ Stale — half an edge |
-| **Completeness of `Enforced by`** | Every layer that can reject this policy is a row: contract/Zod, application, domain, infrastructure, database, UI. Grep the module for the rule's error class and the guard message; each hit is a missing row | ⚠️ Stale (thin) or ❌ Missing |
+| **Completeness of `Enforced by`** | Every layer that can reject this policy is a row: boundary validation (request, schema or DTO), application, domain, infrastructure, database, UI. Grep the module for the rule's error class and the guard message; each hit is a missing row | ⚠️ Stale (thin) or ❌ Missing |
 | **Existence** | Every path and `Symbol.method` in `Enforced by` / `Verified by` still resolves — `test -f` the path, `grep` the symbol in it | ❌ Missing (doc cites code that is gone) |
 | **Test anchor** | Rule has ≥1 `Verified by` test whose title actually appears in that file (`grep -n "<title>" <file>`) | ⚠️ Stale — unverifiable rule |
 | **Status honesty** | ✅ Verified rows are confirmed by opening the file; anything believed goes ⚠️ Unverified; not-yet-built goes ⏳ Planned with no test claim | ⚠️ Stale — unearned ✅ |
-| **Convention mirror** | The shared SDLC mirror is byte-identical to the canonical convention — `cmp -s docs/product/guidelines/traceability.md .agents/skills/sessioflow-sdlc/guidelines/traceability.md` (the file carries no relative links outside its fenced examples, so equality is the requirement; shared across SDLC skills) | ⚠️ Stale — skill teaches outdated rules; re-sync with `cp` |
+| **No links into the skills pack** | Product docs carry the sections the convention defines but must not link to it — `grep -rn "\.claude/skills" <docs root>/product` | ⚠️ Stale: remove the link, keep the prose |
 | **Untagged enforcement** | A rule has flow coverage but no enforcement row that a grep can find | ⚠️ Unverified — record the site by hand |
 
 Report a rule with an empty `Enforced by` table **and** an active flow as the highest-risk finding in
