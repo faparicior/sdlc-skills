@@ -1,5 +1,14 @@
 # sdlc-skills
 
+## 0.3.1
+
+### Patch Changes
+
+- Decouple claim inventory patterns from proprietary tools and expand domain coverage:
+  - Replace product-specific mentions (`kafka`, `datadog`, `unleash`) with stack-agnostic patterns in `claim-inventory.sh`.
+  - Expand domain event past-tense verb allowlist across lifecycle, financial, and messaging domains.
+  - Document pattern tuning guidelines and extension points in `claim-kinds.md`.
+
 ## 0.3.0
 
 ### Minor Changes

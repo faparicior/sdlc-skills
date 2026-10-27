@@ -1,6 +1,6 @@
 {
   "name": "sdlc-skills",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "description": "Universal SDLC agent skills for real engineering: Lean Inception, Story Mapping, Flow Specs, DDD, TDD, ADR governance, and Living Documentation auditing.",
   "repository": {
