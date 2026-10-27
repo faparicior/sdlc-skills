@@ -1,6 +1,6 @@
 {
   "name": "sdlc-skills",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Universal SDLC agent skills for real engineering: Lean Inception, Story Mapping, Flow & Feature Specs, Domain-Driven Design (DDD), TDD implementation, ADR governance, and Living Documentation auditing. Plug-and-play across agents.",
   "author": {
     "name": "Fernando Aparicio",
