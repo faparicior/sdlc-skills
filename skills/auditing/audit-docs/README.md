@@ -26,8 +26,12 @@ to act on findings.
 |-------|---------|
 | Full audit | "audit all docs", "docs health check" |
 | Bounded context | "audit the [context] context" |
+| Folder | "audit the journeys", "check the working-on docs" |
 | Doc type | "check all business rules", "verify entity lifecycles" |
 | Single doc | "is flow-02 still accurate?" |
+
+A full audit covers **every** docs folder, not only the bounded contexts. The report always lists the
+folders audited and the ones not audited.
 
 ---
 
@@ -50,6 +54,12 @@ to act on findings.
 | Invariants (INV-XXX) | Same as BRs + must be in domain layer |
 | Entity Lifecycle docs | States, transitions, domain events, repository interface |
 | Flow docs | Entry point, step sequence, BR/INV citations, Event messaging, external calls, DB constraints, idempotency |
+| Journeys, personas, inception | Status lines, behaviour claims ("waits for the next cron"), agreement with the flow docs |
+| Proposals, plans, feature specs | Status vs code and vs the parent proposal, folder vs status, checklist boxes, names |
+| Architecture assessments | Defaults, nullable fields and flags against code and the latest migrations |
+| Deferred decisions, reminders | Embedded code and the original premise still true |
+| Reference and UI-spec docs | Every enum value and field name against the code's parser; UI spec vs API reference |
+| **Every doc** | Every checkable claim (HTTP status, event, table name, "never/permanently/silently"), doc-against-doc consistency, links, diagrams, and a **claim sweep** before a finding is closed |
 
 ---
 
@@ -65,10 +75,23 @@ to act on findings.
 
 ```
 skills/audit-docs/
-├── SKILL.md    # Full skill instructions
-└── README.md   # This summary
+├── SKILL.md                      # Full skill instructions
+├── README.md                     # This summary
+├── references/
+│   ├── claim-kinds.md            # What to compare each kind of claim with, and how docs usually drift
+│   └── slice-prompt.md           # Prompt template for one sub-agent slice of a large audit
+└── scripts/
+    ├── check-links.sh            # Broken relative links, every folder (skips code fences)
+    ├── check-mermaid.mjs         # Diagrams that do not parse (one-time setup in the header)
+    ├── check-reciprocity.sh      # Traceability edges present at one end only
+    ├── claim-inventory.sh        # Checklist of every checkable claim, by kind
+    ├── claim-sweep.sh            # Every place a given wording appears
+    ├── make-plan.sh              # Plan mode: cut the docs into slices with a claim worksheet each
+    ├── next-slice.sh             # Plan mode: claim the next slice (safe for two workers)
+    ├── check-worksheet.sh        # Plan mode: gate that refuses a slice with unanswered claims
+    └── merge.sh                  # Plan mode: merge worksheets, whole-tree sweep and checks
 ```
 
 ---
 
-**Version:** 1.0
+**Version:** 1.1

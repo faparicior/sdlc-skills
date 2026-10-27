@@ -155,8 +155,8 @@ If you're unsure whether something is a business rule or invariant:
 
 ## References
 
-- [Business Rules Template](../../../../docs/templates/product/business-rules.md)
-- [Invariants Template](../../../../docs/templates/product/invariants.md)
-- [Entity Lifecycle Template](../../../../docs/templates/product/entity-lifecycle.md)
+- Templates that emit these sections — each skill bundles its own copies under `templates/`:
+  `create-entity-lifecycle/templates/business-rules.md`, `create-entity-lifecycle/templates/invariants.md`,
+  `create-entity-lifecycle/templates/entity-lifecycle.md`
 - [Traceability](traceability.md) — how to link rules to the flows, entities and code that enforce them
 - Extracting rules and invariants from existing code: the `reverse-engineer-domain` skill

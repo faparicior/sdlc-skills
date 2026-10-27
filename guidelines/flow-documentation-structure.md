@@ -153,8 +153,8 @@ stateDiagram-v2
 
 ## 📚 Related Documentation
 
-- [Flow Template](../../../../docs/templates/product/flows.md)
-- [Create Flow Command](../create-flow-documentation/SKILL.md)
+- Flow template: bundled with the skill — `create-flow-documentation/templates/flows.md`
+- Command: the `/create-flow-documentation` skill
 - [Business Rules Guide](./business-rules-vs-invariants.md)
 
 ---
