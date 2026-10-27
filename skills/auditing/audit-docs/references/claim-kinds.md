@@ -25,3 +25,11 @@ source is for each kind and where docs usually drift.
 5. **Same claim, many places.** When a claim is wrong, run `scripts/claim-sweep.sh` with its exact wording
    and two or three paraphrases. Judge every hit: some docs describe a different mechanism and are right.
 6. **Ranges and ordering.** "Step 8 before step 9", "A runs before B": check the order in the code.
+
+## Where the patterns live
+
+Every kind above is one `scan` line in `scripts/claim-inventory.sh`. The `TUNE HERE` block at the top of
+that script marks the two per-product surfaces (event verbs, naming formats): extend them when auditing a
+new product whose wording the patterns miss. Adding a kind means adding both a `scan` line and a row in
+the table above. Under-detection is the only silent failure — when in doubt, broaden the pattern; the
+inventory is a noisy checklist by design and every line is judged before it becomes a finding.
