@@ -40,12 +40,14 @@ will:
 ## 🚀 How to Use This Skill
 
 ### Natural Language Triggers
+
 - "I want to disable/change [existing behaviour]"
 - "Create a modification proposal for [flow/entity/rule]"
 - "How do we document this change before implementing it"
 - "Modify [flow] to no longer..."
 
 ### What Happens
+
 1. Skill discovers this repo's doc conventions, source layout, and real commands
 2. Reads the affected flow/entity/BR docs and the real source code behind them
 3. Generates `proposal.md` — product-framed rationale + real-code current/desired behaviour + scope
@@ -63,7 +65,8 @@ skills/modify-flow/
 ├── README.md                       # This summary
 ├── templates/
 │   ├── proposal.md                 # Modification proposal template
-│   └── implementation-plan.md      # Phased implementation plan template
+│   ├── implementation-plan.md      # Phased implementation plan template
+│   └── parallel-change-plan.md     # Variant: Expand -> Migrate -> Contract for staged migrations
 └── evals/
     └── evals.json                  # Test cases for evaluation
 ```
@@ -73,6 +76,7 @@ skills/modify-flow/
 ## ✅ Quality Checklist
 
 The skill ensures every proposal includes:
+
 - [ ] This repo's own conventions discovered first — no assumed stack, folder names, or sibling skills
 - [ ] Product Rationale kept as bullets (As a/I want to/So that, Known Gaps); Personas Affected and
       Business Value as tables
@@ -83,6 +87,7 @@ The skill ensures every proposal includes:
 - [ ] Impact on Existing Documentation naming the exact docs to update in place (no new parallel docs)
 
 And every implementation plan includes:
+
 - [ ] Phases derived from the proposal's Scope of Change table, ordered inside-out per this repo's own
       real layering
 - [ ] Test-authoring tasks per phase, matching this repo's own convention (test-first if it does TDD)

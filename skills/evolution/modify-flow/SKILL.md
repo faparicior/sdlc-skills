@@ -87,7 +87,7 @@ Before writing a proposal, ask the user (or infer from the request and confirm):
 
 | Tier | When | Path |
 | :--- | :--- | :--- |
-| **Light** | All answers "no" — a single behaviour tweak (threshold, validation, window length) | **Do not create a proposal folder.** Write a short change note for the PR, implement test-first, and edit the affected flow/entity/BR doc in the same PR (update its `Enforced by` / `Verified by` rows). Stop here. |
+| **Light** | All answers "no" — a single behaviour tweak (threshold, validation, window length) | **Do not create a proposal folder.** Write a short change note for the PR, implement test-first, and edit the affected flow/entity/BR doc in the same PR (update its `Enforced by` / `Verified by` rows). **Still run Step 1.11 (boundary-values check) for any new or reused input and put the result in the change note** — Light skips the proposal, not that check. Stop here. |
 | **Standard** | One PR-sized slice, but with a design choice, invariant or migration | Proposal with a single slice (S1), then Steps 3–6. No feature specs. |
 | **Full** | Several slices, several repos, or a long pause expected | Everything below, including feature specs (`/create-features`) saved inside the proposal folder. |
 
@@ -121,13 +121,13 @@ override it. In every tier the living doc changes in the same PR as the code tha
      don't silently skip the frozen doc, and don't silently rewrite it either.
 5. While reading upstream docs, also note who is affected (personas) and whether this reverses or extends
    an already-scoped feature — this feeds Section 1 (Product Rationale), not just Section 6.
-7. **Perform Concurrency, TOCTOU, Idempotency & Active Invariant Cross-Check** —
+6. **Perform Concurrency, TOCTOU, Idempotency & Active Invariant Cross-Check** —
    - **Cross-check active invariants across all bounded contexts**: Search `docs/product/bounded-contexts/**/invariants/INV-*.md` and `docs/product/discovered/invariants/INV-RAW-*.md` for any invariant whose statement constrains the operations being modified, extended, or newly called (e.g. calling an application/domain service from a new entry point, adding a new delivery mechanism, mutating status).
    - For each matching invariant, verify whether the change preserves enforcement or introduces an unconstrained code path. List each relevant INV in the proposal's scope and implementation plan.
    - Evaluate if modifying this flow introduces new race conditions, check-then-act vulnerabilities, duplicate replay side-effects, or alters domain invariant enforcements (e.g. database-level unique indexes, optimistic locking versioning, aggregate consistency boundaries, transactional outbox atomicity, or transaction isolation).
-8. **Evaluate Migration & Backward Compatibility** — determine if modifying data schemas, contracts, or business rules requires database column defaults,
+7. **Evaluate Migration & Backward Compatibility** — determine if modifying data schemas, contracts, or business rules requires database column defaults,
    data backfill scripts, or API contract versioning for backward compatibility with clients.
-9. **Read the rule/invariant document's own traceability section before grepping.** If this repo links
+8. **Read the rule/invariant document's own traceability section before grepping.** If this repo links
    rules to the artifacts that enforce them (a `Traceability` / `Enforced by` / `Verified by` section —
    convention shared across SDLC skills at [../guidelines/traceability.md](../guidelines/traceability.md)),
    that section *is* the
@@ -136,9 +136,22 @@ override it. In every tier the living doc changes in the same PR as the code tha
    ✅ Verified means somebody saw the guard, ⚠️ Unverified means it is a lead to confirm by opening the
    file, ⏳ Planned means it does not exist yet — promote nothing silently, and put every ⚠️ you confirm or
    reject into the proposal.
-10. **Check the tests, not just the code.** For each `Verified by` test, confirm the file and the test title
+9. **Check the tests, not just the code.** For each `Verified by` test, confirm the file and the test title
     still exist (`grep -n "<title>" <test-file>`); those tests are what fails when a guard is deleted, so
     they are the change's real safety net and the tests you will have to rewrite.
+10. **Boundary-values check for every new or reused input.** For each new parameter, flag, config value or
+    field the change adds, and each existing one it starts to feed from a new source:
+    - list **every place it is consumed** (grep the variable through the call chain, not just the line you
+      are editing) — one value reused for two calculations (e.g. a date used both as "is it started yet" and
+      as the start of a counting window) is the typical hidden coupling;
+    - try **values on both sides of every boundary it crosses**: past / present / future, same / next period
+      (month, year), empty / one / many, and **mixed states** in one call (some records already started, some
+      not; some at their limit, some not);
+    - ask **what a caller gains by passing an unusual value** — can it bypass a limit, a permission or a
+      uniqueness rule that the normal path enforces?
+    Record the answers in the proposal (Section 4) or, for the Light tier, in the change note. Each risky
+    value found becomes a test. Do not write a doc sentence that declares a side effect "intended" before
+    this check has been done.
 
 ---
 
@@ -265,8 +278,20 @@ Only after the proposal's Open Questions are resolved (for the slice being plann
 proposal, plan **one slice at a time** — the next slice is planned when it is resumed (Step 2b), against the
 code as it is then.
 
+- **Parallel change variant.** If the proposal's Migration & Backward Compatibility table marks a contract as
+  **Deprecation** and records a staged rollout (old and new versions coexist while consumers migrate
+  gradually), use `templates/parallel-change-plan.md` instead of `templates/implementation-plan.md`. Phases
+  are then the lifecycle **Expand → Migrate → Contract** (not inside-out), the "no orphaned flags / remove
+  dead code" rules apply only at the Contract phase, baseline usage metrics on the old surface come first,
+  and Rollout Notes carry the flags table, the per-consumer migration table with entry/exit criteria, the
+  signals that confirm the rollout, and the risks. Optional companions in the change folder: a
+  mapping inventory (when the consumers' value mapping moves to the backend), a ticket backlog file, and a
+  next-steps file for resuming. The variant also carries Mermaid skeletons: put the lifecycle gates diagram at
+  the top of the plan's Phases section, and, in the proposal (Step 2), open Section 3 (Desired Behaviour)
+  with the before/after sequence diagram and the old/new coexistence diagram from the template's appendix,
+  so readers see who orchestrates what before reading the tables. Everything else in Step 3 still applies.
 - If the proposal's Section 6 listed cross-repo dependencies, fill in **Section 0 (Cross-Repo Dependencies)** of the implementation plan — carry the repo table and deploy-order note forward from the proposal verbatim. Phases that belong to an external repo come before phases in this repo when deploy order requires it.
-- Phases must be derived from the proposal's **Scope of Change** table — one phase per real
+- (Unless the parallel change variant above applies.) Phases must be derived from the proposal's **Scope of Change** table — one phase per real
   file/component, ordered **inside-out** matching this specific codebase's actual layering, whatever that
   is (do not impose domain/application/infrastructure, CQRS modules, MVC, or any other template if the
   repo is organized differently — use Step 0's findings).
@@ -287,7 +312,10 @@ Follow this repo's own documented conventions (its `CLAUDE.md`/`AGENTS.md`/READM
 than any generic process — skip steps that assume infrastructure this repo doesn't have (e.g. an ADR index)
 unless Step 0 confirmed it exists. Implement **only the current slice's features**; leave later slices
 untouched. Work phase by phase from the implementation plan, checking off tasks as
-they complete. Run this repo's real validation commands (found in Step 0) before marking a phase done.
+they complete. Run this repo's real validation commands (found in Step 0) before marking a phase done —
+**the full unit suite and the architecture tests, not only the tests you touched**: changing a signature
+breaks mocks in test classes you never opened. Run the integration suite before the change is declared
+done or a PR is opened.
 
 ---
 
@@ -353,20 +381,27 @@ still `📋 Planned`/`🔄 In Progress`, the proposal stays where it is (Status 
 `⏸ Parked`) — it is the record of what remains.
 
 1. **Move to Grace Period**: Do not delete the proposal immediately upon shipping. Move the directory out of active view to prevent LLM context contamination across branches or worktrees:
+
    ```bash
    mv docs/product/working-on/active/[change-name] docs/product/working-on/grace-period/
    ```
+
    Update status in `proposal.md`:
+
    ```markdown
    * **Status:** 🚀 Implemented (Grace Period)
    * **Shipped Date:** YYYY-MM-DD
    ```
+
    Keep the directory during staging/production verification so the team can reference rationale or make quick hotfixes if regressions occur.
 2. **Mark Ready to Purge**: Once verified stable in production (or at the start of the next sprint/feature cycle), mark status:
+
    ```markdown
    * **Status:** 🧹 Ready to Purge
    ```
+
 3. **Safe Purge**: Because living documentation (`bounded-contexts/`, `flows/README.md`) was already updated in Step 5, deleting the proposal directory loses zero context:
+
    ```bash
    rm -rf docs/product/working-on/grace-period/[change-name]
    ```
@@ -376,9 +411,10 @@ still `📋 Planned`/`🔄 In Progress`, the proposal stays where it is (Status 
 ## 📚 Bundled Resources
 
 | Template | Purpose |
-|----------|---------|
+| ---------- | --------- |
 | `templates/proposal.md` | Modification proposal — product rationale + current/desired behaviour + real-code scope |
 | `templates/implementation-plan.md` | Phased implementation plan derived from the proposal's scope table |
+| `templates/parallel-change-plan.md` | Variant for staged migrations where old and new coexist: Expand → Migrate → Contract phases, flags and per-consumer rollout tables |
 
 ## 🔗 Related Skills
 
@@ -387,11 +423,11 @@ If this repo has skills for first-time flow/entity documentation (any name — e
 document structure and, where applicable, invoke them directly to regenerate an existing doc rather than
 hand-editing it.
 
-If this repo has a traceability convention document (shared across SDLC skills at
-`../guidelines/traceability.md`), it is binding for Step 1.9 and Step 5.4 — the markdown links are
+The traceability convention (shared across SDLC skills at
+`../guidelines/traceability.md`) is binding for Step 1.9 and Step 5.4 — the markdown links are
 the record; code comments that cite rule IDs are optional corroboration, never a substitute.
 
 ---
 
-**Version:** 1.1 — generalized to be language- and framework-agnostic; no longer assumes a specific repo's
+**Version:** 1.3 — added the parallel change plan variant (`templates/parallel-change-plan.md`, with Mermaid diagram skeletons) and its trigger in Step 3. 1.2 — added the boundary-values check (Step 1.11, also for the Light tier) and a full-suite run in Step 4. 1.1 — generalized to be language- and framework-agnostic; no longer assumes a specific repo's
 stack, folder names, or sibling skills.
