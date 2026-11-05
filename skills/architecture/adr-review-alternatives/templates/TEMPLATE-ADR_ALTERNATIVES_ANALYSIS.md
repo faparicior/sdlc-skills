@@ -1,12 +1,11 @@
+<!--
 # Template: ADR Alternatives Analysis
+Template Version: 1.0
+Created: 2026-06-06
+Purpose: Standardized template for analyzing ADR alternatives and best practices
+-->
 
-**Template Version:** 1.0  
-**Created:** 2026-06-06  
-**Purpose:** Standardized template for analyzing ADR alternatives and best practices
-
----
-
-# SessioFlow ADR Alternatives Analysis
+# [Project Name] ADR Alternatives Analysis
 
 **Analysis Date:** [YYYY-MM-DD]  
 **Analyst:** [Name/Role]  

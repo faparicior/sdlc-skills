@@ -38,39 +38,37 @@ Step 6: Write & Sync  -> read_file(templates/TEMPLATE.md)   -> docs/adr/0XX-*.md
 2. The new ADR number is `0XX` (e.g., `024`). Never leave sequence gaps.
 3. Formulate the filename using kebab-case: `docs/adr/0XX-decision-title.md` (e.g., `docs/adr/024-use-redis-for-caching.md`).
 
-### 2. Gather Context & Architecture Drivers
-Extract or prompt for:
-- **Status**: Default to `Proposed` (or `Accepted` if already agreed upon).
-- **Context & Problem Statement**: What technical, product, or operational problem forces this decision?
-- **Decision Drivers**: 2–4 bullet points prioritizing constraints (e.g., zero-cost free tier, DDD isolation, developer experience).
+### 2. Gather Metadata, Context & Decision Drivers
+Populate the header metadata and `## Context and Problem Statement` section from `templates/TEMPLATE.md`:
+- **Header Metadata**: `* **Status:**` (`Proposed` or `Accepted`), `* **Date:**`, `* **Decision Makers:**`, `* **Supersedes:** [ADR-0000](link) | N/A`, `* **Amended By:** [ADR-0000](link) | N/A`.
+- **`## Context and Problem Statement`**: What technical, product, or operational problem forces this decision?
+- **`**Decision Drivers:**`**: 2–4 bullet points prioritizing constraints (e.g., zero-cost free tier, DDD isolation, developer experience).
 
-### 3. Evaluate Options (Minimum 2–3)
-Document at least 2 viable options with concrete trade-offs:
-- **Option 1**: Selected choice.
-- **Option 2**: Primary alternative considered.
-- **Option 3**: Secondary alternative considered.
-Include:
-- ✅ **Pros / Advantages**
-- ❌ **Cons / Drawbacks**
+### 3. List Considered Options & Decision Outcome
+Populate `## Considered Options` and `## Decision Outcome`:
+- **`## Considered Options`**: Bulleted list of at least 2–3 viable options (`[Option 1]`, `[Option 2]`, `[Option 3]`).
+- **`## Decision Outcome`**:
+  - **`**Chosen Option:** "[Option 1]"`** and **`**Justification:**`** explaining why it wins over the alternatives.
+  - **`### Consequences`**:
+    - `* **Positive:**` What improves or becomes easier.
+    - `* **Negative:**` What becomes harder, technical debt incurred, or complexity added.
+    - `* **Risks:**` Potential downsides and how they will be handled.
 
-### 4. Decision Outcome & Consequences
-- State the chosen option clearly and justify why it wins over the alternatives.
-- Document consequences:
-  - **Positive consequences**: What improves or becomes easier.
-  - **Negative consequences**: What becomes harder, technical debt incurred, or complexity added.
-  - **Risks & Mitigations**: How potential downsides will be handled.
-
-### 5. Mandatory 🤖 AI & Agentic Ergonomics (AX)
-Every ADR in SessioFlow must document AI friction to keep autonomous agents on-plan:
-- **LLM Corpus Alignment**:
+### 4. Mandatory `### 🤖 AI & Agentic Ergonomics (AX)`
+Every ADR must document AI friction under `## Decision Outcome` -> `### 🤖 AI & Agentic Ergonomics (AX)` to keep autonomous agents on-plan:
+- **`* **LLM Corpus Alignment:**`**:
   - `High (>80%)`: Ubiquitous pattern well-represented in LLM pretraining (e.g., RESTful endpoints, Tailwind, Docker Compose).
   - `Medium (30-80%)`: Known pattern but with significant ecosystem variance (e.g., Supabase, Drizzle ORM).
-  - `Atypical (<30%)`: Patterns counter to internet CRUD defaults (e.g., pure DDD Value Objects without Zod in domain, CQRS separation in Next.js, ts-archunit guardrails).
-- **Guardrail Tax**:
-  - `Low`: Standard TypeScript compiler or simple linter catches violations.
+  - `Atypical/Exotic (<30%)`: Patterns counter to internet CRUD defaults (e.g., pure DDD Value Objects without Zod in domain, CQRS separation, `ts-archunit` guardrails).
+- **`| Expected Agent Bias | Automated Guardrail |` Table**: Pair each expected LLM deviation with a named automated countermeasure (or justify `—` as an accepted manual-review risk).
+- **`* **Supervision & Guardrail Tax:**`**:
+  - `Low`: Standard TypeScript/language compiler or simple linter catches violations.
   - `Medium`: Requires custom lint rules or integration tests.
   - `High`: Requires custom architectural AST tests (`check:arch`, `ts-archunit`) to prevent agent deviation.
-- **Drift Risks**: Where LLMs are likely to hallucinate or regress to generic patterns.
+
+### 5. Document `## Pros and Cons of the Options` & `## Links`
+- Under `## Pros and Cons of the Options`, create `### [Option N]` subsections using `* Good, because ...` and `* Bad, because ...` bullets.
+- Under `## Links`, link related ADRs, inception docs, or tickets.
 
 ### 6. Write File & Update Catalog
 1. Save the new ADR to `docs/adr/0XX-your-decision-name.md`.

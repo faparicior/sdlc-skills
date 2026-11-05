@@ -1,7 +1,7 @@
-# 3. Features & Sequencing
+# Step 7: Features & Sequencing
 
-## 3.1 Brainstormed Features (Initial List)
-*All features considered, before prioritization.*
+## 7.1 Brainstormed Features (Initial List)
+*All features considered from Step 6 (Brainstorming), before prioritization.*
 
 * [ ] Feature A: [Description]
 * [ ] Feature B: [Description]
@@ -9,7 +9,7 @@
 
 ---
 
-## 3.2 The Feature Sequencer (Release Planning)
+## 7.2 The Feature Sequencer (Release Planning)
 *The prioritized list defining the MVP (Wave 1) and subsequent releases.*
 
 ### 🌊 Wave 1: The Minimum Viable Product (MVP)

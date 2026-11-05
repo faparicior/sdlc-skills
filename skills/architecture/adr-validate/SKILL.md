@@ -12,18 +12,18 @@ disable-model-invocation: true
 <state_machine>
 CURRENT_STEP          -> REQUIRED_TOOL                                      -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
 Step 1: Read Target   -> read_file (target ADR + docs/adr/README.md)        -> Target ADR content & index state                        -> Continue to Step 2
-Step 2: Audit Rubric  -> read_file(templates/TEMPLATE-ADR_VALIDATOR.md)     -> 6-point rubric evaluation                               -> Continue to Step 3
+Step 2: Audit Rubric  -> read_file(templates/TEMPLATE-ADR_VALIDATOR.md)     -> 7-criteria weighted rubric evaluation                   -> Continue to Step 3
 Step 3: Score Report  -> format using TEMPLATE-ADR_VALIDATOR.md             -> Scored validation report (High / Medium / Low)          -> 🛑 HALT TURN (Present audit)
 </state_machine>
 
 <execution_invariants>
-1. WORKFLOW IMMUTABILITY: Execute all 3 steps and all 6 rubric checks in strict order (`workflow structure = immutable | step reasoning = flexible`).
-2. TEMPLATE LOCK: You MUST call `read_file` on `templates/TEMPLATE-ADR_VALIDATOR.md` before producing the validation report and preserve its exact rubric sections and scoring structure.
+1. WORKFLOW IMMUTABILITY: Execute all 3 steps and all 7 rubric criteria in strict order (`workflow structure = immutable | step reasoning = flexible`).
+2. TEMPLATE LOCK: You MUST call `read_file` on `templates/TEMPLATE-ADR_VALIDATOR.md` before producing the validation report and preserve its exact rubric sections and weighted scoring structure.
 </execution_invariants>
 
 <output_contract>
 - SOURCE_TEMPLATE: `templates/TEMPLATE-ADR_VALIDATOR.md` (MUST call `read_file` before producing report)
-- SCHEMA_INVARIANCE: Preserve all 6 rubric check sections and overall quality score breakdown verbatim.
+- SCHEMA_INVARIANCE: Preserve all 7 validation criteria sections, the weighted Quality Score Summary table (`3.0` scale), and the Validation Summary verbatim.
 </output_contract>
 
 ---
@@ -33,42 +33,53 @@ Step 3: Score Report  -> format using TEMPLATE-ADR_VALIDATOR.md             -> S
 ### 1. Identify Target ADR File
 Locate the file in `docs/adr/` specified by the user (or prompt for the path if not provided).
 
-### 2. Audit Against the 6-Point Quality Rubric
+### 2. Audit Against the 7-Criteria Weighted Quality Rubric (`templates/TEMPLATE-ADR_VALIDATOR.md`)
 
-#### Check 1: Metadata Completeness
-- [ ] Number follows 3-digit sequential standard (`0XX`).
-- [ ] Status is valid (`Proposed`, `Accepted`, `Approved`, `Superseded`, `Deprecated`).
-- [ ] Date is present and correctly formatted.
-- [ ] Two-way links exist if this is an amendment (`Amends`) or superseded record (`Superseded By`).
+#### Criteria 1: Metadata & Formal Compliance (Weight: 10%)
+- [ ] Status field present and valid (`Proposed`, `Accepted`, `Approved`, `Deprecated`, `Superseded`).
+- [ ] Date field present (`YYYY-MM-DD` format).
+- [ ] Decision makers identified.
+- [ ] `Supersedes` / `Amended By` (or `Amends`) fields completed with two-way links where applicable.
+- [ ] ADR follows standard template structure and 3-digit sequential numbering (`0XX`).
 
-#### Check 2: Context & Problem Statement
-- [ ] Problem statement clearly explains the technical or business force driving the decision.
-- [ ] Constraints and decision drivers (e.g., zero-cost tier, DDD boundaries) are explicitly listed.
+#### Criteria 2: Context & Problem Statement (Weight: 20%)
+- [ ] Context is clear and unbiased (value-neutral).
+- [ ] Problem statement is specific and well-defined.
+- [ ] References specific pain points or constraints.
+- [ ] Decision drivers are explicitly stated.
+- [ ] Links back to inception artifacts or business requirements.
 
-#### Check 3: Considered Options (Minimum 2–3)
-- [ ] At least 2–3 viable, real-world alternatives are analyzed.
-- [ ] Each option has balanced, objective pros (✅) and cons (❌).
-- [ ] No strawman alternatives designed solely to validate the chosen option.
+#### Criteria 3: Options & Analysis (Weight: 20%)
+- [ ] At least 2–3 viable alternatives considered.
+- [ ] No strawman options (all options are realistic).
+- [ ] Each option has pros and cons documented (`Good, because...` / `Bad, because...`).
+- [ ] Options are compared against decision drivers and trade-offs are explicitly discussed.
 
-#### Check 4: Decision Outcome & Consequences
-- [ ] Clear statement of the winning decision.
-- [ ] Concrete justification explaining why it was chosen over the alternatives.
-- [ ] Balanced consequences: positive impacts, negative impacts/trade-offs, and risk mitigations.
+#### Criteria 4: Decision Outcome (Weight: 20%)
+- [ ] Chosen option is clearly identified.
+- [ ] Justification is logical, evidence-based, and references decision drivers.
+- [ ] Decision aligns with project constraints (cost, timeline, architecture boundaries).
 
-#### Check 5: 🤖 AI & Agentic Ergonomics (AX) [Mandatory]
-- [ ] `LLM Corpus Alignment` is classified (`High`, `Medium`, `Atypical`).
-- [ ] `Guardrail Tax` is evaluated (`Low`, `Medium`, `High`).
-- [ ] `Drift Risks` are documented (explaining where LLMs are prone to hallucinate or revert to generic patterns).
+#### Criteria 5: Consequences Documentation (Weight: 10%)
+- [ ] Positive consequences explicitly listed.
+- [ ] Negative consequences explicitly listed.
+- [ ] Risks identified and documented with actionable mitigations.
 
-#### Check 6: References & Document Health
-- [ ] All file links use working relative paths within `docs/adr/` or repo markdown links.
-- [ ] The record is listed in `docs/adr/README.md`.
+#### Criteria 6: Traceability & References (Weight: 10%)
+- [ ] Links to inception artifacts, related ADRs, and external documentation/benchmarks.
+- [ ] Record is listed in `docs/adr/README.md` with working relative links.
+
+#### Criteria 7: AI & Agentic Ergonomics (AX) [Mandatory] (Weight: 10%)
+- [ ] `LLM Corpus Alignment` states an estimated training-corpus match (`High >80%` / `Medium 30-80%` / `Atypical/Exotic <30%`).
+- [ ] `Expected Agent Bias | Automated Guardrail` table pairs each expected agent deviation with a named automated countermeasure.
+- [ ] Rows marked `—` are explicitly justified as accepted manual-review risks.
+- [ ] `Supervision & Guardrail Tax` (`Low`, `Medium`, `High`) is assessed.
 
 ### 3. Assign Quality Score & Provide Feedback
-Calculate overall quality score:
-- **High (Pass)**: 6/6 checks satisfied. The ADR is complete and ready for adoption.
-- **Medium (Conditional Pass)**: 4–5 checks satisfied with minor gaps (e.g., weak consequences or missing AX tag). Provide bullet points for quick fixes.
-- **Low (Needs Revision)**: <4 checks satisfied (e.g., only 1 option considered, missing context, no AX section). Block adoption until remediated.
+Score each of the 7 criteria (`High = 3`, `Medium = 2`, `Low = 1`), compute the weighted score out of `3.0` (`[X]/7` criteria at High level), and assign the rating:
+- **High Quality (Accept)**: 6–7 criteria at High level, no Low ratings.
+- **Medium Quality (Accept with Revisions)**: 4–5 criteria at High level, or 1–2 Medium ratings. Provide concrete action items.
+- **Low Quality (Reject / Revise)**: More than 2 criteria at Medium or any Low rating (e.g., missing AX section or strawman options). Block adoption until remediated.
 
 ---
 
@@ -76,5 +87,5 @@ Calculate overall quality score:
 Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
 - [ ] Target ADR file and `docs/adr/README.md` were read via `read_file`.
 - [ ] **Template Read Verified:** `read_file` was called on `templates/TEMPLATE-ADR_VALIDATOR.md`.
-- [ ] All 6 rubric checks evaluated and scored using the template's exact structure.
+- [ ] All 7 rubric criteria evaluated and scored using the template's exact weighted structure.
 </self_validation_gate>

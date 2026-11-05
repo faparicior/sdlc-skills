@@ -9,7 +9,7 @@
 
 ## Context and Problem Statement
 
-Describe the specific question this analysis answers (e.g., vendor lock-in exposure, alternative evaluation, market research, cost study). State what decision(s) it informs and which ADR(s) depend on its conclusion.
+<!-- Describe the specific question this analysis answers (e.g., vendor lock-in exposure, alternative evaluation, market research, cost study). State what decision(s) it informs and which ADR(s) depend on its conclusion. -->
 
 ---
 
@@ -62,7 +62,7 @@ Describe the specific question this analysis answers (e.g., vendor lock-in expos
 
 ## 🤖 AI & Agentic Ergonomics (AX)
 
-Evaluate the friction of the pattern this analysis recommends (the validator audits this section).
+<!-- Evaluate the friction of the pattern this analysis recommends (the validator audits this section). -->
 
 * **LLM Corpus Alignment:** [High (>80%) | Medium (30-80%) | Atypical/Exotic (<30%) for the recommended pattern]
 

@@ -5,6 +5,7 @@
 * **Type:** [Simple Value Object | Composite Value Object]
 * **Immutability:** ✅ Immutable
 * **Validation:** [Summary of validation constraints]
+* **Implementation Source Path:** `[path/to/VoName.ext]`
 
 ---
 
@@ -33,9 +34,7 @@
 | `get value` | Encapsulated getter for underlying primitive | ✅ Built |
 | `equals(other)` | Structural equality comparison | ✅ Built |
 
-> `✅ Built` only for a member you found in the class you opened; `⏳ Planned` for anything you are
-> specifying rather than describing. Never leave a method row in the present tense if the code does not
-> have it.
+<!-- `✅ Built` only for a member you found in the class you opened; `⏳ Planned` for anything you are specifying rather than describing. Never leave a method row in the present tense if the code does not have it. -->
 
 ---
 
@@ -47,13 +46,24 @@
 
 ---
 
-## 🔒 Invariants
+## 🔒 Invariants & Business Rules
 
 *The `Enforces` edge: every rule this value object is responsible for upholding. Both ends or it didn't
 ship — each rule listed here must link back to this value object in its `Enforced by` table.*
 
 * [INV-[XXX]](../invariants/INV-[XXX]-[invariant-name].md): [Short invariant title]
 * [BR-[XXX]](../business-rules/BR-[XXX]-[rule-name].md): [Short business rule title]
+
+### Enforcement & tests
+
+Where each guard lives and what pins it.
+
+| Rule | Enforcing member | Test |
+| ---- | ---------------- | ---- |
+| [INV-[XXX]](../invariants/INV-[XXX]-[invariant-name].md) | `[VoName].create()` | `tests/unit/modules/[context]/domain/value-objects/[vo].test.ts` |
+| [BR-[XXX]](../business-rules/BR-[XXX]-[rule-name].md) | `[VoName].create()` | `tests/unit/modules/[context]/domain/value-objects/[vo].test.ts` |
+
+<!-- Name only an enforcing member and a test file you opened. A `✅` you did not earn by reading the file is worse than a `⚠️`. -->
 
 ---
 

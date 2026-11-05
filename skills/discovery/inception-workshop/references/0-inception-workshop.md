@@ -13,14 +13,14 @@ You are an expert **Lean Inception Facilitator** and **Agile Coach** with deep k
 ## 3. The Lean Inception Steps & Template Mapping
 | Step | Phase Name | Template File Path | Output File Path | Validator File Path |
 | :--- | :--- | :--- | :--- | :--- |
-| **1** | Product Vision & Boundaries | `docs/templates/inception/1-product-vision-and-boundaries.md` | `docs/inception/1-product-vision-and-boundaries.md` | `docs/commands/inception/1-product-vision-boundary-validator.md` |
-| **2** | Tradeoffs | `docs/templates/inception/2-tradeoffs.md` | `docs/inception/2-tradeoffs.md` | `docs/commands/inception/2.2-tradeoff-validator.md` |
-| **3** | Personas | `docs/templates/inception/3-personas.md` | `docs/inception/3-personas/` | `docs/commands/inception/3-personas-validator.md` |
-| **4** | Empathy Map | `docs/templates/inception/4-empathy-map.md` | `docs/inception/4-empathy-map.md` | `docs/commands/inception/4-empathy-map-validator.md` |
-| **5** | Features Brainstorming | `docs/templates/inception/6-brainstorming.md` | `docs/inception/6-brainstorming.md` | `docs/commands/inception/6-brainstorming-validator.md` |
-| **6** | User Journey Mapping | `docs/templates/inception/5-user-journey-mapping.md` | `docs/inception/5-user-journeys/` | `docs/commands/inception/5-user-journey-validator.md` |
-| **7** | Features & Sequencing | `docs/templates/inception/7-features-and-sequencing.md` | `docs/inception/7-features-and-sequencing.md` | `docs/commands/inception/7-features-and-sequencing-validator.md` |
-| **8** | MVP Canvas Definition | `docs/templates/inception/8-mvp-canvas-definition.md` | `docs/inception/8-mvp-canvas-definition.md` | `docs/commands/inception/8-mvp-canvas-definition-validator.md` |
+| **1** | Product Vision & Boundaries | `templates/1-product-vision-and-boundaries.md` | `docs/inception/1-product-vision-and-boundaries.md` | `references/1-product-vision-boundary-validator.md` |
+| **2** | Tradeoffs | `templates/2-tradeoffs.md` | `docs/inception/2-tradeoffs.md` | `references/2.2-tradeoff-validator.md` |
+| **3** | Personas | `templates/3-personas.md` | `docs/inception/3-personas/` | `references/3-personas-validator.md` |
+| **4** | Empathy Map | `templates/4-empathy-map.md` | `docs/inception/4-empathy-map.md` | `references/4-empathy-map-validator.md` |
+| **5** | User Journey Mapping | `templates/5-user-journey-mapping.md` | `docs/inception/5-user-journeys/` | `references/5-user-journey-validator.md` |
+| **6** | Features Brainstorming | `templates/6-brainstorming.md` | `docs/inception/6-brainstorming.md` | `references/6-brainstorming-validator.md` |
+| **7** | Features & Sequencing | `templates/7-features-and-sequencing.md` | `docs/inception/7-features-and-sequencing.md` | `references/7-features-and-sequencing-validator.md` |
+| **8** | MVP Canvas Definition | `templates/8-mvp-canvas-definition.md` | `docs/inception/8-mvp-canvas-definition.md` | `references/8-mvp-canvas-definition-validator.md` |
 
 ## 4. The Lean Inception Steps
 
@@ -40,13 +40,13 @@ You are an expert **Lean Inception Facilitator** and **Agile Coach** with deep k
 * **Goal:** Deepen understanding of the user by exploring what they think, feel, say, and do in relation to the product.
 * **Key Check:** Does the Empathy Map provide actionable insights? Are the pains and gains clearly articulated and connected to the personas?
 
-### Step 5: Features Brainstorming
+### Step 5: User Journey Mapping
+* **Goal:** Map the end-to-end user journey across stages, visualizing how the product supports the user's path and identifying gaps.
+* **Key Check:** Does every journey stage have clear triggers and actions? Is the critical path fully covered? Have you identified any gaps in the user experience?
+
+### Step 6: Features Brainstorming
 * **Goal:** Brainstorm and identify potential features for the product based on personas, journeys, and empathy maps. Generate a comprehensive list of features without filtering.
 * **Key Check:** Have you generated a diverse range of features? Are the features clearly linked to specific user needs and pain points identified in previous steps?
-
-### Step 6: User Journey Mapping
-* **Goal:** Map the brainstormed features to specific stages of the user journey, visualizing how features support the user's path and identifying gaps.
-* **Key Check:** Does every journey stage have supporting features? Is the critical path fully covered? Have you identified any gaps in the user experience?
 
 ### Step 7: Features & Sequencing
 * **Goal:** Review the journey-mapped features and decide which ones form the **Minimum Viable Product (MVP)**, separating them into Waves.

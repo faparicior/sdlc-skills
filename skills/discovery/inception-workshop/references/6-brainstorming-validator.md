@@ -1,6 +1,6 @@
 # AI Feature Brainstorming & Assessment Audit
 
-Role: You are a Lean Inception Coach and Product Strategist. Your task is to audit the "Step 5: Features Brainstorming" template to ensure it transitions effectively from user discovery to technical planning.
+Role: You are a Lean Inception Coach and Product Strategist. Your task is to audit the "Step 6: Features Brainstorming" template to ensure it transitions effectively from user discovery to technical planning.
 
 ## Instructions for the Audit: 
 

@@ -10,13 +10,13 @@
 
 ## Purpose of This Amendment
 
-Describe the reason for proposing this amendment (e.g., changes in requirements, pricing adjustments, new architecture patterns, or library deprecations).
+<!-- Describe the reason for proposing this amendment (e.g., changes in requirements, pricing adjustments, new architecture patterns, or library deprecations). -->
 
 ---
 
 ## Critical Updates to ADR-0XX
 
-Detail the specific parts of the original decision that are being revised.
+<!-- Detail the specific parts of the original decision that are being revised. -->
 
 ### Update 1: [Topic of Update]
 * **Original ADR-0XX stated:** "[Quote the original text]"
@@ -30,7 +30,7 @@ Detail the specific parts of the original decision that are being revised.
 
 ## Revised Decision Options
 
-List the updated options or modified variants of original options being considered:
+<!-- List the updated options or modified variants of original options being considered: -->
 
 ### Option 1: Keep Original Decision As-Is
 * **Description:** Continue with the choice approved in the original ADR.
@@ -44,7 +44,7 @@ List the updated options or modified variants of original options being consider
 
 ## Revised Consequences
 
-List the positive and negative consequences of the amended approach compared to the original decision.
+<!-- List the positive and negative consequences of the amended approach compared to the original decision. -->
 
 ### If We Choose Option 1 (Keep Original):
 * **Positive:**
@@ -63,7 +63,7 @@ List the positive and negative consequences of the amended approach compared to 
 
 ## 🤖 AI & Agentic Ergonomics (AX)
 
-Re-evaluate friction against LLM training corpora for the **amended** pattern — the original ADR's AX assessment may no longer apply after this change.
+<!-- Re-evaluate friction against LLM training corpora for the amended pattern — the original ADR's AX assessment may no longer apply after this change. -->
 
 * **LLM Corpus Alignment:** [High (>80%) | Medium (30-80%) | Atypical/Exotic (<30%) — for the amended pattern, not the original]
 

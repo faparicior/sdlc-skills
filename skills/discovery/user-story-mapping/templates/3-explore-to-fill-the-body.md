@@ -62,11 +62,10 @@ Identify any high-risk assumptions or technical unknowns discovered during explo
 - Risk 2: [e.g., Users might not understand the icon]
   - Mitigation: [e.g., Perform a quick usability test]
 
---------------------------------------------------------------------------------
-
+<!--
 🔍 Quality Checklist for Step 3
-
 - [ ] Vertical Depth: Did we go "deep" enough to understand the complexity?
 - [ ] Sad Paths: Did we account for errors and what happens when things fail?
 - [ ] User Focus: Are the stories written from the user's perspective, not the system's?
 - [ ] Conversation Trigger: Do the cards serve as a promise for a future conversation, rather than a full specification?
+-->

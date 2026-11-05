@@ -36,7 +36,17 @@ Workflow B (Validate) -> read_file(references/prd-validator.md)             -> 5
 ### Workflow A: Draft a PRD
 
 - Generate a structured PRD using `templates/template-prd.md`.
-- Ensure all sections are populated: Problem Statement, Success Metrics (with baselines), User Personas, Core Logic, Edge Cases, UX/UI, Engineering Specs, and NFRs.
+- Ensure all 10 numbered sections from `templates/template-prd.md` are populated in exact order:
+  1. `## 1. Executive Summary`
+  2. `## 2. Problem Statement` (`2.1 User Pain Points`, `2.2 Strategic Alignment / Business Impact`)
+  3. `## 3. Goals & Success Metrics` (`3.1 Success Metrics` table with Baseline/Target, `3.2 Anti-Goals`)
+  4. `## 4. User Personas & Stories` (`4.1 Target Personas`, `4.2 Key User Stories & Acceptance Criteria`)
+  5. `## 5. Functional Requirements` (`5.1 Core Logic`, `5.2 Edge Cases & Error Handling`)
+  6. `## 6. UX/UI & Design Requirements`
+  7. `## 7. Technical Considerations (Engineering Specs)`
+  8. `## 8. Non-Functional Requirements (NFRs)`
+  9. `## 9. Go-to-Market & Release Strategy`
+  10. `## 10. Open Questions & Risks`
 - Strip all instructional commentary from the output.
 
 ### Workflow B: Review & Validate a PRD

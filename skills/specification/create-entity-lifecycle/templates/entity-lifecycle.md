@@ -4,6 +4,7 @@
 * **Description:** [Brief summary of what this entity represents in the system domain]
 * **Database Table / Collection:** `[table_or_collection_name]`
 * **Primary Key / Identifier:** `[id format, e.g., UUIDv4]`
+* **Implementation Source Path:** `[path/to/Entity.ext]`
 * **Owner Team:** [e.g., Core Commerce / Billing Team]
 
 ---
@@ -32,12 +33,9 @@ stateDiagram-v2
 | `[e.g., PENDING]`| Stripe webhook success | `[PAID]` | Payment status == paid | Generate invoice; trigger confirmation email. | ✅ Built |
 | `[e.g., PENDING]`| Cron timeout (15m) | `[CANCELLED]` | Time elapsed > 15 mins | Release inventory lock back to stock pool. | ⏳ Planned |
 
-> **Status is a claim about the class, not about the product.** Open the domain class before filling this
-> column: `✅ Built` only when you found the mutator or trigger in the code you read, `⚠️ Unverified` when
-> you believe it but did not look, `⏳ Planned` when no code exists yet. A `⏳` row is written in the
-> future tense ("will publish `X`"), never in the present tense — present tense asserts the code ships.
-> A state machine that documents the whole target product as if it were Wave 1 is the single most
-> expensive drift this document can carry.
+<!--
+Status is a claim about the class, not about the product. Open the domain class before filling this column: `✅ Built` only when you found the mutator or trigger in the code you read, `⚠️ Unverified` when you believe it but did not look, `⏳ Planned` when no code exists yet. A `⏳` row is written in the future tense ("will publish `X`"), never in the present tense — present tense asserts the code ships. A state machine that documents the whole target product as if it were Wave 1 is the single most expensive drift this document can carry.
+-->
 
 ---
 
@@ -95,8 +93,7 @@ Where each guard lives and what pins it.
 | [INV-[XXX]](../invariants/INV-[XXX]-[invariant-name].md) | `[Entity].[mutator]()` | `tests/unit/modules/[context]/domain/[entity].test.ts` |
 | [BR-[XXX]](../business-rules/BR-[XXX]-[rule-name].md) | `[Entity].[method]()` / `[ValueObject].create()` | `tests/unit/modules/[context]/domain/value-objects/[vo].test.ts` |
 
-> Name only an enforcing member and a test file you opened. A `✅` you did not earn by reading the file
-> is worse than a `⚠️`.
+<!-- Name only an enforcing member and a test file you opened. A `✅` you did not earn by reading the file is worse than a `⚠️`. -->
 
 ---
 

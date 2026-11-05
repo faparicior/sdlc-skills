@@ -58,7 +58,7 @@ flowchart TB
 
 ## A4. Pending Changes
 
-What is coming that A1–A3 do not describe yet. Detail lives in the proposal; a row is removed, and A1–A3 updated, when its slice ships. Leave the table empty (or write "None") when nothing is pending.
+<!-- What is coming that A1–A3 do not describe yet. Detail lives in the proposal; a row is removed, and A1–A3 updated, when its slice ships. Leave the table empty (or write "None") when nothing is pending. -->
 
 | Change | Slice | Proposal | Ticket | Status |
 |--------|:-----:|----------|--------|--------|

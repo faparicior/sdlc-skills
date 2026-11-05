@@ -41,17 +41,19 @@ Step 4: Sync Catalog  -> edit_file (docs/adr/README.md)               -> Updated
    - **Technical Analysis**: `docs/adr/0XX-02-{topic}-analysis-{subtype}.md` (e.g., `002-02-use-supabase-analysis-vendor-lock-in.md`).
    - **Impact Analysis**: `docs/adr/0XX-04-{topic}-impact-analysis.md` (when a change has ripple effects on other ADRs).
 
-### 2. Draft the Amendment
-Complete the sections in `templates/TEMPLATE-AMENDMENT.md`:
-- **Status**: `Proposed` or `Approved`.
-- **Amends**: Relative link to base ADR.
-- **Context & Drivers**: What new findings, requirements, or real-world friction necessitate this amendment?
-- **Scope of Amendment**: Explicitly document:
-  - What is modified.
-  - What remains unchanged from the original decision.
-- **Amended Decision**: Exact new architectural rule or pattern.
-- **Consequences**: Delta impact on development, dependencies, and testing.
-- **AI & Agentic Ergonomics (AX)**: Updated LLM Corpus Alignment, Guardrail Tax, and drift risks.
+### 2. Draft the Amendment or Analysis
+Complete the exact sections in `templates/TEMPLATE-AMENDMENT.md` (or `templates/TEMPLATE-ANALYSIS.md`):
+- **For an Amendment (`templates/TEMPLATE-AMENDMENT.md`)**:
+  - **Header Metadata**: `* **Status:** Proposed Amendment` (or `Approved`), `* **Date:**`, `* **Decision Makers:**`, `* **Amends:** [ADR-0XX: Original Title](0XX-original-filename.md)`, `* **Related:**`.
+  - **`## Purpose of This Amendment`**: Why this amendment is needed (new information, production experience, or requirement changes).
+  - **`## Critical Updates to ADR-0XX`**: Numbered `### Update N: [Topic of Update]` subsections contrasting `* **Original ADR-0XX stated:**` with `* **Correction/New Analysis:**`.
+  - **`## Revised Decision Options`**: Compare `### Option 1: Keep Original Decision As-Is` against `### Option X: [Amended/Hybrid Option Title]` (`Description`, `Pros`, `Cons`, `When to use`).
+  - **`## Revised Consequences`**: Delta impact per option (`### If We Choose Option 1`, `### If We Choose Option X`).
+  - **`## 🤖 AI & Agentic Ergonomics (AX)`**: `* **LLM Corpus Alignment:**`, `| Expected Agent Bias | Automated Guardrail |` table, and `* **Supervision & Guardrail Tax:**`.
+  - **`## Revised Decision Outcome`**: `### Updated Recommendation` (`Option Chosen`, `Justification`, `Migration Path`).
+  - **`## Updated Links`**: Supersedes/Updates, Related Documents, Reference Implementation.
+- **For a Technical Analysis (`templates/TEMPLATE-ANALYSIS.md`)**:
+  - Complete `## Context and Problem Statement`, `## Considered Alternatives`, `## Comparison Matrix`, `## Decision Outcome`, `## Consequences`, `## 🤖 AI & Agentic Ergonomics (AX)`, `## Recommendations`, `## Migration Path`, `## Links`, `## Discussion Questions`, and `## Decision`.
 
 ### 3. Establish Mandatory Two-Way Links
 Both documents must reference each other to preserve navigation:

@@ -12,7 +12,7 @@
 
 When you ask to create a flow from a journey, this skill will:
 
-1. **Read the journey** from `docs/inception/6-user-journey-mapping.md` or other journey sources
+1. **Read the journey** from `docs/inception/5-user-journeys/` or other journey sources
 2. **Extract requirements**: persona, goal, steps, impacted entities, bounded context
 3. **Generate complete flow documentation** with:
    - 3 Mermaid diagrams (sequence, flowchart, state)

@@ -39,12 +39,12 @@ Does the narrative require hand-offs between different users or systems?
 - Hand-off Points: [e.g., User submits request -> Admin approves request]
 - System Actions: [e.g., System sends confirmation email]
 
---------------------------------------------------------------------------------
+<!--
 🔍 Quality Checklist for Step 2
-Use this checklist to validate your Backbone.
-
+Use this checklist to validate your Backbone:
 - [ ] Chronological Order: Is the map arranged left-to-right in time order?
 - [ ] Breadth over Depth: Have we covered the entire story from start to finish before adding details?
 - [ ] Verb Phrases: Are the items written as short verb phrases (e.g., "Select movie")?
 - [ ] Activities vs. Tasks: Have we grouped tasks under higher-level "Activities" (the diamond-shaped sticky notes)?
 - [ ] No Features Yet: Have we focused on what people do (tasks) rather than features the software has?
+-->

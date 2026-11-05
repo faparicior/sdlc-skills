@@ -1,14 +1,13 @@
+<!--
 # Template: Executive Summary - ADR Alternatives Analysis
-
-**Template Version:** 1.0  
-**Created:** 2026-06-06  
-**Purpose:** High-level executive summary of ADR alternatives analysis
-
----
+Template Version: 1.0
+Created: 2026-06-06
+Purpose: High-level executive summary of ADR alternatives analysis
+-->
 
 # Executive Summary: ADR Alternatives Analysis
 
-**Organization:** SessioFlow  
+**Organization:** [Project / Organization Name]  
 **Analysis Date:** [YYYY-MM-DD]  
 **Scope:** [e.g., All ADRs / Specific Categories]  
 **Prepared For:** [Stakeholders / Technical Team / Leadership]
@@ -19,7 +18,7 @@
 
 [Provide a 3-4 paragraph executive overview of the entire analysis]
 
-**Purpose:** This analysis evaluates whether SessioFlow's architectural decisions remain optimal given the current technology landscape (2025-2026) and identifies opportunities for improvement.
+**Purpose:** This analysis evaluates whether the project's architectural decisions remain optimal given the current technology landscape (2025-2026) and identifies opportunities for improvement.
 
 **Method:** We reviewed [X] ADRs, researched [Y] alternatives across [Z] technology categories, and evaluated each decision against current best practices, performance benchmarks, and cost structures.
 

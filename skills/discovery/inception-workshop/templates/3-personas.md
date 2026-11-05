@@ -87,16 +87,13 @@ Define the primary persona(s) who will use the product. Understanding who we're 
 > 
 > *Example: "I just need to see the data, not spend half my day fighting with it."*
 
----
-
+<!--
 ## Persona Validation
-*Answer these questions to validate your persona definitions:*
-
+Answer these questions to validate your persona definitions:
 - [ ] Is this persona clearly defined enough that the team can visualize them?
 - [ ] Do the pain points align with the product vision from Step 1?
 - [ ] Can we prioritize this persona over others for the MVP?
 - [ ] Do we have enough detail to make design and feature decisions?
 
----
-
-**Next Step:** In Step 4, we'll create an Empathy Map to deepen our understanding of what this persona thinks, feels, says, and does.
+Next Step: In Step 4, we'll create an Empathy Map to deepen our understanding of what this persona thinks, feels, says, and does.
+-->

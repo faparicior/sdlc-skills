@@ -1,16 +1,15 @@
-# Step 6: User Journey Mapping
+# Step 5: User Journey Mapping
 
+<!--
 ## Goal
-Map the brainstormed features to specific stages of the user journey, visualizing how features support the user's path from awareness to achieving their goal. This helps identify feature coverage, gaps, and dependencies.
+Map the end-to-end user journey across stages, visualizing how the system supports the user's path from trigger to achieving their goal. This helps identify feature coverage, gaps, and dependencies.
 
 ## Instructions
-1. Review the personas defined in Step 3
-2. Review the features brainstormed in Step 5
-3. Map each feature to one or more stages of the user journey
-4. Identify which features are critical at each stage
-5. Note any gaps or missing features needed to complete the journey
-
----
+1. Review the personas and empathy maps defined in Steps 3 and 4
+2. Map each stage of the user journey from trigger to goal completion
+3. Identify pain points addressed and any gaps at each stage
+4. Define the Critical Path (Minimum Happy Path)
+-->
 
 **Persona:** [Name from Step 3]  
 **Main Goal:** [What is the user trying to achieve?]
@@ -135,6 +134,4 @@ Map the brainstormed features to specific stages of the user journey, visualizin
 - [Link to related journey file]
 - [Link to related journey file]
 
----
-
-**Next Step:** In Step 7, we will sequence these features into the MVP Canvas to define the specific releases.
+<!-- Next Step: In Step 6 (Features Brainstorming), brainstorm user-facing features to support these journey stages and close identified gaps. -->

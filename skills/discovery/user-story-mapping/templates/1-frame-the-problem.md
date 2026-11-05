@@ -58,6 +58,7 @@ Does the team and stakeholders have enough shared understanding to proceed to St
 | **No-Go** | The problem isn't worth solving or the risks are too high. | [ ] |
 | **Recycle** | We need more research (Explore) before we can Frame. | [ ] |
 
---------------------------------------------------------------------------------
+<!--
 **The Vacation Photo Analogy**
 Treat this completed template as a "vacation photo". Just as a photo helps someone who was actually there remember the sights, sounds, and deep context of a trip, this document is a tool to help the discovery team recall the shared understanding and rich discussions that occurred during the framing session—context that an outsider would never fully grasp from the words alone.
+-->

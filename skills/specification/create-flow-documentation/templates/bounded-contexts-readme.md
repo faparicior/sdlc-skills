@@ -23,7 +23,7 @@ Each flow represents a complete user story from start to finish, documenting sys
 **So that** [outcome]
 
 **Bounded Contexts:** [Primary Context] (primary) · [Secondary Context] (consumed)  
-**Features:** [comma-separated feature list from Step 5]  
+**Features:** [comma-separated feature list from Step 6]  
 → [Full Flow Specification](path/to/flow.md)
 
 ---
@@ -84,9 +84,9 @@ flowchart TB
 
 ## 📚 Related Documentation
 
-- [Step 6: User Journeys](../../inception/6-user-journeys/README.md) — Source journeys this documentation is derived from
+- [Step 5: User Journeys](../../inception/5-user-journeys/README.md) — Source journeys this documentation is derived from
 - [Step 7: Features & Sequencing](../../inception/7-features-and-sequencing.md) — Wave planning and feature prioritisation
-- [Step 5: Brainstorming](../../inception/5-brainstorming.md) — Feature definitions and confidence signals
+- [Step 6: Brainstorming](../../inception/6-brainstorming.md) — Feature definitions and confidence signals
 
 ---
 

@@ -1,10 +1,9 @@
+<!--
 # Template: ADR Validator
-
-**Template Version:** 1.0  
-**Created:** 2026-06-06  
-**Purpose:** Validate ADR quality against established criteria
-
----
+Template Version: 1.0
+Created: 2026-06-06
+Purpose: Validate ADR quality against established criteria
+-->
 
 # ADR Quality Validator
 
@@ -227,7 +226,7 @@ This validator assesses the quality of Architecture Decision Records (ADRs) agai
 │                                                             │
 │  Overall Rating: [High / Medium / Low]                     │
 │                                                             │
-│  Score: [X]/6 criteria at High level                       │
+│  Score: [X]/7 criteria at High level                       │
 │                                                             │
 │  Recommendation: [Accept / Revise / Reject]                │
 │                                                             │
@@ -235,8 +234,8 @@ This validator assesses the quality of Architecture Decision Records (ADRs) agai
 ```
 
 **Rating Guidelines:**
-- **High Quality:** 5-6 criteria at High level, no Low ratings
-- **Medium Quality:** 3-4 criteria at High level, or 1-2 Medium ratings
+- **High Quality:** 6-7 criteria at High level, no Low ratings
+- **Medium Quality:** 4-5 criteria at High level, or 1-2 Medium ratings
 - **Low Quality:** More than 2 criteria at Medium or any Low rating
 
 ---

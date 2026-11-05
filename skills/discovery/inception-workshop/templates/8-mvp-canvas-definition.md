@@ -1,9 +1,8 @@
 # Step 8: MVP Canvas Definition
 
+<!--
 ## Goal
 Synthesize all decisions from Steps 1-7 into a final, high-level business plan for the MVP. This canvas should reflect your product vision, constraints, user needs, key features, and sequencing decisions.
-
----
 
 ## Instructions
 Review the outputs from previous steps before completing this canvas:
@@ -11,11 +10,10 @@ Review the outputs from previous steps before completing this canvas:
 - **Step 2:** Tradeoffs & Constraints
 - **Step 3:** Personas
 - **Step 4:** Empathy Map
-- **Step 5:** Features Brainstorming
-- **Step 6:** User Journey Mapping
+- **Step 5:** User Journey Mapping
+- **Step 6:** Features Brainstorming
 - **Step 7:** Features & Sequencing (Wave 1 = MVP)
-
----
+-->
 
 ## 1. MVP Definition
 *A succinct statement of the first product increment - the "cupcake" (complete, simple slice of value), not a "layer of cake" (incomplete technical foundation).*
@@ -57,7 +55,7 @@ Review the outputs from previous steps before completing this canvas:
 *From Step 7 (Features & Sequencing) - which features are included in Wave 1 (the MVP)?*
 
 ### Critical Path Features
-*Features required for the minimum happy path identified in Step 6 (User Journey Mapping):*
+*Features required for the minimum happy path identified in Step 5 (User Journey Mapping):*
 1. ✅ **[Feature Name]** - [Brief description and why it's critical]
 2. ✅ **[Feature Name]** - [Brief description and why it's critical]
 3. ✅ **[Feature Name]** - [Brief description and why it's critical]
@@ -122,12 +120,12 @@ Review the outputs from previous steps before completing this canvas:
 ---
 
 ## 6. Personas & Journey Alignment
-*From Steps 3, 4, and 6 - confirm the MVP serves the primary persona's journey.*
+*From Steps 3, 4, and 5 - confirm the MVP serves the primary persona's journey.*
 
 **Primary Persona:** [Name from Step 3]
 
 **Core Journey Supported:**
-[Briefly describe the critical path from Step 6 that the MVP enables]
+[Briefly describe the critical path from Step 5 that the MVP enables]
 
 **Pain Points Addressed:**
 - [Pain point 1 from Steps 3/4 that MVP solves]
@@ -137,30 +135,16 @@ Review the outputs from previous steps before completing this canvas:
 - [Gain 1 from Step 4 that MVP provides]
 - [Gain 2 from Step 4 that MVP provides]
 
----
-
+<!--
 ## 7. Final Validation Checklist
 
 Before finalizing the MVP Canvas, verify:
-
 - [ ] **Vision Alignment:** Does this MVP deliver on the product vision from Step 1?
 - [ ] **Constraints Respected:** Does this respect the tradeoffs and constraints from Step 2?
 - [ ] **User-Centered:** Does this solve real problems for the Primary Persona (Steps 3-4)?
-- [ ] **Journey Complete:** Can users complete the critical path with Wave 1 features (Step 6)?
+- [ ] **Journey Complete:** Can users complete the critical path with Wave 1 features (Step 5)?
 - [ ] **Properly Scoped:** Are we building a "cupcake" (complete value) not a "layer" (infrastructure only)?
 - [ ] **Measurable:** Can we clearly measure success/failure with the defined metrics?
 - [ ] **Achievable:** Is the schedule and cost realistic given the scope?
 - [ ] **Risky:** Have we identified and mitigated the biggest risks?
-
----
-
-## Next Steps After MVP Definition
-
-Once the MVP Canvas is complete and validated:
-1. **Break down features** into user stories and technical tasks
-2. **Create sprint plan** based on the schedule
-3. **Assign resources** and begin development
-4. **Set up measurement** infrastructure for KPIs
-5. **Plan user testing** sessions for validation
-
-**Congratulations! You've completed the Lean Inception workshop.** 🎉
+-->

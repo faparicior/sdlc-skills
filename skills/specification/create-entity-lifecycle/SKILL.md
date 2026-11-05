@@ -170,11 +170,14 @@ This skill is **language- and framework-agnostic**. File paths and class convent
 9. **Linked User Stories & Flows** - References to flows that interact with the entity
 
 ### Value Objects
-1. **Definition & Context** - Description, class/type name, implementation source path
-2. **Construction & Reconstitution** - Factory methods (`create()` for validated new instances, `fromData()` for persistence reconstitution)
-3. **Validation & Immutability** - What is accepted, validation constraints, error exceptions thrown
-4. **Invariants & Business Rules** - Links to relevant BRs and INVs
-5. **Linked Entities & Use Cases** - Which aggregates embed this VO
+1. **Definition** - Description, type (`Simple Value Object | Composite Value Object`), immutability, validation summary, implementation source path
+2. **Composition** - Property, type, and description table
+3. **Validation Rules** - Rule name and what is validated/why
+4. **Behavior & Methods** - Factory methods (`create()` for validated new instances, `fromData()` for persistence reconstitution), getters, and equality methods, each with a Status (`✅ Built` / `⏳ Planned`)
+5. **Error Conditions** - Exception class, trigger condition, and Status
+6. **Invariants & Business Rules** - Links to relevant INVs and BRs, plus the `Enforcement & tests` reverse-edge table
+7. **Referenced By** - Which aggregates, entities, or use cases embed this VO
+8. **Related Value Objects** - Related VOs in the same or adjacent bounded contexts
 
 ### Domain Services
 

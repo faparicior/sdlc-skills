@@ -52,13 +52,11 @@ Explicitly list the ideas that were "good" but didn't make the cut for the fores
   - [Story Name] - **Reason:** High effort, low value.
   - [Story Name] - **Reason:** Solves a problem users don't care about yet.
 
---------------------------------------------------------------------------------
-
+<!--
 🔍 Quality Checklist for Step 4
-
-Use this checklist to validate your release slice.
-
+Use this checklist to validate your release slice:
 - [ ] **Cohesion:** If you look only at the stories in Slice 1, can the user complete a full, meaningful journey from start to finish?
 - [ ] **Thinness:** Is the slice as thin as possible? Did we remove "nice-to-haves" that don't directly support the target outcome?
 - [ ] **Outcome Focus:** Did we prioritize based on what the business/user gets (outcome), not just what the developers build (output)?
 - [ ] **Feasibility:** Do we believe this slice is actually buildable in the timeframe we have?
+-->

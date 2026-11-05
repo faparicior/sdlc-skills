@@ -416,16 +416,16 @@ Each step is validated against criteria from the validator file:
 
 ## Integration with Flow Documentation
 
-After completing Step 6 (User Journey), the skill can automatically generate flow specifications:
+After completing Step 5 (User Journey) and Step 7 (Features & Sequencing), use the `create-flow-documentation` skill to generate flow specifications:
 
 ```bash
-pi skill inception-workshop --mode generate-flows --from-step 6
+pi skill inception-workshop --mode generate-flows --from-step 5
 ```
 
 This will:
-1. Read the completed user journey
-2. Extract MVP features from Step 7
-3. Generate flow specifications using `docs/templates/product/flows.md`
+1. Read the completed user journeys from `docs/inception/5-user-journeys/`
+2. Extract MVP features from Step 7 (`docs/inception/7-features-and-sequencing.md`)
+3. Generate flow specifications using `skills/specification/create-flow-documentation/templates/flows.md`
 4. Output to `docs/product/bounded-contexts/{context}/flows/`
 
 ## Configuration
@@ -445,8 +445,8 @@ This skill includes all required templates and validators as bundled assets:
 - `templates/2-tradeoffs.md`
 - `templates/3-personas.md`
 - `templates/4-empathy-map.md`
-- `templates/6-brainstorming.md`
 - `templates/5-user-journey-mapping.md`
+- `templates/6-brainstorming.md`
 - `templates/7-features-and-sequencing.md`
 - `templates/8-mvp-canvas-definition.md`
 
@@ -455,8 +455,8 @@ This skill includes all required templates and validators as bundled assets:
 - `references/2.2-tradeoff-validator.md`
 - `references/3-personas-validator.md`
 - `references/4-empathy-map-validator.md`
-- `references/6-brainstorming-validator.md`
 - `references/5-user-journey-validator.md`
+- `references/6-brainstorming-validator.md`
 - `references/7-features-and-sequencing-validator.md`
 - `references/8-mvp-canvas-definition-validator.md`
 
@@ -523,8 +523,8 @@ Step 1 is complete! Ready to proceed to Step 2: Tradeoffs? (yes/no)
 Skill: Tradeoff Generator (AI Debate Simulation)
 
 Reading: docs/inception/1-product-vision-and-boundaries.md
-Template: docs/templates/inception/2-tradeoffs.md
-Validator: docs/commands/inception/2.2-tradeoff-validator.md
+Template: templates/2-tradeoffs.md
+Validator: references/2.2-tradeoff-validator.md
 
 Simulating stakeholder debate...
 
@@ -566,8 +566,8 @@ Step 1: Product Vision... ✅
 Step 2: Tradeoffs... ✅
 Step 3: Personas... ✅
 Step 4: Empathy Map... ✅
-Step 5: Brainstorming... ✅
-Step 6: User Journey... ✅
+Step 5: User Journey... ✅
+Step 6: Brainstorming... ✅
 Step 7: Features & Sequencing... ✅
 Step 8: MVP Canvas... ✅
 

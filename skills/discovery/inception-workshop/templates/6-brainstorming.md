@@ -1,9 +1,8 @@
-# Step 5: Features Brainstorming
+# Step 6: Features Brainstorming
 
+<!--
 ## Goal
 Brainstorm and identify potential features based on the personas and user journeys defined in previous steps. This is a divergent thinking exercise — quantity first, filtering second.
-
----
 
 ## Instructions for AI Agents
 
@@ -35,8 +34,7 @@ Brainstorm and identify potential features based on the personas and user journe
 ### Coach's Question
 Include one question that challenges the MVP scope, e.g.:
 > "If you could only ship three features to validate the primary hypothesis, which would they be and why?"
-
----
+-->
 
 ## ![](https://img.shields.io/badge/_%20_-2ecc71) Core Features
 *Essential to the primary value proposition.*
@@ -127,6 +125,4 @@ quadrantChart
 
 **Coach's question:** [One question that challenges the MVP scope]
 
----
-
-**Next Step:** Map these features to user journeys and define sequencing in Step 7 — Features & Sequencing.
+<!-- Next Step: Prioritize and sequence these features into release waves in Step 7 — Features & Sequencing. -->

@@ -61,10 +61,9 @@ Does the "Opening Game" fit into the first few sprints?
 - **Opening Game Size:** [Total Estimate]
 - **Reality Check:** If the Opening Game is too big, can we slice it thinner? (e.g., Use a flat file instead of a real database for the first pass).
 
---------------------------------------------------------------------------------
-
+<!--
 🔍 Quality Checklist for Step 6
-
 - [ ] **Walking Skeleton:** Does the "Opening Game" slice cut through the entire architecture (UI, Logic, Database) rather than just building one layer?
 - [ ] **Risk First:** Did we schedule the highest-risk stories in the Opening Game?
 - [ ] **Learning Loops:** Have we planned moments to pause and evaluate the product with stakeholders after the Opening and Mid games, rather than waiting for the final release?
+-->

@@ -1,6 +1,6 @@
 # AI User Journey & Feature Alignment Audit
 
-Role: You are a Lean Inception Facilitator. Your task is to audit the "Step 6: User Journey Mapping and Feature Alignment Guide" to ensure it creates a clear bridge between the user's needs and the product's functional scope.
+Role: You are a Lean Inception Facilitator. Your task is to audit the "Step 5: User Journey Mapping" output to ensure it creates a clear bridge between the user's needs and the product's functional scope.
 
 ## Audit Criteria (Based on Lean Inception Methodology):
 
