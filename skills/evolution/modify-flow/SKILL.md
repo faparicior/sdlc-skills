@@ -13,421 +13,324 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Modify Flow Skill
+# PROTOCOL: MODIFY-FLOW (EXECUTION LEVEL 3)
 
-You are an expert Technical Product Manager and System Architect operating on a codebase that already has
-living DDD-style documentation for its flows, entities, and business rules — typically (but not always)
-organized under a `bounded-contexts/{context}/{flows,entities,business-rules,invariants}/` tree. Your job is
-to turn a requested behaviour change into a **proposal**, then an **implementation plan**, and — only after
-the code change is verified — into updates to the **original** flow/entity/business-rule docs. Never create
-parallel/duplicate documentation for something that already has a doc; update it in place.
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                         -> REQUIRED_OUTPUT                            -> MANDATORY_HALT
+STEP_00: Discover     -> grep / find / read_file               -> Repo conventions, commands, cross-repo map -> Continue to STEP_00B
+STEP_00B: Triage      -> evaluate 4 criteria                   -> Tier decision (Light / Standard / Full)    -> Continue to STEP_01
+STEP_01: Ground       -> grep / read_file                      -> Code truth, INV-* cross-check, boundaries  -> Continue to STEP_02
+STEP_02: Propose      -> read_file(templates/proposal.md)      -> working-on/active/[change]/proposal.md     -> 🛑 HALT TURN (Wait for user)
+STEP_02B: Resume      -> git log / read_file                   -> Re-grounded slice against HEAD             -> Continue to STEP_03
+STEP_03: Plan         -> read_file(templates/*-plan.md)        -> working-on/active/[change]/*-plan*.md      -> 🛑 HALT TURN (Wait for user)
+STEP_04: Implement    -> edit_file / run_command               -> Verified code + full test/arch suites      -> Continue to STEP_05
+STEP_05: Living Docs  -> edit_file / grep                      -> In-place doc updates + closed trace edges  -> Continue to STEP_06
+STEP_06: Grace/Purge  -> mv / rm                               -> Grace-period lifecycle transition          -> END
+</state_machine>
 
-This skill is deliberately **language- and framework-agnostic**. It doesn't assume Kotlin, Gradle, Spring,
-or any specific test runner, feature-flag system, or file layout. Every technical reference in the produced
-documents must be *this specific codebase's* real file paths, real function/class names, and real commands —
-discovered fresh each time, never assumed from a template or from a different project.
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: You are free to reason deeply INSIDE each step, but you are strictly forbidden from skipping, merging, reordering, or replacing steps (`workflow structure = immutable | step reasoning = flexible`).
+2. STOP GATES ARE ABSOLUTE: You are strictly forbidden from executing `STEP_03` (Plan) or `STEP_04` (Code) in the same turn as `STEP_02` (Proposal). You MUST halt your turn at every `🛑 HALT TURN` gate and wait for explicit user approval.
+3. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory or prose rules is strictly forbidden. You MUST call `read_file` on `templates/proposal.md` before `STEP_02`, and `read_file` on `templates/implementation-plan.md` (or `templates/parallel-change-plan.md`) before `STEP_03`.
+4. NO PROACTIVE BUSINESS DECISIONS: If an open question exists, record it in Section 10 (`Open Questions`) of `proposal.md`, stop, and wait. Never resolve open questions or self-select `Light` tier without explicit user confirmation.
+5. NEVER CREATE PARALLEL LIVING DOCS: Living docs under `bounded-contexts/` describe currently shipped code only. Until `STEP_04` ships, all proposals, slice specs, drafts, and plans live exclusively under `docs/product/working-on/active/[change-name]/`.
+</execution_invariants>
 
-Documentation locations shown in this skill (e.g. `docs/product/working-on/`) are the pack defaults; if
-`.sdlc/config.json` exists (written by `/setup-sdlc`), honour its `docsRoot` / `productDocsDir` overrides.
-
-This skill exists because many repos either have no modification-proposal convention at all, or default to
-a generic template (e.g. a boilerplate feature-spec/dev-plan pair) that doesn't match how the rest of that
-repo's documentation is actually organized. Before using this skill's templates verbatim, check Step 0 —
-if the target repo already has its own flow/entity/BR documentation convention (e.g. via
-`create-flow-documentation` / `create-entity-lifecycle`-style skills), follow *that* repo's convention for
-Step 5 instead of inventing a new shape.
-
----
-
-## 📋 Input Context
-
-Before writing anything, gather:
-
-- **What should change:** [Plain description of the desired behaviour delta, in the user's own words]
-- **Which flow(s)/entity(ies)/business rule(s) it touches:** search this repo's product/flow documentation
-  tree — do not assume a path, find it (see Step 0 and Step 1)
-- **Real code location:** the actual functions/classes/modules that implement the current behaviour — never
-  describe scope in terms of a generic template's placeholder paths; use this codebase's real layering,
-  whatever language and directory structure it actually uses
+<output_contract>
+- PROPOSAL ARTIFACT (`STEP_02`):
+  - TARGET_PATH: `docs/product/working-on/active/[change-name]/proposal.md` (or `.sdlc/config.json` override)
+  - SOURCE_TEMPLATE: `templates/proposal.md` (MUST call `read_file` first)
+  - SCHEMA_INVARIANCE: Preserve all metadata bullets and numbered sections (`## 1. Product Rationale` through `## 10. Open Questions` + `## 🔗 Related Documentation`) and exact Markdown table column schemas verbatim.
+- IMPLEMENTATION PLAN ARTIFACT (`STEP_03`):
+  - TARGET_PATH: `docs/product/working-on/active/[change-name]/implementation-plan.md` (or `implementation-plan-sN.md`)
+  - SOURCE_TEMPLATE: `templates/implementation-plan.md` (or `templates/parallel-change-plan.md` when Section 4.1 marks a contract as `Deprecation` with staged coexistence; MUST call `read_file` first)
+  - SCHEMA_INVARIANCE: Preserve `### Resolved Open Questions`, `## 0. Cross-Repo Dependencies`, `## 1. Pre-Implementation Checklist`, `## 2. Phases`, `## 3. Validation`, `## 4. Documentation Update`, `## 5. Rollout Notes`, and `## 🔗 Related Documentation` verbatim.
+</output_contract>
 
 ---
 
-## Step 0: Discover This Repo's Conventions (Do This First, Every Time)
+## STEP_00 — Discover This Repo's Conventions
 
-Do not assume any of the following — they vary per repo and must be (re)discovered each time this skill
-runs:
-
-1. **Docs location & shape:** find where flow/entity/business-rule documentation actually lives (grep for
-   terms like "flow", "business rule", "bounded context", "entity lifecycle" across the repo's docs
-   directories). Note the exact folder structure and file naming convention in use.
-2. **Language & source layout:** identify the implementation language(s) and how source is organized
-   (e.g. layered `domain/application/infrastructure`, feature-first modules, monorepo packages — whatever
-   it actually is).
-3. **Test/build/lint commands:** find the real commands from the repo's own README, contributor guide
-   (`CLAUDE.md`, `AGENTS.md`, `CONTRIBUTING.md`), or build config — never assume `npm test` or `./gradlew`
-   or any other stack's defaults.
-4. **Feature-flag system, if any:** check whether the repo already has one (any name — Unleash, LaunchDarkly,
-   a config toggle, an env var convention) before assuming a new one is needed.
-5. **Cross-repo dependencies:** read `CLAUDE.md` (or `AGENTS.md`) for a **Cross-Repo Dependencies** section. Note which other repos this change may touch, what changes there, and whether there is a required deploy order. This feeds Section 6 of the proposal and Section 0 of the implementation plan — discover it here, not later.
-6. **Existing modification-proposal precedent:** check whether the repo already has a "proposal" or
-   "change request" convention (an ADR process, a "working docs" folder) — if so, prefer reusing that
-   shape over this skill's templates; if not, use `templates/proposal.md` /
-   `templates/implementation-plan.md` as-is.
+- **INPUT:** Target repository workspace and `.sdlc/config.json` (if present, honour its `docsRoot` / `productDocsDir` overrides; default is `docs/product/`).
+- **ACTION:** Execute tool searches to discover (never assume):
+  1. **Docs location & shape:** Find where flow/entity/business-rule documentation lives (grep for `"flow"`, `"business rule"`, `"bounded context"`, `"entity lifecycle"` across docs directories). Note exact folder structure and naming conventions.
+  2. **Language & source layout:** Identify implementation language(s) and how source is organized (e.g. layered `domain/application/infrastructure`, feature-first modules, monorepo packages).
+  3. **Test/build/lint commands:** Read the repo's `README.md`, `CLAUDE.md`, `AGENTS.md`, `CONTRIBUTING.md`, or build config to find real verification commands.
+  4. **Feature-flag system:** Check whether the repo already uses one (Unleash, LaunchDarkly, config toggle, env var convention).
+  5. **Cross-repo dependencies:** Read `CLAUDE.md` or `AGENTS.md` for a **Cross-Repo Dependencies** section. Note which other repos this change may touch, what changes there, and any required deploy order (feeds **Section 7** of `proposal.md` and **Section 0** of `implementation-plan.md`).
+- **REQUIRED OUTPUT:** Internal discovery findings used to populate subsequent steps with real paths and commands.
+- **DO NOT:**
+  - Do NOT guess file paths, test commands (`npm test`, `./gradlew`), or module layouts without checking the repo.
+  - Do NOT skip `templates/proposal.md` in Step 2 unless the user explicitly instructs you to use a different template file.
+- **PASS CONDITION:** All 5 repository dimensions above are verified from real files.
 
 ---
 
-## Step 0b: Triage — How Much Ceremony Does This Change Need?
+## STEP_00B — Triage Ceremony Tier
 
-Before writing a proposal, ask the user (or infer from the request and confirm):
+- **INPUT:** User request and STEP_00 findings.
+- **ACTION:** Evaluate the 4 triage criteria:
+  1. Does it need more than one PR?
+  2. Does it touch an invariant, a data migration, or another repository?
+  3. Are there open business questions?
+  4. Will it be paused and resumed later?
 
-1. Does it need more than one PR?
-2. Does it touch an invariant, a data migration, or another repository?
-3. Are there open business questions?
-4. Will it be paused and resumed later?
-
-| Tier | When | Path |
+| Tier | Trigger Condition | Mandatory Execution Path |
 | :--- | :--- | :--- |
-| **Light** | All answers "no" — a single behaviour tweak (threshold, validation, window length) | **Do not create a proposal folder.** Write a short change note for the PR, implement test-first, and edit the affected flow/entity/BR doc in the same PR (update its `Enforced by` / `Verified by` rows). **Still run Step 1.11 (boundary-values check) for any new or reused input and put the result in the change note** — Light skips the proposal, not that check. Stop here. |
-| **Standard** | One PR-sized slice, but with a design choice, invariant or migration | Proposal with a single slice (S1), then Steps 3–6. No feature specs. |
-| **Full** | Several slices, several repos, or a long pause expected | Everything below, including feature specs (`/create-features`) saved inside the proposal folder. |
+| **Light** | **All 4 answers are strictly "no"** (a single behaviour tweak such as a threshold, validation, or window length) **AND the user confirms Light tier** | Do not create a proposal folder. Run **STEP_01.10 (boundary-values check)** for any new or reused input and put the result in a short PR change note, implement test-first, and edit the affected flow/entity/BR doc in the same PR (updating its `Enforced by` / `Verified by` rows). Stop after verification. |
+| **Standard** *(Default)* | One PR-sized slice, with a design choice, invariant, or migration | Execute **STEP_01 $\rightarrow$ STEP_02** (Proposal with a single slice `S1`), stop at **HARD GATE 1**, then **STEP_03 $\rightarrow$ STEP_06**. No separate feature specs. |
+| **Full** | Several slices, several repos, or a long pause expected | Execute **STEP_01 $\rightarrow$ STEP_06** in full, including feature specs (`/create-features`) saved inside `docs/product/working-on/active/[change-name]/features/` for active slices. |
 
-If any answer is "yes" the change moves up a tier. Tell the user which tier you chose and why; let them
-override it. In every tier the living doc changes in the same PR as the code that makes it true.
-
----
-
-## Step 1: Ground the Change in Reality Before Writing Anything
-
-1. Read this repo's root flow/documentation index (whatever Step 0 found) — identify which flow(s) this
-   change affects.
-2. Read the affected flow doc(s), entity doc(s), **domain-service doc(s)** (`bounded-contexts/{ctx}/domain-services/` —
-   check it for every service whose behaviour the change touches), and business rule doc(s). These are usually **derived**
-   docs — extracted from an earlier upstream source (a journey, a brainstorming/feature-scoping pass).
-3. **Do not trust the docs alone** — grep/read the real source files the docs point to (function/class
-   names). Docs can be stale; the code is truth. If you're using an Explore-style agent for this, ask it to
-   report the actual current logic, not just summarize the doc.
-4. **Trace every derived doc back to its upstream source, and check that source for staleness too** — not
-   just for context. If this repo has upstream product docs (journeys, personas, brainstorming/feature-
-   scoping docs), the derived flow/entity/BR doc almost never repeats the full upstream content verbatim —
-   the upstream doc typically has its own copy of the same fact (a formula, a step, a diagram) that will
-   also go stale if this change ships. Read every upstream doc a derived doc links back to and check
-   line-by-line whether it states the current (pre-change) behaviour as fact. Two distinct outcomes:
-   - **Living upstream doc that states current behaviour as present-tense fact** (e.g. a journey's
-     step-by-step table) → goes stale, must be edited. List it.
-   - **Frozen historical record of a past decision** (e.g. a workshop/brainstorming artifact scoping the
-     original feature) → do **not** rewrite; it's a record of what was decided *then*. Instead, the
-     *derived* doc's changelog/history section should forward-link to this proposal so a reader tracing
-     the frozen record forward can find the reversal. Note this distinction explicitly in the proposal —
-     don't silently skip the frozen doc, and don't silently rewrite it either.
-5. While reading upstream docs, also note who is affected (personas) and whether this reverses or extends
-   an already-scoped feature — this feeds Section 1 (Product Rationale), not just Section 6.
-6. **Perform Concurrency, TOCTOU, Idempotency & Active Invariant Cross-Check** —
-   - **Cross-check active invariants across all bounded contexts**: Search `docs/product/bounded-contexts/**/invariants/INV-*.md` and `docs/product/discovered/invariants/INV-RAW-*.md` for any invariant whose statement constrains the operations being modified, extended, or newly called (e.g. calling an application/domain service from a new entry point, adding a new delivery mechanism, mutating status).
-   - For each matching invariant, verify whether the change preserves enforcement or introduces an unconstrained code path. List each relevant INV in the proposal's scope and implementation plan.
-   - Evaluate if modifying this flow introduces new race conditions, check-then-act vulnerabilities, duplicate replay side-effects, or alters domain invariant enforcements (e.g. database-level unique indexes, optimistic locking versioning, aggregate consistency boundaries, transactional outbox atomicity, or transaction isolation).
-7. **Evaluate Migration & Backward Compatibility** — determine if modifying data schemas, contracts, or business rules requires database column defaults,
-   data backfill scripts, or API contract versioning for backward compatibility with clients.
-8. **Read the rule/invariant document's own traceability section before grepping.** If this repo links
-   rules to the artifacts that enforce them (a `Traceability` / `Enforced by` / `Verified by` section —
-   convention shared across SDLC skills at [../guidelines/traceability.md](../guidelines/traceability.md)),
-   that section *is* the
-   pre-computed blast radius: one row per enforcing layer with a file + guard, plus the tests that pin it.
-   Start there, then grep the ID to catch enforcement nobody linked. Read the row statuses honestly:
-   ✅ Verified means somebody saw the guard, ⚠️ Unverified means it is a lead to confirm by opening the
-   file, ⏳ Planned means it does not exist yet — promote nothing silently, and put every ⚠️ you confirm or
-   reject into the proposal.
-9. **Check the tests, not just the code.** For each `Verified by` test, confirm the file and the test title
-    still exist (`grep -n "<title>" <test-file>`); those tests are what fails when a guard is deleted, so
-    they are the change's real safety net and the tests you will have to rewrite.
-10. **Boundary-values check for every new or reused input.** For each new parameter, flag, config value or
-    field the change adds, and each existing one it starts to feed from a new source:
-    - list **every place it is consumed** (grep the variable through the call chain, not just the line you
-      are editing) — one value reused for two calculations (e.g. a date used both as "is it started yet" and
-      as the start of a counting window) is the typical hidden coupling;
-    - try **values on both sides of every boundary it crosses**: past / present / future, same / next period
-      (month, year), empty / one / many, and **mixed states** in one call (some records already started, some
-      not; some at their limit, some not);
-    - ask **what a caller gains by passing an unusual value** — can it bypass a limit, a permission or a
-      uniqueness rule that the normal path enforces?
-    Record the answers in the proposal (Section 4) or, for the Light tier, in the change note. Each risky
-    value found becomes a test. Do not write a doc sentence that declares a side effect "intended" before
-    this check has been done.
+- **REQUIRED OUTPUT:** Explicit statement of which Tier applies and why.
+- **DO NOT:**
+  - Do NOT silently self-select **Light** tier to avoid writing `proposal.md`. If any criterion is "yes" or uncertain, you **MUST** use **Standard** or **Full** tier.
+  - Even in **Light** tier, you **MUST NOT** skip **STEP_01.10 (boundary-values check)**.
+- **PASS CONDITION:** Tier is explicitly determined; if Standard or Full, proceed immediately to `STEP_01`.
 
 ---
 
-## Step 2: Write the Proposal
+## STEP_01 — Ground the Change in Reality Before Writing Anything
 
-Use `templates/proposal.md`. Proposals must be saved strictly under:
-`docs/product/working-on/active/[change-name]/proposal.md`
-(Never save directly in `working-on/` root or `grace-period/`, to prevent LLM context bleeding across worktrees/branches).
+- **INPUT:** Target change description and STEP_00 discovery results.
+- **ACTION:** Perform all 10 grounding checks using file-reading and search tools:
+  1. **Read root flow/documentation index:** Identify every flow this change affects.
+  2. **Read affected derived docs:** Read the affected flow doc(s), entity doc(s), **domain-service doc(s)** (`bounded-contexts/{ctx}/domain-services/` — check every service whose behaviour the change touches), and business rule doc(s).
+  3. **Verify against real source code (Code is Truth):** Grep and read the actual source files the docs point to. Docs can be stale; report the actual current logic in code, not just what the doc claims.
+  4. **Trace every derived doc back to its upstream source for staleness:** Read every upstream doc (journeys, personas, brainstorming/feature-scoping docs) that a derived doc links back to and check line-by-line whether it states the pre-change behaviour as present-tense fact. Classify each upstream doc into one of two buckets:
+     - **Bucket A — Living upstream doc stating current behaviour as present-tense fact** (e.g. a journey's step-by-step table) $\rightarrow$ goes stale; must be listed in `proposal.md` Section 8.2 for editing.
+     - **Bucket B — Frozen historical record of a past decision** (e.g. a workshop/brainstorming artifact scoping the original feature) $\rightarrow$ **do NOT rewrite**; list it in `proposal.md` Section 8.2 as "Do not rewrite — frozen record", and plan a dated History & Evolution forward-link in the derived doc (Section 8.1).
+  5. **Identify affected personas & feature reversals:** Note who is affected (personas) and whether this reverses or extends an already-scoped feature (feeds Section 1 and Section 8).
+  6. **Perform Concurrency, TOCTOU, Idempotency & Active Invariant Cross-Check:**
+     - Search `docs/product/bounded-contexts/**/invariants/INV-*.md` and `docs/product/discovered/invariants/INV-RAW-*.md` across **all** bounded contexts for any invariant constraining the operations being modified, extended, or newly called.
+     - Verify whether the change preserves enforcement or introduces an unconstrained code path. List every relevant `INV-*` in the proposal's scope and implementation plan.
+     - Evaluate race conditions, check-then-act vulnerabilities, duplicate replay side-effects, database unique indexes, optimistic locking versioning, aggregate consistency boundaries, transactional outbox atomicity, and transaction isolation.
+  7. **Evaluate Migration & Backward Compatibility:** Determine if modifying data schemas, contracts, or business rules requires DB column defaults, data backfill scripts, or API contract versioning / staged parallel-change deprecation.
+  8. **Read the rule/invariant document's own Traceability section before grepping:** Follow [../guidelines/traceability.md](../guidelines/traceability.md). Start from the rule doc's `Traceability` / `Enforced by` / `Verified by` table (the pre-computed blast radius), then grep the rule ID across the codebase to catch unlinked enforcement. Respect row statuses strictly:
+     - `✅ Verified`: confirmed guard in code.
+     - `⚠️ Unverified`: lead that you **must** open the file to confirm or reject in the proposal.
+     - `⏳ Planned`: does not exist yet.
+     - Never promote a status silently.
+  9. **Verify the existing tests:** For each `Verified by` test, confirm the file and test title still exist (`grep -n "<title>" <test-file>`). These are the tests that will fail when a guard is altered and must be listed in Section 6 (Scope of Change).
+  10. **Boundary-values check for every new or reused input:** For each new parameter, flag, config value, or field added, and each existing one fed from a new source:
+      - List **every place it is consumed** through the full call chain (watch for hidden coupling where one value is reused for two calculations, e.g. a date used both as "has started" and as the start of a counting window).
+      - Test **values on both sides of every boundary**: past / present / future, same / next period (month, year), empty / one / many, and **mixed states** in a single call (some records started, some not; some at limit, some not).
+      - Ask **what a caller gains by passing an unusual value** (can it bypass a limit, permission, or uniqueness rule?).
+      - Record findings in `proposal.md` Section 4 (or in the change note for Light tier). Every risky boundary value becomes a required test.
+- **REQUIRED OUTPUT:** Complete evidence set of real file paths, method names, upstream docs, invariants, test titles, and boundary cases.
+- **DO NOT:**
+  - Do NOT trust markdown documentation without reading the underlying source code files.
+  - Do NOT declare a side effect "intended" before completing check `10` (boundary-values check).
+- **PASS CONDITION:** Every affected doc, source file, test file, and cross-context invariant has been read and verified.
 
-Name the folder/file with a kebab-case slug matching the git branch name where possible.
+---
 
-### Structure & Formatting Rules
+## STEP_02 — Write the Proposal (`OUTPUT CONTRACT`)
 
-- **Section 1, "Product Rationale," stays product-shaped like this repo's own persona/journey docs (if it
-  has them)** — this is the one section that should NOT default to a table:
-  - `As a / I want to / So that` — always bullets, matching this repo's own Overview/journey style if one
-    exists. Never tabulate a 3-line narrative statement.
-  - **Personas Affected** — a table (`Persona | Current Experience | Experience After This Change`).
-    Link to this repo's own persona docs if it has them; otherwise describe the affected user/role inline.
-  - **Business Value & Why It Matters** — a table (`Aspect | Detail`). Even though these often start as a
-    handful of prose bullets, convert them to a table once there are 2+ items that share the same
-    "aspect → explanation" shape — it's more scannable and matches the rest of the document.
-  - **Known Gaps Introduced** — bullets, not a table. A single flagged gap doesn't benefit from a table
-    (one-row tables just add visual noise); omit the section entirely if there's no new gap.
-- **Section 4, "🛡️ Concurrency, TOCTOU & Invariant Integrity Analysis"** — must evaluate whether the
-  modified flow changes check-then-act sequences, concurrent state changes, uniqueness guarantees, idempotency/replay safety,
-  or requires new database/locking constraints to protect domain invariants. Includes a dedicated **Migration & Backward Compatibility** assessment table.
-- **All other sections default to tables** (Current Behaviour, Desired Behaviour, Why, Scope of Change,
-  Impact on Existing Documentation, Open Questions). Prefer `Aspect/Step | Detail` or `Before | After`
-  shaped tables over paragraphs — match whatever this repo's existing docs already favor for enumerable
-  content (check a couple of its existing flow/entity docs first). Rule of thumb: if you're about to write
-  2 or more bullet points that share the same implicit column structure (a label and an explanation, a
-  before and an after), make it a table instead.
-- **Cite real file paths and function/method names in every technical section** — no
-  `[EntityName]`-style placeholders in the delivered document (placeholders are only for the template
-  itself).
-- **Number sections sequentially** and keep the numbering consistent if you add/remove a section — don't
-  leave two sections sharing the same number.
-- Link every affected BR/entity/flow doc using relative markdown links, and add this proposal to their
-  eventual update list (the "Impact on Existing Documentation" section).
-- **Split "Impact on Existing Documentation" into two groups if this repo has upstream product docs**:
-  derived bounded-context/flow docs (always edited) vs. upstream inception-style docs (journeys/personas —
-  edited only where they state current behaviour as present-tense fact; brainstorming/feature-scoping
-  artifacts left untouched as frozen history, per Step 1.4). Don't collapse these into one table — a
-  reader deciding what to touch needs the "why" for each group, and the "leave alone" decisions need to be
-  as visible as the "edit this" ones.
-- If the proposal reverses part of an already-shipped feature, say so explicitly and link the original
-  feature-scoping doc if this repo has one — don't silently contradict a shipped decision.
+- **INPUT:** Grounded findings from `STEP_00` and `STEP_01`, plus the exact contents of `templates/proposal.md`.
+- **ACTION:**
+  1. **MANDATORY TOOL CALL:** Read `templates/proposal.md` (located in this skill's `templates/` folder) using `read_file`.
+  2. Write the proposal file to:
+     `docs/product/working-on/active/[change-name]/proposal.md`
+     *(Use a kebab-case `[change-name]` slug matching the git branch name where possible. Never write directly in `working-on/` root or `grace-period/`.)*
+  3. If the proposal's Migration & Backward Compatibility table (`Section 4.1`) marks a contract as **Deprecation** with a staged rollout where old and new versions coexist, also read `templates/parallel-change-plan.md` and copy the two Mermaid diagram skeletons from its Appendix (`A. Before and after` and `B. Old and new surfaces coexisting`) to the top of `Section 3 (Desired Behaviour)` in `proposal.md`.
 
-### Delivery Slices (multi-slice changes)
+### `OUTPUT CONTRACT` for `proposal.md`
+Your generated `proposal.md` **MUST** conform strictly to `templates/proposal.md`:
+- **Required Header Metadata:** `* **Status:**`, `* **Shipped Date:**`, `* **Last checked against code:**` (with date + git commit SHA), `* **Branch:**`, `* **Bounded Context:**`, `* **Affects:**`.
+- **Required Section Structure (Exact Order & Headings — Do Not Rename or Reorder):**
+  - `## 1. Product Rationale`
+    - `**As a:**` / `**I want to:**` / `**So that:**` (always 3 bullets, never a table)
+    - `### Personas Affected` (table: `Persona | Current Experience | Experience After This Change`)
+    - `### Business Value & Why It Matters` (table: `Aspect | Detail`)
+    - `### Known Gaps Introduced` (bullets; omit this H3 subsection only if there are zero gaps)
+  - `## 2. Current Behaviour` (table: `Step | Method / Component | Behaviour` citing real classes/methods + link to enforced BR/INV doc and feature-flag check)
+  - `## 3. Desired Behaviour` (table: `Aspect | Today | After This Change`; preceded by the two Appendix Mermaid diagrams if Parallel Change applies)
+  - `## 4. 🛡️ Concurrency, TOCTOU & Invariant Integrity Analysis` (table: `Concurrency / Invariant Scenario (TOCTOU) | Potential Risk in Modified Flow | Guard / Mitigation Strategy | Enforcement Mechanism` + boundary-value findings from `STEP_01.10`)
+    - `### 4.1 Migration & Backward Compatibility Assessment` (table: `Dimension | Risk / Impact | Mitigation / Strategy`)
+  - `## 5. Why` (table: `Driver | Detail`)
+  - `## 6. Scope of Change` (table: `File | In/Out | Change` — every real source file, test file, undecided dependency, and feature flag)
+  - `## 7. Cross-Repo Dependencies` (table: `# | Repo | Role in this change | Deploy first?` + deploy order note; remove this section only for single-repo changes)
+  - `## 8. Impact on Existing Documentation`
+    - `### 8.1 Derived Bounded-Context / Flow Docs` (table: `Doc (destination) | Draft | Slice | Change`)
+    - `### 8.2 Upstream Product Docs` (table: `Doc | Stale Content | Change` — explicitly separating living upstream docs to edit vs. frozen historical docs left untouched)
+  - `## 9. Delivery Slices` (table: `Slice | Features / Scope | Blocked by (Open Question #) | Detail | Status | Shipped | Ticket / PR`)
+  - `## 10. Open Questions` (table: `# | Question | Blocks slice`)
+  - `## 🔗 Related Documentation` (relative links to journeys, flows, BRs, entities)
 
-- If the change is big enough to ship in more than one increment (or may be paused and resumed later), fill
-  **Section 9, "Delivery Slices"**: group the scope into slices that can ship independently, and tag each
-  Open Question with the slice it blocks. A slice whose questions are all resolved can start even while
-  later slices stay blocked.
-- Single-pass changes keep one row (S1) — do not invent slices for small changes.
-- If the user wants to document now and implement later, set Status to `⏸ Parked` and make sure the
-  proposal (and any feature specs created for it) is committed. **Do not edit the living docs while
-  parked** — they describe shipped behaviour, and the proposal's Section 8 (with a slice per row) is what
-  records how they will change.
-- **Plan light, detail just in time.** Every slice gets a *Detail* level in Section 9: `Outline` (one
-  paragraph of intent, blockers, ticket) → `Specified` (detailed spec in `features/`) → `In progress` →
-  `Shipped`, or `Discarded / Superseded` with a one-line reason. Specify in detail only the slice that is
-  about to start; features may change or become obsolete before they reach production, so later slices
-  stay outlines until picked up.
-- **Not-yet-implemented docs live in the change folder, never in the living docs:**
-
-  ```
+### Multi-Slice & Draft Rules (`Section 8` & `Section 9`)
+- **Single-pass changes:** Keep one row (`S1`) in Section 9.
+- **Multi-slice or parked changes:** Group scope into independently shippable slices (`S1`, `S2`, ...) and tag each Open Question in Section 10 with the slice it blocks.
+- **Plan light, detail just in time:** Set each slice's `Detail` column in Section 9 to `Outline` $\rightarrow$ `Specified` (detailed spec in `features/`) $\rightarrow$ `In progress` $\rightarrow$ `Shipped` (or `Discarded / Superseded`). Only specify the slice about to start.
+- **Not-yet-implemented docs live in `working-on/active/<change>/drafts/`, NEVER in living docs:**
+  ```text
   working-on/active/<change>/
   ├── proposal.md                   roadmap: slices, decisions, blockers, ticket keys
   ├── features/                     detailed specs (specified slices only)
   ├── drafts/                       planned text of living docs (+ README mapping draft → destination/slice)
-  └── implementation-plan-sN.md     written when slice N starts
+  └── implementation-plan-sN.md     written when slice N starts (or implementation-plan.md for single-slice)
   ```
+  - While parked (`⏸ Parked`) or in progress, **do not edit living docs** (except a single pointer row in a domain-service doc's Part A4 *Pending Changes* table).
+  - Once a slice is `In progress`, freeze its spec and record changes only via a dated amendment line in `proposal.md`.
 
-  If a planned rewrite of an existing doc (BR, flow, entity, domain service) is needed, write it as a file in `drafts/` and leave the
-  living doc untouched. A service doc may carry one row in its *Pending Changes* table pointing back here;
-  nothing else from this change appears in the living tree.
-- **Freeze and amend.** Once a slice is `In progress`, change its spec only through a dated amendment line in
-  the proposal, not by silently editing the spec.
-
-### Before Finalizing
-
-- [ ] Every code reference has been verified against the actual source file, not assumed
-- [ ] Every derived doc's upstream source has been traced and checked for staleness (Step 1.4) — not just
-      read for context
-- [ ] Concurrency, TOCTOU, idempotency, and invariant risks evaluated in Section 4
-- [ ] If the change touches other repos, **Section 6 (Cross-Repo Dependencies)** is filled in with real repo names, roles, and deploy order — not left as a placeholder
-- [ ] Migration, data backfill, and API backward compatibility addressed
-- [ ] Open Questions table captures every undecided fork (rollout strategy, dead-code removal scope,
-      migration/backfill needs) — do not resolve these on the user's behalf
-- [ ] Ask the user to confirm or resolve Open Questions before moving to the implementation plan
+- **DO NOT:**
+  - Do NOT leave `[EntityName]` or `[RealClassOrModule.method()]` placeholders in the delivered `proposal.md`.
+  - Do NOT resolve Open Questions in Section 10 on the user's behalf.
+  - Do NOT proceed to `STEP_03` (Implementation Plan) or `STEP_04` (Code) in the same turn as `STEP_02`.
+- **PASS CONDITION (🛑 HARD GATE 1):**
+  `proposal.md` is written to disk, passes the **Gate 1 Validation Checklist** at the bottom of this skill, and you **STOP your turn** to ask the user to review `proposal.md` and resolve Section 10 Open Questions.
 
 ---
 
-## Step 2b: Resume a Parked or Partially Shipped Proposal
+## STEP_02B — Resume a Parked or Partially Shipped Proposal
 
-Run this whenever a proposal already exists in `working-on/` and the user wants to continue it (typically
-a new conversation, days or weeks later). Do not rely on memory of the earlier session.
+Run this step whenever `proposal.md` already exists in `working-on/active/[change-name]/` and the user asks to continue work on it.
 
-1. Read the proposal's **Section 9 (Delivery Slices)** and **Section 10 (Open Questions)**. Identify the
-   next slice that is `📋 Planned` and whose blocking questions are all resolved. If a blocking question is
-   still open, stop and ask the user — do not resolve it on their behalf.
-1b. **Ask "is this slice still wanted?"** before investing in detail. Features can become obsolete while
-   parked. If it is no longer wanted, follow Step 5b (discard). If it is still wanted but only an `Outline`,
-   write its detailed spec now (`/create-features`, saved in `features/`), then continue.
-2. **Re-ground the slice against the current code.** Compare the "Last checked against code" commit with
-   `HEAD` (`git log <commit>..HEAD -- <files in Scope of Change>`), re-read the real files in Section 6 and
-   the feature specs for the slice, and re-run the Step 1.7 invariant cross-check. Code may have moved
-   since the proposal was written.
-3. Report drift to the user (renamed files, changed signatures, already-shipped overlapping work, newly
-   relevant invariants) and update the proposal/specs where they are now wrong. Specs describe desired
-   *behaviour*; code-level findings (real table/method names, which component does what today) belong in
-   the slice's implementation plan, not in the feature specs.
-4. Update "Last checked against code" with today's date and commit, set Status to `🔄 In Progress`, then
-   continue with Step 3 for **that slice only**.
+- **INPUT:** Existing `proposal.md` and current git `HEAD`.
+- **ACTION:**
+  1. Read **Section 9 (Delivery Slices)** and **Section 10 (Open Questions)**. Identify the next `📋 Planned` slice whose blocking questions are all resolved. If any blocking question is still open, **STOP** and ask the user.
+  2. **Ask "is this slice still wanted?"** before investing in detail. If no longer wanted, execute `STEP_05B` (Discard). If wanted and currently at `Outline` detail in a Full-tier change, generate its detailed spec in `features/` (`/create-features`) before continuing.
+  3. **Re-ground against current code:** Compare the `"Last checked against code"` commit SHA in `proposal.md` with `HEAD` (`git log <commit>..HEAD -- <files in Section 6>`), re-read the real files in Section 6, and re-run `STEP_01.6` (invariant cross-check).
+  4. Report any code drift to the user and update `proposal.md` / slice specs where affected. Update `"Last checked against code"` with today's date and `HEAD` commit SHA, and set Status to `🔄 In Progress`.
+- **PASS CONDITION:** Target slice is unblocked, re-grounded against `HEAD`, and ready for `STEP_03`.
 
 ---
 
-## Step 3: Write the Implementation Plan
+## STEP_03 — Write the Implementation Plan (`OUTPUT CONTRACT`)
 
-Only after the proposal's Open Questions are resolved (for the slice being planned). Use
-`templates/implementation-plan.md`. Save it alongside the proposal, in the same folder. For a multi-slice
-proposal, plan **one slice at a time** — the next slice is planned when it is resumed (Step 2b), against the
-code as it is then.
+Execute **only after** the user has approved `proposal.md` and resolved all Open Questions blocking the target slice. Plan **one slice at a time**.
 
-- **Parallel change variant.** If the proposal's Migration & Backward Compatibility table marks a contract as
-  **Deprecation** and records a staged rollout (old and new versions coexist while consumers migrate
-  gradually), use `templates/parallel-change-plan.md` instead of `templates/implementation-plan.md`. Phases
-  are then the lifecycle **Expand → Migrate → Contract** (not inside-out), the "no orphaned flags / remove
-  dead code" rules apply only at the Contract phase, baseline usage metrics on the old surface come first,
-  and Rollout Notes carry the flags table, the per-consumer migration table with entry/exit criteria, the
-  signals that confirm the rollout, and the risks. Optional companions in the change folder: a
-  mapping inventory (when the consumers' value mapping moves to the backend), a ticket backlog file, and a
-  next-steps file for resuming. The variant also carries Mermaid skeletons: put the lifecycle gates diagram at
-  the top of the plan's Phases section, and, in the proposal (Step 2), open Section 3 (Desired Behaviour)
-  with the before/after sequence diagram and the old/new coexistence diagram from the template's appendix,
-  so readers see who orchestrates what before reading the tables. Everything else in Step 3 still applies.
-- If the proposal's Section 6 listed cross-repo dependencies, fill in **Section 0 (Cross-Repo Dependencies)** of the implementation plan — carry the repo table and deploy-order note forward from the proposal verbatim. Phases that belong to an external repo come before phases in this repo when deploy order requires it.
-- (Unless the parallel change variant above applies.) Phases must be derived from the proposal's **Scope of Change** table — one phase per real
-  file/component, ordered **inside-out** matching this specific codebase's actual layering, whatever that
-  is (do not impose domain/application/infrastructure, CQRS modules, MVC, or any other template if the
-  repo is organized differently — use Step 0's findings).
-- Each phase follows this repo's own test-authoring convention (test-first if it does TDD; otherwise match
-  its existing pattern), then implement, then remove dead code identified in the proposal (no
-  commented-out code, no orphaned flags unless staged rollout was an explicit decision in the proposal).
-- Ensure integration and acceptance test phases include cases for concurrency/TOCTOU mitigations, idempotency replays, migration compatibility, and invariant guards.
-- Include a Documentation Update section listing exactly which existing docs get touched and with which
-  mechanism this repo uses to (re)generate them, if any (e.g. a paired "create entity/flow documentation"
-  skill) — otherwise state that the docs will be hand-edited in place. Never plan to create a new doc file
-  for something that already has one.
+- **INPUT:** Approved `proposal.md` (with resolved Open Questions) and the plan template in `templates/`.
+- **ACTION:**
+  1. **Select & Read Template (`MANDATORY TOOL CALL`):**
+     - **Standard Inside-Out Change:** Call `read_file` on `templates/implementation-plan.md`.
+     - **Parallel Change Variant:** If `proposal.md` Section 4.1 marks a contract as **Deprecation** with staged coexistence (old and new versions live side-by-side while consumers migrate), call `read_file` on `templates/parallel-change-plan.md` instead.
+  2. Write the plan alongside `proposal.md`:
+     - Single-slice: `docs/product/working-on/active/[change-name]/implementation-plan.md`
+     - Multi-slice (slice `N`): `docs/product/working-on/active/[change-name]/implementation-plan-sN.md`
 
----
+### `OUTPUT CONTRACT` for `implementation-plan.md` / `parallel-change-plan.md`
+- Preserve all template headings and sections in exact order:
+  - Header Metadata (`Status`, `Proposal` link) + `### Resolved Open Questions` table (`# | Question | Resolution`)
+  - `## 0. Cross-Repo Dependencies` (carried forward verbatim from `proposal.md` Section 7; external repo phases precede this repo's phases when deploy order requires it)
+  - `## 1. Pre-Implementation Checklist`
+  - `## 2. Phases`:
+    - *If Standard (`templates/implementation-plan.md`):* Derive phases directly from `proposal.md` Section 6 (Scope of Change), ordered **inside-out** matching this codebase's actual layering discovered in `STEP_00`. Each phase is test-first (or matches repo test convention), implements the change, and removes dead code. Include dedicated integration/acceptance test tasks for concurrency/TOCTOU, idempotency replays, migration compatibility, and invariant guards.
+    - *If Parallel Change (`templates/parallel-change-plan.md`):* Keep the Mermaid lifecycle gates diagram at the top of `## 2. Phases` and structure phases strictly as **Phase 1: Expand (baseline metrics on old surface first + dark new surface)** $\rightarrow$ **Phase 2: Migrate (consumers one at a time + deprecation signals)** $\rightarrow$ **Phase 3: Contract (remove old routes, code, flags)**.
+  - `## 3. Validation` (populated with this repo's **real** unit, integration, architecture, and lint commands from `STEP_00`)
+  - `## 4. Documentation Update` (table mapping every doc from `proposal.md` Section 8 for the active slice to its update mechanism)
+  - `## 5. Rollout Notes` (for Parallel Change, include the mandatory `### Flags`, `### Per-consumer migration table`, `### How to confirm the rollout worked`, and `### Risks to watch` tables)
+  - `## 🔗 Related Documentation`
 
-## Step 4: Implement
-
-Follow this repo's own documented conventions (its `CLAUDE.md`/`AGENTS.md`/README, or equivalent) rather
-than any generic process — skip steps that assume infrastructure this repo doesn't have (e.g. an ADR index)
-unless Step 0 confirmed it exists. Implement **only the current slice's features**; leave later slices
-untouched. Work phase by phase from the implementation plan, checking off tasks as
-they complete. Run this repo's real validation commands (found in Step 0) before marking a phase done —
-**the full unit suite and the architecture tests, not only the tests you touched**: changing a signature
-breaks mocks in test classes you never opened. Run the integration suite before the change is declared
-done or a PR is opened.
+- **DO NOT:**
+  - Do NOT invent generic architecture layers (e.g. CQRS/Hexagonal) if `STEP_00` showed a different codebase structure.
+  - Do NOT start modifying production or test code in the same turn that you generate the implementation plan.
+- **PASS CONDITION (🛑 HARD GATE 2):**
+  The implementation plan is written to disk, verified against the **Gate 2 Validation Checklist**, and presented to the user for approval before coding begins.
 
 ---
 
-## Step 5: Update the Original Docs (Post-Implementation)
+## STEP_04 — Implement the Slice
 
-Once a slice is implemented and verified (for a single-slice change, that is the whole change):
+Execute **only after** user approval at **HARD GATE 2**.
 
-0. **Scope the doc update to the slice that shipped.** Only edit the Section 8 rows tagged with that slice:
-   copy the matching files from `drafts/` into their destination (fix the relative links, keep only the
-   parts whose slice shipped, re-check against the code), then delete the consumed drafts.
-   Docs tagged with later slices stay untouched, so the living docs never describe behaviour that is not
-   in the code. Mark the slice `✅ Shipped` in Section 9 with the date and ticket/PR, and set the
-   proposal Status to `🔄 Partially Shipped (slice N/M)` if slices remain.
-0b. **Domain-service docs: planned text in `drafts/`, one pointer row in the living doc.** While a change is
-   parked or in progress, the service doc's *Pending Changes* table (Part A4) only gets a one-sentence row
-   (change, slice, proposal link, ticket); Part A1–A3 and Part B stay as shipped behaviour. The planned
-   rewrite lives in `drafts/<ServiceName>.md`. When the slice ships: copy the draft over the living doc,
-   keep the A4 rows of slices that have not shipped yet, remove the shipped slice's row, flip ⏳ to ✅ only
-   after opening the code, and fill `Verified by` with real test titles.
-1. Update each affected doc **in place**, using whichever mechanism this repo already uses to author that
-   kind of doc (Step 0) — e.g. if it has a paired skill for generating entity/business-rule/flow docs,
-   re-invoke that skill on the existing file rather than writing free-hand.
-2. Do **not** create new rule/invariant IDs for a modified rule unless the change is genuinely a new rule
-   coexisting with the old one — a change that replaces the old formula updates the same rule doc, keeping
-   its ID, and gets a dated entry in that doc's history/changelog section if it has one.
-3. **Update both layers identified in the proposal's split "Impact on Existing Documentation" section** —
-   the derived docs AND the living upstream docs (journeys/personas) that stated the old behaviour as
-   present-tense fact. Updating only the derived layer and leaving a stale journey/persona doc behind is an
-   incomplete change. Leave frozen brainstorming/feature-scoping artifacts untouched, as decided in the
-   proposal — do not retroactively edit history.
-4. **Close every edge at both ends.** For each link the change adds or removes — rule ↔ entity, flow,
-   feature, journey, test — write the counterpart in the same commit and then verify it from the other
-   side (grep the rule ID across the docs tree and check both directions). A `Enforces` bullet added to an
-   entity without the matching `Traces up to` / `Enforced by` row in the rule doc is exactly the half-edge
-   that makes rules undiscoverable later. Where the rule doc has an `Enforced by` table, keep it complete:
-   one row per layer that can reject the policy (contract, application, domain, database, UI), each naming
-   the file and the guard, with the status you earned by reading it — ⚠️ Unverified is an acceptable row,
-   an unearned ✅ is not.
-5. Update this repo's flow/documentation index only if the change makes an existing summary/status/table
-   row inaccurate.
-6. Mark the implementation plan's Documentation Update table complete.
+- **INPUT:** Approved `implementation-plan.md` (or `implementation-plan-sN.md`).
+- **ACTION:**
+  1. Implement **only the current slice's scope** phase by phase, following the repo's documented conventions (`CLAUDE.md` / `AGENTS.md`).
+  2. Check off (`[x]`) tasks in the implementation plan as each phase completes.
+  3. After each phase, run the repo's **full unit test suite and architecture test suite** (found in `STEP_00`), not only the test file you touched — signature changes break mocks in untouched test files.
+  4. Run the **full integration/acceptance test suite** and linter/typecheck before declaring implementation complete.
+- **DO NOT:**
+  - Do NOT implement features belonging to future slices.
+  - Do NOT leave commented-out dead code or orphaned feature flags (unless in Phase 1/2 of a Parallel Change plan).
+- **PASS CONDITION:** All phases for the active slice are checked off and the full unit, architecture, integration, and lint suites pass.
 
 ---
 
-## Step 5b: Discard or Supersede a Slice
+## STEP_05 — Update the Original Living Docs In-Place (Post-Implementation)
 
-When a slice becomes obsolete, is replaced, or the business drops it:
+Execute once `STEP_04` is complete and verified for the active slice.
 
-1. In Section 9 set the slice's Status to `🗑 Discarded` (or `Superseded by S#`) with a one-line reason and
-   the date. Keep the row — it is the decision record.
-2. Delete its `features/` specs and its `drafts/` files (and the entries in `drafts/README.md`).
-3. Remove its row from any domain-service doc's *Pending Changes* table. The living docs never contained
-   the slice, so nothing else needs reverting.
-4. Close or re-scope the linked tickets, and drop any Open Question that only blocked this slice.
-5. If every remaining slice is `Shipped` or `Discarded`, continue to Step 6.
+- **INPUT:** Shipped code for the slice, `proposal.md` Section 8, and `drafts/` (if used).
+- **ACTION:**
+  1. **Scope strictly to the shipped slice:** Only update Section 8 rows tagged with the slice that just shipped. Copy matching files from `drafts/` into their living destination, fix relative links, verify against shipped code, and delete the consumed drafts. Leave docs for unshipped slices untouched.
+  2. **Domain-service docs (`Part A4 Pending Changes`):** When a slice ships, copy its draft over the living domain-service doc, retain `Part A4` rows for slices not yet shipped, remove the shipped slice's row, flip `⏳` to `✅` only after verifying the code guard, and populate `Verified by` with real test titles.
+  3. **Update in place using the repo's convention:** If the repo uses paired skills (`create-entity-lifecycle`, `create-flow-documentation`), follow their exact structure on the existing file. Never create a duplicate file or new rule/invariant ID when replacing an existing rule's formula — keep the existing ID and add a dated entry in its `History & Evolution` / changelog section.
+  4. **Update BOTH documentation layers from Section 8:**
+     - **8.1 Derived Bounded-Context / Flow Docs** AND
+     - **8.2 Living Upstream Docs** (journeys/personas that stated the old behaviour as present-tense fact).
+     - Leave frozen historical brainstorming/scoping artifacts untouched.
+  5. **Close every traceability edge at both ends ([../guidelines/traceability.md](../guidelines/traceability.md)):**
+     - For every link added or removed (rule $\leftrightarrow$ entity, flow, feature, journey, test), write both sides in the same commit and grep the rule ID across the docs tree to verify bidirectional links.
+     - Keep each rule doc's `Enforced by` table complete across layers (contract, application, domain, database, UI) with honest status (`✅ Verified` or `⚠️ Unverified`, never an unearned `✅`).
+  6. Update the root flow/documentation index if any summary/status row changed.
+  7. Mark the slice `✅ Shipped` in `proposal.md` Section 9 (with date and PR/ticket), update `proposal.md` Status (`🔄 Partially Shipped (slice N/M)` if slices remain), and mark Section 4 of the implementation plan complete.
+- **PASS CONDITION:** All living docs for the shipped slice match the code, all bidirectional traceability links are verified via grep, and no unshipped slice behaviour leaks into living docs.
 
 ---
 
-## Step 6: Grace Period & Purge Lifecycle (`working-on/`)
+## STEP_05B — Discard or Supersede a Slice
 
-Once Step 5 is complete for the **last** slice and living documentation is updated. While any slice is
-still `📋 Planned`/`🔄 In Progress`, the proposal stays where it is (Status `🔄 Partially Shipped` or
-`⏸ Parked`) — it is the record of what remains.
+Execute when a planned slice is dropped or replaced:
+1. In `proposal.md` Section 9, set the slice's Status to `🗑 Discarded` (or `Superseded by S#`) with a one-line reason and date. Keep the table row as the decision record.
+2. Delete its `features/` specs and `drafts/` files (and remove entries from `drafts/README.md`).
+3. Remove its row from any domain-service doc's *Pending Changes* (Part A4) table.
+4. Drop Open Questions in Section 10 that only blocked the discarded slice.
+5. If all remaining slices are `Shipped` or `Discarded`, proceed to `STEP_06`.
 
-1. **Move to Grace Period**: Do not delete the proposal immediately upon shipping. Move the directory out of active view to prevent LLM context contamination across branches or worktrees:
+---
 
+## STEP_06 — Grace Period & Purge Lifecycle (`working-on/`)
+
+Execute **only after** `STEP_05` is complete for the **last** slice of the proposal. (While any slice remains `📋 Planned` or `🔄 In Progress`, keep the folder in `working-on/active/`.)
+
+1. **Move to Grace Period:** Move the change folder out of `active/` to prevent LLM context bleeding across branches/worktrees:
    ```bash
    mv docs/product/working-on/active/[change-name] docs/product/working-on/grace-period/
    ```
-
-   Update status in `proposal.md`:
-
+   Update `proposal.md` metadata:
    ```markdown
    * **Status:** 🚀 Implemented (Grace Period)
    * **Shipped Date:** YYYY-MM-DD
    ```
-
-   Keep the directory during staging/production verification so the team can reference rationale or make quick hotfixes if regressions occur.
-2. **Mark Ready to Purge**: Once verified stable in production (or at the start of the next sprint/feature cycle), mark status:
-
-   ```markdown
-   * **Status:** 🧹 Ready to Purge
-   ```
-
-3. **Safe Purge**: Because living documentation (`bounded-contexts/`, `flows/README.md`) was already updated in Step 5, deleting the proposal directory loses zero context:
-
-   ```bash
-   rm -rf docs/product/working-on/grace-period/[change-name]
-   ```
+2. **Mark Ready to Purge:** Once verified stable in production, set `* **Status:** 🧹 Ready to Purge`.
+3. **Safe Purge:** Delete `docs/product/working-on/grace-period/[change-name]` once no longer needed for hotfix reference.
 
 ---
 
-## 📚 Bundled Resources
+<self_validation_gate>
+Before producing your final response at ANY turn, verify every applicable item below. If any checkbox for your current gate is FALSE, DO NOT end your turn — return to the failed step and fix the violation first:
 
-| Template | Purpose |
-| ---------- | --------- |
-| `templates/proposal.md` | Modification proposal — product rationale + current/desired behaviour + real-code scope |
-| `templates/implementation-plan.md` | Phased implementation plan derived from the proposal's scope table |
-| `templates/parallel-change-plan.md` | Variant for staged migrations where old and new coexist: Expand → Migrate → Contract phases, flags and per-consumer rollout tables |
+### Gate 1 Validation (End of Turn 1 — Proposal Phase)
+- [ ] `STEP_00` executed: Repo conventions, real test commands, and cross-repo dependencies discovered from actual files.
+- [ ] `STEP_00B` executed: Triage tier (`Light` / `Standard` / `Full`) explicitly stated and justified.
+- [ ] `STEP_01` executed: Real source code read, upstream docs checked for staleness, active invariants (`INV-*`) cross-checked across all bounded contexts, existing tests verified, and boundary-values check (`STEP_01.10`) completed.
+- [ ] **Template Read Verified:** `read_file` was called on `templates/proposal.md` before writing `proposal.md`.
+- [ ] **Path Compliance Verified:** Proposal saved strictly at `docs/product/working-on/active/[change-name]/proposal.md` (or `.sdlc/config.json` equivalent).
+- [ ] **Schema Compliance Verified:** `proposal.md` contains all numbered sections (`1` through `10` + `🔗 Related Documentation`) and exact table schemas from `templates/proposal.md` with zero `[Placeholder]` leftovers.
+- [ ] **Halt Gate Respected:** No `implementation-plan.md` written and no production/test code modified before user approves `proposal.md` and resolves Section 10 Open Questions.
 
-## 🔗 Related Skills
+### Gate 2 Validation (End of Turn 2 — Implementation Plan Phase)
+- [ ] **Template Read Verified:** `read_file` was called on `templates/implementation-plan.md` (or `templates/parallel-change-plan.md` for staged deprecations).
+- [ ] **Schema Compliance Verified:** Plan contains `Resolved Open Questions`, `0. Cross-Repo Dependencies`, `1. Pre-Implementation Checklist`, `2. Phases`, `3. Validation` (with real repo commands), `4. Documentation Update`, and `5. Rollout Notes`.
+- [ ] **Halt Gate Respected:** Plan presented to user for approval before executing `STEP_04` code changes.
 
-If this repo has skills for first-time flow/entity documentation (any name — e.g.
-`create-flow-documentation`, `create-entity-lifecycle`), treat them as the authority for Step 5: reuse their
-document structure and, where applicable, invoke them directly to regenerate an existing doc rather than
-hand-editing it.
-
-The traceability convention (shared across SDLC skills at
-`../guidelines/traceability.md`) is binding for Step 1.9 and Step 5.4 — the markdown links are
-the record; code comments that cite rule IDs are optional corroboration, never a substitute.
+### Gate 3 Validation (Post-Implementation & Living Docs Phase)
+- [ ] Full unit, architecture, integration, and lint suites executed and passing.
+- [ ] Living docs (both 8.1 derived and 8.2 living upstream) updated in place for the shipped slice only.
+- [ ] Bidirectional traceability links (`Enforced by` / `Verified by` / `Traces up to`) verified via grep.
+</self_validation_gate>
 
 ---
 
-**Version:** 1.3 — added the parallel change plan variant (`templates/parallel-change-plan.md`, with Mermaid diagram skeletons) and its trigger in Step 3. 1.2 — added the boundary-values check (Step 1.11, also for the Light tier) and a full-suite run in Step 4. 1.1 — generalized to be language- and framework-agnostic; no longer assumes a specific repo's
-stack, folder names, or sibling skills.
+## 📚 Bundled Resources & Related Skills
+
+| Resource / Guideline | Purpose |
+| :--- | :--- |
+| `templates/proposal.md` | **Mandatory `OUTPUT CONTRACT`** for `STEP_02` modification proposals |
+| `templates/implementation-plan.md` | **Mandatory `OUTPUT CONTRACT`** for `STEP_03` standard inside-out implementation plans |
+| `templates/parallel-change-plan.md` | **Mandatory `OUTPUT CONTRACT`** for `STEP_03` staged Expand $\rightarrow$ Migrate $\rightarrow$ Contract migrations |
+| `../guidelines/traceability.md` | Binding traceability convention for `STEP_01.8` and `STEP_05.5` |
+
+---
+
+**Version:** 2.0 — Upgraded to a Level 3 Execution Protocol (explicit state machine, non-negotiable `OUTPUT CONTRACT` template locks, turn-termination gates, and mandatory self-audit checklists for reasoning models). 1.3 — added parallel change plan variant (`templates/parallel-change-plan.md`). 1.2 — added boundary-values check and full-suite run. 1.1 — generalized to be language- and framework-agnostic.

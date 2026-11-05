@@ -17,6 +17,10 @@ Welcome! You are working on the `sdlc-skills` repository, which houses the unive
 - Subdirectories inside a skill can include `templates/`, `references/`, and `scripts/`.
 - Shared guidelines reside in `guidelines/` and are symlinked into categories.
 - Skills must remain modular, decoupled from any single proprietary codebase, and configurable via `.sdlc/config.json`.
+- **Level 3 Execution Protocol (`guidelines/execution-protocol.md`)**:
+  - Every workflow/template-producing skill MUST open with XML control-plane blocks (`<state_machine>`, `<execution_invariants>`, `<output_contract>`) that enforce `workflow structure = immutable | step reasoning = flexible`.
+  - Every reference to a file in `templates/*.md` MUST be locked inside `<output_contract>` requiring an explicit `read_file` tool call on the template before generating output (never reconstructing templates from prose or memory).
+  - Multi-stage skills MUST enforce explicit `🛑 HALT TURN` boundaries and end with a `<self_validation_gate>` self-audit block so reasoning models (GPT-6.x / Terra / Sol, Claude, Gemini) cannot skip steps or improvise formats.
 
 ## Verifying Skills
 

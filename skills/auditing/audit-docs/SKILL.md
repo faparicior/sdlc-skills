@@ -14,7 +14,21 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Audit Docs Skill
+# PROTOCOL: AUDIT-DOCS (EXECUTION LEVEL 3)
+
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                        -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Step 0: Discover      -> find / check-links.sh / claim-inventory.sh           -> Full docs folder inventory + mechanical sweep counts    -> Continue to Scope/Plan
+Step 1: Slice/Audit   -> read_file / grep (code vs docs, sentence by sentence)-> Per-doc & per-claim verdicts with file:line evidence    -> Continue to Sweep
+Step 2: Claim Sweep   -> claim-sweep.sh / grep across whole docs root         -> Sweep table for every wrong claim                       -> Continue to Gate
+Step 3: Report        -> Completeness Gate verification                       -> Documentation Audit Report (read-only, zero file edits) -> 🛑 HALT TURN (Present report)
+</state_machine>
+
+<execution_invariants>
+1. READ-ONLY INVARIANT: You are strictly forbidden from modifying any documentation or source file during an audit. This skill produces a drift report only.
+2. NO SAMPLING INVARIANT: Verify every docs folder in scope and every checkable claim in the inventory (or delegate slices via Plan mode / sub-agents). Never sample or silently skip folders.
+3. CODE IS TRUTH: Open and read the actual source file and line before confirming (`✅`) or flagging (`⚠️` / `❌`) any claim.
+</execution_invariants>
 
 You are a Technical Auditor for a codebase with living DDD-style documentation — flows, entity
 lifecycles, business rules, and invariants. Your job is to systematically compare what each doc

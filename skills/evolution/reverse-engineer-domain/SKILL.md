@@ -9,9 +9,28 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Reverse Engineer Domain Skill
+# PROTOCOL: REVERSE-ENGINEER-DOMAIN (EXECUTION LEVEL 3)
 
-You are an expert Software Archeologist and Domain-Driven Design (DDD) Reverse Engineering Specialist. Your job is to analyze existing, legacy, or brownfield source code, extract the implicit **Business Rules** and **Domain Invariants**, and formalize them into standardized living documentation.
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                      -> REQUIRED_OUTPUT                                                  -> MANDATORY_HALT
+Step 1: Read Source   -> read_file / grep (legacy/brownfield code)          -> Conditional branches, exceptions, transaction boundaries         -> Continue to Step 2
+Step 2: Triage        -> evaluate domain confidence                         -> Target destination (bounded-contexts/{ctx} vs discovered/RAW)    -> Continue to Step 3
+Step 3: Write Rules   -> read_file(templates/business-rules.md, invariants) -> Standardized BR-* and INV-* files with file:line traceability    -> 🛑 HALT TURN (Present extracted rules)
+</state_machine>
+
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to analyze legacy code, branch conditions, and domain boundaries, but you are strictly forbidden from skipping triage or improvising output formats (`workflow structure = immutable | step reasoning = flexible`).
+2. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory is strictly forbidden. You MUST call `read_file` on `templates/business-rules.md` or `templates/invariants.md` before generating any file.
+3. MANDATORY TRIAGE ROUTING:
+   - High-confidence bounded context -> `docs/product/bounded-contexts/{context}/{business-rules,invariants}/`
+   - Ambiguous/tangled legacy -> `docs/product/discovered/{business-rules,invariants}/` with `BR-RAW-XXX` / `INV-RAW-XXX` IDs and exact `file:line` pointers.
+</execution_invariants>
+
+<output_contract>
+- TARGET_PATHS: `docs/product/bounded-contexts/{context}/{business-rules,invariants}/` OR `docs/product/discovered/{business-rules,invariants}/`
+- SOURCE_TEMPLATES: `templates/business-rules.md` and `templates/invariants.md` (MUST call `read_file` before writing)
+- SCHEMA_INVARIANCE: Preserve every H1/H2/H3 heading, metadata field, Gherkin scenario structure, and Traceability table verbatim, and strip all instructional meta-commentary.
+</output_contract>
 
 ---
 
@@ -69,4 +88,14 @@ This skill is conversational and automatically infers your intent:
 2. State the invariant as an absolute truth:
    > **Invariant:** [e.g., The total registered attendees can never exceed venue capacity.]
 3. Define the monitored fields and write **Gherkin scenarios** for positive (valid) and negative (violation blocked) cases.
-4. Fill out `templates/invariants.md` and remove all instructional commentary.
+4. Call `read_file` on `templates/invariants.md`, fill out every section verbatim, and remove all instructional commentary.
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — return to the failed step and fix the violation first:
+- [ ] **Source Code Read Verified:** Target source files were read and exact `file:line` enforcement sites recorded.
+- [ ] **Template Read Verified:** `read_file` was called on `templates/business-rules.md` and/or `templates/invariants.md` before writing any output file.
+- [ ] **Schema Compliance Verified:** Every generated file preserves the exact headings and `Traceability` tables of `templates/business-rules.md` or `templates/invariants.md` with all instructional comments stripped.
+- [ ] **Triage Path Verified:** Files saved strictly under `bounded-contexts/{context}/` (high confidence) or `discovered/` with `RAW` prefix (ambiguous context).
+</self_validation_gate>

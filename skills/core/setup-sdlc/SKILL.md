@@ -7,7 +7,19 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Setup SDLC Skills
+# PROTOCOL: SETUP-SDLC (EXECUTION LEVEL 3)
+
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                        -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Step 1: Detect Env    -> ls / read_file (workspace layout, existing docs)     -> Detected directory defaults                             -> Continue to Step 2
+Step 2: Configure     -> ask_question / prompt developer                      -> Confirmed paths for `.sdlc/config.json`                 -> 🛑 HALT TURN (Wait for user answers)
+Step 3-5: Initialize  -> write_file / mkdir / cp guidelines                   -> `.sdlc/config.json` + directory tree + guidelines       -> END
+</state_machine>
+
+<execution_invariants>
+1. INTERACTIVE CONFIRMATION: Confirm the 5 directory paths with the developer before writing `.sdlc/config.json`.
+2. GUIDELINE COPY RULE: Copy `business-rules-vs-invariants.md`, `flow-documentation-structure.md`, and `adr-naming-conventions.md` into the target `guidelinesDir`, but NEVER copy `traceability.md` or `execution-protocol.md` (they remain in the skills pack).
+</execution_invariants>
 
 Configure your repository to use the full Spec-Driven, DDD & TDD Software Development Life Cycle (SDLC).
 

@@ -10,13 +10,29 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Create Features Skill
+# PROTOCOL: CREATE-FEATURES (EXECUTION LEVEL 3)
 
-You are an expert Technical Product Architect and Systems Engineer. Your job is to break down an end-to-end User Flow document (`journey-XX-[name].md`) into **sequentially numbered feature specifications** (vertical slices) saved in the change folder `docs/product/working-on/active/[change]/features/`, never in the living bounded-contexts/ tree.
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                 -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Step 1: Read Flow     -> read_file (flow, AGENTS.md, ADRs)             -> Vertical slice boundaries (F1, F2...)                   -> Continue to Step 2
+Step 2: Edge/INV      -> grep / read_file (all bounded-contexts/INV-*) -> Concurrency, TOCTOU & cross-context invariant catalogue -> Continue to Step 3
+Step 3: Contracts     -> define requirements & HTTP error mapping      -> F[X]-R[Y] checklist + HTTP Error Contract table         -> Continue to Step 4
+Step 4: Write Specs   -> read_file(templates/feature-specification.md) -> working-on/active/[change]/features/feature-NN-*.md     -> Continue to Step 5
+Step 5: Review Gate   -> present summary & Lack of Information Log     -> User review prompt                                      -> 🛑 HALT TURN (Wait for user)
+</state_machine>
 
-Each feature specification bridges the high-level user journey and the detailed domain model (Phase 3) & implementation (Phase 4), establishing the executable requirements, HTTP error contracts, concurrency safeguards, and architectural boundaries before coding begins.
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to analyze flows, concurrency, and cross-context invariants, but you are strictly forbidden from skipping, reordering, or merging steps (`workflow structure = immutable | step reasoning = flexible`).
+2. STOP GATES ARE ABSOLUTE: After generating feature specification file(s) in Step 4/5, you MUST halt your turn immediately and wait for user approval before invoking `/create-entity-lifecycle` or `/implement-flow`.
+3. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory is strictly forbidden. You MUST call `read_file` on `templates/feature-specification.md` before writing any feature specification file.
+4. STRICT OUTPUT LOCATION: Save feature specifications exclusively under `docs/product/working-on/active/[change]/features/feature-NN-[name].md` (or `.sdlc/config.json` override), NEVER in the living `bounded-contexts/` tree.
+</execution_invariants>
 
-Use the template provided in `templates/feature-specification.md`.
+<output_contract>
+- TARGET_PATH: `docs/product/working-on/active/[change]/features/feature-NN-[name].md`
+- SOURCE_TEMPLATE: `templates/feature-specification.md` (MUST call `read_file` before writing)
+- SCHEMA_INVARIANCE: Preserve every H1/H2/H3 section heading, metadata field, requirement ID format (`F[X]-R[Y]`), HTTP Error Contract table, Concurrency/TOCTOU table, Layer Scope, and `🧠 Agent Design Decisions & Assumptions` table verbatim.
+</output_contract>
 
 > **Paths**: the locations shown are the pack defaults; if `.sdlc/config.json` exists (written by `/setup-sdlc`), honour its `docsRoot` / `productDocsDir` / `adrDir` overrides.
 
@@ -118,8 +134,9 @@ For each feature slice, conduct a thorough technical analysis:
    - For multi-slice proposals, write detailed specs **only for the slice about to start**; later slices stay outlines in the proposal's Delivery Slices table and are specified when resumed (features may change or become obsolete before they ship).
    - Lifecycle: the change folder moves to `working-on/grace-period/` and is purged later (`/modify-flow` Step 6). Living docs get the shipped behaviour in the same PR as the code and must not link to feature specs.
 
-2. **Template Compliance**:
-   - Follow `templates/feature-specification.md` strictly.
+2. **Template Compliance (`OUTPUT CONTRACT`)**:
+   - **MANDATORY TOOL CALL:** Read `templates/feature-specification.md` via `read_file` before writing.
+   - Preserve every section heading and table column from `templates/feature-specification.md` in exact order. Do not omit or rename sections.
 
 3. **Populate the Lack of Information Log**:
    - Document any judgment calls, assumptions, fallback status codes, or tie-breakers made by the LLM in the `🧠 Agent Design Decisions & Assumptions` section:
@@ -144,3 +161,16 @@ For each feature slice, conduct a thorough technical analysis:
   2. Key requirements and HTTP error contracts.
   3. All entries in the Lack of Information Log (`D1`, `D2`...).
 * **Do NOT proceed to implementation or downstream domain modeling until the user reviews and approves the feature specification.**
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — return to the failed step and fix the violation first:
+- [ ] `Step 1` executed: Target flow spec, `AGENTS.md`/`CLAUDE.md`, architecture docs, and ADRs read.
+- [ ] `Step 2` executed: Edge cases, concurrency/TOCTOU risks, and active invariants (`INV-*` across **all** bounded contexts) cross-checked.
+- [ ] `Step 3` executed: Functional/non-functional requirements (`F[X]-R[Y]`) and HTTP Error Contract table defined.
+- [ ] **Template Read Verified:** `read_file` was called on `templates/feature-specification.md` before writing.
+- [ ] **Path Compliance Verified:** Files saved strictly under `docs/product/working-on/active/[change]/features/feature-NN-[name].md` (never in living `bounded-contexts/`).
+- [ ] **Schema Compliance Verified:** Output conforms 100% to `templates/feature-specification.md` with all sections and tables intact.
+- [ ] **Halt Gate Respected:** Turn stops at Step 5 for user review without writing production code.
+</self_validation_gate>

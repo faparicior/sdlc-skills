@@ -10,11 +10,30 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Create Entity Lifecycle Skill
+# PROTOCOL: CREATE-ENTITY-LIFECYCLE (EXECUTION LEVEL 3)
 
-You are an expert System Architect and Backend Engineer. Your job is to generate the technical details for an "Entity Lifecycle" document based on a domain noun (entity) and its high-level requirements.
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                      -> REQUIRED_OUTPUT                                                  -> MANDATORY_HALT
+Step 1: Read Code     -> read_file (domain class, VOs, repo port, events)   -> Earned status facts (`✅ Built` / `⚠️ Unverified` / `⏳ Planned`) -> Continue to Step 2
+Step 2: Write Doc     -> read_file(templates/entity-lifecycle|value-object) -> bounded-contexts/{ctx}/{entities,value-objects,domain-services}/ -> Continue to Step 3
+Step 3: Extract Rules -> read_file(templates/business-rules.md, invariants) -> BR-XXX & INV-XXX files + bidirectional `Enforcement & tests`     -> 🛑 HALT TURN (Present docs)
+</state_machine>
 
-Use the exact Markdown layout provided in `templates/entity-lifecycle.md`. Do not add any conversational text before or after the markdown block.
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to inspect domain classes, value objects, and state transitions, but you are strictly forbidden from skipping reading the real source code (`Code Is Truth`), skipping rule extraction, or improvising document structure (`workflow structure = immutable | step reasoning = flexible`).
+2. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory is strictly forbidden. You MUST call `read_file` on `templates/entity-lifecycle.md` (or `templates/value-object.md` / `templates/domain-service.md`) and `templates/business-rules.md` / `templates/invariants.md` before writing.
+3. EARNED STATUS INVARIANT (`Code Is Truth`): Open and read the real domain class, value objects, repository port, and domain events before writing any row. Never mark a row `✅ Built` without reading the code, and always write `⏳ Planned` rows in the future tense.
+</execution_invariants>
+
+<output_contract>
+- ENTITY / VO / SERVICE DOCUMENT:
+  - TARGET_PATH: `docs/product/bounded-contexts/{context}/{entities|value-objects|domain-services}/{Name}.md`
+  - SOURCE_TEMPLATE: `templates/entity-lifecycle.md` | `templates/value-object.md` | `templates/domain-service.md` (MUST call `read_file` before writing)
+  - SCHEMA_INVARIANCE: Preserve every H1/H2/H3 section heading, `Status` column (`✅ Built` / `⚠️ Unverified` / `⏳ Planned`), and table column schema verbatim.
+- BUSINESS RULES & INVARIANTS:
+  - TARGET_PATHS: `docs/product/bounded-contexts/{context}/business-rules/BR-[XXX]-[rule-name].md` and `invariants/INV-[XXX]-[invariant-name].md`
+  - SOURCE_TEMPLATES: `templates/business-rules.md` and `templates/invariants.md` (MUST call `read_file` before writing)
+</output_contract>
 
 > **Paths**: the locations shown are the pack defaults; if `.sdlc/config.json` exists (written by `/setup-sdlc`), honour its `docsRoot` / `productDocsDir` / `adrDir` overrides.
 
@@ -205,8 +224,19 @@ Two parts, so a PM can stop after Part A:
 
 ---
 
-**Last Updated:** 2026-09-16  
-**Version:** 1.3  
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — return to the failed step and fix the violation first:
+- [ ] **Code Read Verified (`Code Is Truth`):** Real domain class, value objects, repository port, and domain events were read before writing any table row (or confirmed not yet built and marked `⏳ Planned` in future tense).
+- [ ] **Template Read Verified:** `read_file` was called on `templates/entity-lifecycle.md`, `templates/value-object.md`, or `templates/domain-service.md` (plus `templates/business-rules.md` / `templates/invariants.md`) before writing.
+- [ ] **Schema Compliance Verified:** Output preserves all template headings, section order, and `Status` columns verbatim.
+- [ ] **State Machine Parity Verified:** Mermaid state diagram, State Transition Matrix, and State Definitions match 100%.
+- [ ] **Bidirectional Traceability Verified:** Extracted `BR-XXX` and `INV-XXX` files have complete `Traceability` tables (`Traces up to`, `Enforced by`, `Verified by`) AND the entity/VO/service doc has its matching `Enforcement & tests` reverse edge.
+</self_validation_gate>
+
+---
+
+**Last Updated:** 2026-11-05  
+**Version:** 1.4 (Level 3 Execution Protocol)  
 **Changes from v1.2:**
 - Added `🔍 Code Is Truth`: open the class, its value objects, the repository port and `domain/events/`
   before writing any row; every table row is an earned claim with a Status

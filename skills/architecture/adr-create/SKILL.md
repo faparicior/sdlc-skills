@@ -8,11 +8,26 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Create ADR Skill
+# PROTOCOL: ADR-CREATE (EXECUTION LEVEL 3)
 
-You are a Principal Software Architect. Your job is to draft, format, and catalog a new Architecture Decision Record (ADR) following SessioFlow standards.
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                      -> REQUIRED_OUTPUT                           -> MANDATORY_HALT
+Step 1: Sequence      -> read_file(docs/adr/README.md)      -> Next gapless 3-digit ADR number (`0XX`)   -> Continue to Step 2
+Step 2-5: Analyze     -> evaluate drivers, options, AX tax  -> Structured decision analysis              -> Continue to Step 6
+Step 6: Write & Sync  -> read_file(templates/TEMPLATE.md)   -> docs/adr/0XX-*.md + updated README.md     -> 🛑 HALT TURN (Present ADR)
+</state_machine>
 
-Use the template located at `templates/TEMPLATE.md` (relative to this skill).
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: Execute all 6 steps in strict order (`workflow structure = immutable | step reasoning = flexible`).
+2. TEMPLATE LOCK: Reconstructing the ADR template from memory is strictly forbidden. You MUST call `read_file` on `templates/TEMPLATE.md` before writing `docs/adr/0XX-*.md`.
+3. CATALOG SYNC: Every new ADR must be added to `docs/adr/README.md` with sequential 3-digit numbering (`0XX`) and incremented statistics.
+</execution_invariants>
+
+<output_contract>
+- TARGET_PATH: `docs/adr/0XX-decision-title.md`
+- SOURCE_TEMPLATE: `templates/TEMPLATE.md` (MUST call `read_file` before writing)
+- SCHEMA_INVARIANCE: Preserve every H1/H2/H3 section heading, metadata field, option pros/cons structure, and mandatory `🤖 AI & Agentic Ergonomics (AX)` section verbatim.
+</output_contract>
 
 ---
 
@@ -63,3 +78,13 @@ Every ADR in SessioFlow must document AI friction to keep autonomous agents on-p
    - Add a row to the **Quick Reference** table with number, title link, status, date, and AX tags.
    - Categorize the decision under the appropriate **ADR Categories** section.
    - Increment the total count in the statistics block.
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
+- [ ] `docs/adr/README.md` inspected first to assign the next gapless 3-digit number (`0XX`).
+- [ ] **Template Read Verified:** `read_file` was called on `templates/TEMPLATE.md` before writing.
+- [ ] **Schema Compliance Verified:** Generated ADR matches `templates/TEMPLATE.md` headings verbatim, includes ≥2–3 options with pros/cons, and includes `🤖 AI & Agentic Ergonomics (AX)`.
+- [ ] `docs/adr/README.md` updated with the new ADR entry and incremented count.
+</self_validation_gate>

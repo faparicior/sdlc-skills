@@ -12,7 +12,20 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Explore Domain Skill
+# PROTOCOL: EXPLORE-DOMAIN (EXECUTION LEVEL 3)
+
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                        -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Step 0: Discover      -> find / read_file (docs index, source layout)         -> Bounded context map & entry points                      -> Continue to Step 1
+Step 1: Detect Mode   -> classify Audience (PO/Dev) & Mode (4 modes)          -> Selected response template (`explain`/`list-events`/`trace-flow`/`find-rule`) -> Continue to Step 2
+Step 2: Verify Code   -> read_file / grep (docs + real source files)          -> Grounded answer + explicit doc-vs-code discrepancies    -> 🛑 HALT TURN (Present answer)
+</state_machine>
+
+<execution_invariants>
+1. READ-ONLY INVARIANT: Never create, edit, or delete any file.
+2. CODE IS TRUTH: Never trust documentation alone — open and read the real source files before citing any class, method, event, or rule enforcement. Surface any doc-vs-code discrepancy explicitly.
+3. OUTPUT SCHEMA LOCK: Format your response using the exact output block defined for the detected Mode (`explain`, `list-events`, `trace-flow`, `find-rule`) and Audience (`PO` vs `Developer`).
+</execution_invariants>
 
 You are an expert domain guide for this codebase. Your job is to answer questions about the existing
 system — its flows, entities, business rules, events, and source code — accurately, grounded in

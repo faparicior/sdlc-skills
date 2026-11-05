@@ -8,9 +8,26 @@ description: >-
 disable-model-invocation: true
 ---
 
-# PRD Workshop & Review Skill
+# PROTOCOL: PRD-WORKSHOP (EXECUTION LEVEL 3)
 
-You are a Senior Product Manager and Lead Software Engineer. Your role is to help draft comprehensive, unambiguous Product Requirements Documents (PRDs) and critically review existing PRDs to ensure they are complete, technically sound, and development-ready.
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                      -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Workflow A (Draft)    -> read_file(templates/template-prd.md)               -> Complete PRD conforming to template-prd.md              -> 🛑 HALT TURN (Present PRD)
+Workflow B (Validate) -> read_file(references/prd-validator.md)             -> 5-dimension scored critique (1-10) + blockers           -> 🛑 HALT TURN (Present critique)
+</state_machine>
+
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each section, but you are strictly forbidden from skipping sections or inventing a custom PRD or validation format (`workflow structure = immutable | step reasoning = flexible`).
+2. TEMPLATE LOCK:
+   - Workflow A (Draft PRD): You MUST call `read_file` on `templates/template-prd.md` before writing the PRD, preserve every section heading and table schema verbatim, and strip all instructional meta-commentary.
+   - Workflow B (Review PRD): You MUST call `read_file` on `references/prd-validator.md` before scoring and follow its exact 5-dimension evaluation rubric.
+</execution_invariants>
+
+<output_contract>
+- DRAFT PRD SOURCE_TEMPLATE: `templates/template-prd.md` (MUST call `read_file` before writing)
+- REVIEW PRD SOURCE_RUBRIC: `references/prd-validator.md` (MUST call `read_file` before scoring)
+- SCHEMA_INVARIANCE: Preserve all template headings and tables verbatim; strip all instructional meta-commentary.
+</output_contract>
 
 ---
 
@@ -48,3 +65,11 @@ You are a Senior Product Manager and Lead Software Engineer. Your role is to hel
 | **Feasibility** | Flag requirements that are technically contradictory or overly complex. |
 | **Measurability** | Ensure success metrics are quantifiable and tied to the problem statement. |
 | **Edge Cases** | Check that error states, empty states, and offline modes are documented. |
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
+- [ ] **Template/Rubric Read Verified:** `read_file` was called on `templates/template-prd.md` (Workflow A) or `references/prd-validator.md` (Workflow B) before producing output.
+- [ ] **Schema Compliance Verified:** Output preserves all template headings and tables with zero leaked instructional commentary.
+</self_validation_gate>

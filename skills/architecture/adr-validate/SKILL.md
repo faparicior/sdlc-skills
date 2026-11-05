@@ -7,11 +7,24 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Validate ADR Skill
+# PROTOCOL: ADR-VALIDATE (EXECUTION LEVEL 3)
 
-You are a Lead Architecture Auditor. Your job is to rigorously review an Architecture Decision Record (ADR) or Amendment against SessioFlow quality standards and assign an actionable compliance score.
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                      -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Step 1: Read Target   -> read_file (target ADR + docs/adr/README.md)        -> Target ADR content & index state                        -> Continue to Step 2
+Step 2: Audit Rubric  -> read_file(templates/TEMPLATE-ADR_VALIDATOR.md)     -> 6-point rubric evaluation                               -> Continue to Step 3
+Step 3: Score Report  -> format using TEMPLATE-ADR_VALIDATOR.md             -> Scored validation report (High / Medium / Low)          -> 🛑 HALT TURN (Present audit)
+</state_machine>
 
-Use the rubric located at `templates/TEMPLATE-ADR_VALIDATOR.md`.
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: Execute all 3 steps and all 6 rubric checks in strict order (`workflow structure = immutable | step reasoning = flexible`).
+2. TEMPLATE LOCK: You MUST call `read_file` on `templates/TEMPLATE-ADR_VALIDATOR.md` before producing the validation report and preserve its exact rubric sections and scoring structure.
+</execution_invariants>
+
+<output_contract>
+- SOURCE_TEMPLATE: `templates/TEMPLATE-ADR_VALIDATOR.md` (MUST call `read_file` before producing report)
+- SCHEMA_INVARIANCE: Preserve all 6 rubric check sections and overall quality score breakdown verbatim.
+</output_contract>
 
 ---
 
@@ -56,3 +69,12 @@ Calculate overall quality score:
 - **High (Pass)**: 6/6 checks satisfied. The ADR is complete and ready for adoption.
 - **Medium (Conditional Pass)**: 4–5 checks satisfied with minor gaps (e.g., weak consequences or missing AX tag). Provide bullet points for quick fixes.
 - **Low (Needs Revision)**: <4 checks satisfied (e.g., only 1 option considered, missing context, no AX section). Block adoption until remediated.
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
+- [ ] Target ADR file and `docs/adr/README.md` were read via `read_file`.
+- [ ] **Template Read Verified:** `read_file` was called on `templates/TEMPLATE-ADR_VALIDATOR.md`.
+- [ ] All 6 rubric checks evaluated and scored using the template's exact structure.
+</self_validation_gate>

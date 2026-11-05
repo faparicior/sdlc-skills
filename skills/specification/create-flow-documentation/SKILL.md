@@ -10,11 +10,31 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Create Flow Documentation Skill
+# PROTOCOL: CREATE-FLOW-DOCUMENTATION (EXECUTION LEVEL 3)
 
-You are an expert Technical Product Manager and System Architect. Your job is to generate a detailed "User Flow" document based on a journey, explicitly mapping user actions to backend system reactions and Entity Lifecycle state changes.
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                      -> REQUIRED_OUTPUT                                                  -> MANDATORY_HALT
+Step 1: Read Inputs   -> read_file (journey/USM/code + ADRs)                -> Persona, goal, steps, bounded context                            -> Continue to Step 2
+Step 2: Write Flow    -> read_file(templates/flows.md)                      -> bounded-contexts/{ctx}/flows/journey-XX-[name].md (3 diagrams)   -> Continue to Step 3
+Step 3: Extract Rules -> read_file(templates/business-rules.md, invariants) -> BR-XXX & INV-XXX files with complete Traceability tables         -> Continue to Step 4
+Step 4: Update Index  -> edit_file (flows/README.md)                        -> Updated Master Flow Catalog & BR/INV index                       -> 🛑 HALT TURN (Present flow & rules)
+</state_machine>
 
-Use the exact Markdown layout provided in `templates/flows.md`. Do not add any conversational text before or after the markdown block.
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to map user actions, backend reactions, and entity state transitions, but you are strictly forbidden from skipping steps, omitting any of the 3 required Mermaid diagrams, or improvising document structure (`workflow structure = immutable | step reasoning = flexible`).
+2. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory is strictly forbidden. You MUST call `read_file` on `templates/flows.md`, `templates/business-rules.md`, and `templates/invariants.md` before generating those files.
+3. BIDIRECTIONAL TRACEABILITY: Every governing `BR-XXX` and `INV-XXX` must be extracted to its owning bounded context with both ends of the `Traceability` section completed (`../guidelines/traceability.md`).
+</execution_invariants>
+
+<output_contract>
+- FLOW DOCUMENT:
+  - TARGET_PATH: `docs/product/bounded-contexts/{bounded-context-name}/flows/journey-[XX]-[feature-name].md`
+  - SOURCE_TEMPLATE: `templates/flows.md` (MUST call `read_file` before writing)
+  - SCHEMA_INVARIANCE: Preserve all sections (`Overview`, `Governing Business Rules & Domain Invariants (PM Summary)`, `Sequence Diagram`, `Flowchart`, `State Diagram`, `Step-by-Step Walkthrough`, `Acceptance Criteria`, `Edge Cases & Invariant Integrity`, `Technical Notes`, `Linked Documentation`) verbatim.
+- BUSINESS RULES & INVARIANTS:
+  - TARGET_PATHS: `docs/product/bounded-contexts/{owning-bounded-context}/business-rules/BR-[XXX]-[rule-name].md` and `invariants/INV-[XXX]-[invariant-name].md`
+  - SOURCE_TEMPLATES: `templates/business-rules.md` and `templates/invariants.md` (MUST call `read_file` before writing)
+</output_contract>
 
 > **Paths**: the locations shown are the pack defaults; if `.sdlc/config.json` exists (written by `/setup-sdlc`), honour its `docsRoot` / `productDocsDir` / `adrDir` overrides.
 
@@ -207,5 +227,16 @@ Once the flow specification document (`journey-XX-[name].md`) is created and app
 
 ---
 
-**Last Updated:** 2026-06-25  
-**Version:** 2.0
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — return to the failed step and fix the violation first:
+- [ ] **Template Read Verified:** `read_file` was called on `templates/flows.md` (and `templates/business-rules.md` / `templates/invariants.md` for extracted rules) before writing.
+- [ ] **Schema Compliance Verified:** Generated flow doc matches `templates/flows.md` headings and section order verbatim.
+- [ ] **3 Mermaid Diagrams Verified:** Sequence diagram (with green happy-path and red error `rect` blocks), Flowchart, and State diagram are all embedded in the flow doc and aligned with the Step-by-Step Walkthrough table.
+- [ ] **BR/INV Extraction & Traceability Verified:** Governing `BR-XXX` and `INV-XXX` files created/updated in their owning bounded context with complete bidirectional `Traceability` (`Traces up to`, `Enforced by`, `Verified by`).
+- [ ] **Master Index Updated:** `docs/product/flows/README.md` (or repo index) updated with the new/modified flow.
+</self_validation_gate>
+
+---
+
+**Last Updated:** 2026-11-05  
+**Version:** 2.1 (Level 3 Execution Protocol)

@@ -8,13 +8,27 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Amend ADR Skill
+# PROTOCOL: ADR-AMEND (EXECUTION LEVEL 3)
 
-You are a Principal Software Architect. Your job is to draft, format, and catalog a non-destructive **Amendment** or **Analysis** for an existing Architecture Decision Record (ADR).
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                -> REQUIRED_OUTPUT                                      -> MANDATORY_HALT
+Step 1: Locate Base   -> read_file(docs/adr/0XX-*.md)                 -> Target ADR & amendment sequence number (`0XX-01-*`)  -> Continue to Step 2
+Step 2: Write Amend   -> read_file(templates/TEMPLATE-AMENDMENT.md)   -> Non-destructive amendment file in docs/adr/          -> Continue to Step 3
+Step 3: Two-Way Link  -> edit_file (base ADR header)                  -> `Amends:` + `Amended By:` bidirectional links        -> Continue to Step 4
+Step 4: Sync Catalog  -> edit_file (docs/adr/README.md)               -> Updated Quick Reference, categories, and count       -> 🛑 HALT TURN (Present amendment)
+</state_machine>
 
-> ⚠️ **Golden Rule**: **Never silently edit or overwrite an accepted ADR's historical text.** Accepted ADRs represent the state of knowledge at the time of decision. Any modification, scope refinement, or evolution must be captured as an **Amendment** (`-01-amendment-*.md`) or **Technical Analysis** (`-02-analysis-*.md`).
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: Execute all 4 steps in strict order (`workflow structure = immutable | step reasoning = flexible`).
+2. NON-DESTRUCTIVE GOLDEN RULE: Never silently edit or overwrite an accepted ADR's historical body. Any modification must be a separate file (`0XX-01-*-amendment-*.md` or `0XX-02-*-analysis-*.md`), with only the `Amended By:` link added to the base ADR's header.
+3. TEMPLATE LOCK: Reconstructing template headers from memory is strictly forbidden. You MUST call `read_file` on `templates/TEMPLATE-AMENDMENT.md` (or `templates/TEMPLATE-ANALYSIS.md`) before writing.
+</execution_invariants>
 
-Use the template located at `templates/TEMPLATE-AMENDMENT.md` (or `templates/TEMPLATE-ANALYSIS.md` for technical spikes).
+<output_contract>
+- TARGET_PATH: `docs/adr/0XX-01-{topic}-amendment-{type}.md` (or `0XX-02-{topic}-analysis-{subtype}.md`)
+- SOURCE_TEMPLATE: `templates/TEMPLATE-AMENDMENT.md` or `templates/TEMPLATE-ANALYSIS.md` (MUST call `read_file` before writing)
+- SCHEMA_INVARIANCE: Preserve every section heading and metadata field from the template verbatim.
+</output_contract>
 
 ---
 
@@ -55,3 +69,13 @@ Both documents must reference each other to preserve navigation:
    - Add a row in the Quick Reference table beneath the base ADR.
    - Note the status (e.g., `✅ Approved` for the amendment; if the base ADR is superseded, update the base status to `⚠️ Superseded`).
    - Update category listings and increment the total count in statistics.
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
+- [ ] **Template Read Verified:** `read_file` was called on `templates/TEMPLATE-AMENDMENT.md` (or `templates/TEMPLATE-ANALYSIS.md`) before writing.
+- [ ] **Non-Destructive Rule Verified:** Base ADR's historical body was NOT overwritten.
+- [ ] **Two-Way Links Verified:** `Amends:` header added to new amendment file AND `Amended By:` header added to base ADR file.
+- [ ] `docs/adr/README.md` updated with the new record.
+</self_validation_gate>

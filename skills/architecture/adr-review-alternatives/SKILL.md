@@ -8,11 +8,27 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Review ADR Alternatives Skill
+# PROTOCOL: ADR-REVIEW-ALTERNATIVES (EXECUTION LEVEL 3)
 
-You are a Principal Software Architect and Technology Researcher. Your job is to actively research the current technology landscape (using web search) and evaluate whether SessioFlow's Architecture Decision Records remain optimal or need evolution.
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                      -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Step 1: Scope         -> read_file (docs/adr/)                              -> Active ADRs in scope                                    -> Continue to Step 2
+Step 2: Web Research  -> search_web (2026 benchmarks, adoption, pricing)    -> Primary & secondary source evidence                     -> Continue to Step 3
+Step 3: Tech Radar    -> classify Adopt / Trial / Assess / Hold             -> Quadrant mapping per technology                         -> Continue to Step 4
+Step 4: Write Reports -> read_file(templates/TEMPLATE-*.md)                 -> ADR_ALTERNATIVES_ANALYSIS.md + EXECUTIVE_SUMMARY.md     -> 🛑 HALT TURN (Present reports)
+</state_machine>
 
-Use the templates located at `templates/TEMPLATE-ADR_ALTERNATIVES_ANALYSIS.md` and `templates/TEMPLATE-EXECUTIVE_SUMMARY.md`.
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: Execute all steps in strict order (`workflow structure = immutable | step reasoning = flexible`).
+2. MANDATORY ACTIVE WEB SEARCH: Never rely solely on pretraining memory; execute live `search_web` queries for 2026 benchmarks and adoption.
+3. TEMPLATE LOCK: You MUST call `read_file` on `templates/TEMPLATE-ADR_ALTERNATIVES_ANALYSIS.md` and `templates/TEMPLATE-EXECUTIVE_SUMMARY.md` before writing the report artifacts.
+</execution_invariants>
+
+<output_contract>
+- TARGET_PATHS: `docs/adr/_reports/ADR_ALTERNATIVES_ANALYSIS.md` and `docs/adr/_reports/EXECUTIVE_SUMMARY.md`
+- SOURCE_TEMPLATES: `templates/TEMPLATE-ADR_ALTERNATIVES_ANALYSIS.md` and `templates/TEMPLATE-EXECUTIVE_SUMMARY.md` (MUST call `read_file` before writing)
+- SCHEMA_INVARIANCE: Preserve every H1/H2/H3 section heading and summary table schema verbatim.
+</output_contract>
 
 ---
 
@@ -68,3 +84,12 @@ Categorize each candidate technology into one of 4 quadrants:
 If the analysis recommends an architectural modification:
 - Suggest `/amend-adr` if the existing technology should be used differently (e.g. adding an abstraction).
 - Suggest `/create-adr` to draft a replacement ADR and mark the old one as `Superseded`.
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
+- [ ] Active web search queries executed (not relying solely on pretraining weights).
+- [ ] **Template Read Verified:** `read_file` was called on `templates/TEMPLATE-ADR_ALTERNATIVES_ANALYSIS.md` and `templates/TEMPLATE-EXECUTIVE_SUMMARY.md` before writing.
+- [ ] **Schema Compliance Verified:** Reports conform strictly to the templates with Tech Radar classifications (`Adopt` / `Trial` / `Assess` / `Hold`).
+</self_validation_gate>

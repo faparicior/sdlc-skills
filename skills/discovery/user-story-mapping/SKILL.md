@@ -10,10 +10,29 @@ description: >-
 disable-model-invocation: true
 ---
 
-# User Story Mapping Skill
+# PROTOCOL: USER-STORY-MAPPING (EXECUTION LEVEL 3)
 
-Facilitate Jeff Patton-style User Story Mapping workshops through 6 structured steps:
-**Frame the Problem** -> **Map the Big Picture** -> **Explore to Fill the Body** -> **Slice Release Strategy** -> **Slice Learning Strategy** -> **Slice Development Strategy**.
+<state_machine>
+CURRENT_STEP                  -> REQUIRED_TOOL                                        -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Step 1: Frame the Problem     -> read_file(templates/1-*.md, references/1-*.md)       -> docs/user-story-mapping/1-frame-the-problem.md          -> 🛑 HALT TURN in interactive mode
+Step 2: Map the Big Picture   -> read_file(templates/2-*.md, references/2-*.md)       -> docs/user-story-mapping/2-map-the-big-picture.md        -> 🛑 HALT TURN in interactive mode
+Step 3: Explore the Body      -> read_file(templates/3-*.md, references/3-*.md)       -> docs/user-story-mapping/3-explore-to-fill-the-body.md   -> 🛑 HALT TURN in interactive mode
+Step 4: Release Strategy      -> read_file(templates/4-*.md, references/4-*.md)       -> docs/user-story-mapping/4-slice-out-a-release-strategy.md -> 🛑 HALT TURN in interactive mode
+Step 5: Learning Strategy     -> read_file(templates/5-*.md, references/5-*.md)       -> docs/user-story-mapping/5-slice-out-a-learning-strategy.md -> 🛑 HALT TURN in interactive mode
+Step 6: Development Strategy  -> read_file(templates/6-*.md, references/6-*.md)       -> docs/user-story-mapping/6-slice-out-a-development-strategy.md -> 🛑 HALT TURN (Present USM output)
+</state_machine>
+
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: Execute the 6 structured User Story Mapping steps in strict order (`workflow structure = immutable | step reasoning = flexible`).
+2. TEMPLATE LOCK: Before generating any step document in `docs/user-story-mapping/`, you MUST call `read_file` on the corresponding template in `templates/` (and `*-inception-mapping.md` when in `from-inception` mode, plus `references/*-validator.md` when validating). Never reconstruct USM templates from memory.
+3. STORY CARD & FAKE-STORY BAN: Every MVP story card must follow the 4-part format (`Title`, `Narrative`, `Acceptance Criteria`, `Design/Technical Notes`). Never create standalone technical stories.
+</execution_invariants>
+
+<output_contract>
+- TARGET_DIR: `docs/user-story-mapping/` (honouring `.sdlc/config.json` overrides)
+- SOURCE_TEMPLATES: `templates/1-frame-the-problem.md` through `templates/6-slice-out-a-development-strategy.md` (plus `*-inception-mapping.md` in Bridge mode; MUST call `read_file` before writing)
+- SCHEMA_INVARIANCE: Preserve all structural headings, tables, and 4-part story card schemas verbatim; strip all instructional meta-commentary.
+</output_contract>
 
 This skill operates in 3 distinct modes:
 
@@ -165,3 +184,12 @@ When run in validation mode, the skill audits target documents and scores them a
 2. **INVEST Compliance:** Stories represent user value, are independent, negotiable, and testable.
 3. **Depth of Exploration:** Sad paths, error states, and alternative branches present.
 4. **Scope Fidelity:** Strict adherence to boundaries defined in Step 8 (MVP Canvas) or Step 1 (Problem Frame).
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
+- [ ] **Template Read Verified:** `read_file` was called on the target step's `templates/*.md` file (and `*-inception-mapping.md` if converting from inception) before writing.
+- [ ] **Schema Compliance Verified:** Output matches the template headings and 4-part Story Card format verbatim with zero leaked instructional text.
+- [ ] **No Fake Technical Stories:** Technical chores are nested under Design/Technical Notes inside user story cards, never as standalone stories.
+</self_validation_gate>

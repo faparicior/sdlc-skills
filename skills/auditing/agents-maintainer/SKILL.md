@@ -10,7 +10,18 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Agents.md Maintainer Skill
+# PROTOCOL: AGENTS-MAINTAINER (EXECUTION LEVEL 3)
+
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                        -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Step 1: Read Target   -> read_file(AGENTS.md, templates/agents-sections.md)   -> Current structure vs required 10 sections               -> Continue to Step 2
+Step 2: Execute Mode  -> read_file(templates/validation-checklist.md)         -> Audit / Update / Validate / Generate / Compare output   -> 🛑 HALT TURN (Present result)
+</state_machine>
+
+<execution_invariants>
+1. TEMPLATE LOCK: Before auditing, validating, or generating `AGENTS.md` sections, you MUST call `read_file` on `templates/agents-sections.md` and `templates/validation-checklist.md` (and `references/best-practices.md` when benchmarking).
+2. SPECIFICITY RULE: Every rule written to `AGENTS.md` must be concrete, verifiable, and grounded in this repo's real commands and architecture.
+</execution_invariants>
 
 A specialized skill for maintaining, updating, and optimizing the `AGENTS.md` file to ensure it stays aligned with industry best practices and project needs.
 

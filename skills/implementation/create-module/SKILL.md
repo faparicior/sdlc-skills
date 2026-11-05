@@ -12,7 +12,19 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Create Module Skill
+# PROTOCOL: CREATE-MODULE (EXECUTION LEVEL 3)
+
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                        -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Step 1: Prerequisites -> read_file / ls (packages/modules/, AGENTS.md)        -> Confirmed non-existent module & kebab-case `{context}`  -> Continue to Step 2
+Step 2-5: Scaffold    -> write_file (4 exact files from embedded templates)   -> package.json, tsconfig.json, .gitignore, container.ts   -> Continue to Step 6
+Step 6: Validate      -> run_command (npm install, typecheck, build)          -> Passing workspace typecheck & build                     -> 🛑 HALT TURN (Present module)
+</state_machine>
+
+<execution_invariants>
+1. EXACT 4-FILE SCOPE: Create only `package.json`, `tsconfig.json`, `.gitignore`, and `src/container.ts` under `packages/modules/{context}/` using the exact templates in this skill. Do NOT add domain entities, value objects, or handlers in this skill.
+2. NO OVERWRITE: Never overwrite an existing module under `packages/modules/{context}/`.
+</execution_invariants>
 
 Scaffold a new DDD module as a buildable Turborepo workspace package.
 

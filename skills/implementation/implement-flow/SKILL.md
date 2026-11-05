@@ -9,9 +9,29 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Implement Flow Skill
+# PROTOCOL: IMPLEMENT-FLOW (EXECUTION LEVEL 3)
 
-This skill guides feature implementation through flow-driven analysis, document review, and phased, user-controlled TDD development.
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                     -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Step 1: Read & Audit  -> read_file / grep (specs, flows, INV-*, AGENTS.md) -> Edge-case & Implementation Trap catalogue + summary     -> Continue to Step 2 (or 🛑 HALT if specs missing)
+Step 2: Plan          -> read_file(templates/flow-development-plan.md)     -> working-on/active/[change]/implementation-plan-sN.md    -> 🛑 HALT TURN (Wait for user plan approval)
+Step 3: Phased TDD    -> edit_file / run_command (Test->Code->Arch->Lint)  -> Working phase + updated `[x]` in plan                   -> 🛑 HALT TURN per phase (Wait for user confirmation)
+</state_machine>
+
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to analyze invariants, edge cases, and TDD implementation details, but you are strictly forbidden from skipping steps, bypassing review gates, or reordering phases (`workflow structure = immutable | step reasoning = flexible`).
+2. STOP GATES ARE ABSOLUTE:
+   - Gate 1 (Missing Feature Specs): If `docs/product/working-on/active/[change]/features/feature-XX-*.md` does not exist, STOP and invoke `/create-features` first.
+   - Gate 2 (Plan Approval): You are strictly forbidden from executing Step 3 (writing code) in the same turn as Step 2 (writing `implementation-plan-sN.md`). Halt your turn and wait for user approval.
+   - Gate 3 (Per-Phase TDD Checkpoints): Execute one phase at a time (`Test -> Code -> Arch Check -> Lint/Typecheck`), update plan checkboxes, and halt for user confirmation before the next phase.
+3. TEMPLATE LOCK: Reconstructing `flow-development-plan.md` from memory is strictly forbidden. You MUST call `read_file` on `templates/flow-development-plan.md` before writing the plan in Step 2.
+</execution_invariants>
+
+<output_contract>
+- TARGET_PATH: `docs/product/working-on/active/[change]/implementation-plan-sN.md` (or `implementation-plan.md` for single-slice changes; never in the living tree)
+- SOURCE_TEMPLATE: `templates/flow-development-plan.md` (MUST call `read_file` before writing)
+- SCHEMA_INVARIANCE: Preserve every H1/H2/H3 heading, `🔗 Cross-Repo Dependencies` table, `🧠 Agent Design Decisions & Assumptions` table, and phased checkbox structure verbatim.
+</output_contract>
 
 > **Single Source of Truth**:
 > - Consult **`AGENTS.md`** (or **`CLAUDE.md`** if absent) and the repo's architecture doc (e.g. **`docs/ARCHITECTURE.md`**) for folder layout, coding style, naming conventions, layer boundaries, and exact verification commands.
@@ -76,14 +96,15 @@ flowchart TD
 
 ---
 
-### Step 2: Create Flow Development Plan
+### Step 2: Create Flow Development Plan (`OUTPUT CONTRACT`)
 
-1. Save the plan in the change folder as `working-on/active/[change]/implementation-plan-sN.md`, one slice at a time and only when slice N starts; record "Grounded against commit X" in it. A single-slice change uses `implementation-plan.md`. Never put it alongside the flow doc in the living tree.
-2. Use the template: `templates/flow-development-plan.md` (located in this skill).
-3. **Populate the Lack of Information Log**:
+1. **MANDATORY TOOL CALL:** Call `read_file` on `templates/flow-development-plan.md` (located in this skill's `templates/` directory) before writing the plan.
+2. Save the plan in the change folder as `docs/product/working-on/active/[change]/implementation-plan-sN.md`, one slice at a time and only when slice N starts; record "Grounded against commit X" in it. A single-slice change uses `implementation-plan.md`. Never put it alongside the flow doc in the living tree.
+3. **Preserve Template Schema:** Keep every section heading, metadata line, and table structure from `templates/flow-development-plan.md` verbatim.
+4. **Populate the Lack of Information Log**:
    - Consolidate all architectural decisions, runtime configurations, and tie-breakers in the `🧠 Agent Design Decisions & Assumptions` table.
-4. The plan acts as the **state tracker** containing phased checkboxes (`[ ]` $\rightarrow$ `[x]`) for sequential execution.
-5. **🛑 Review Gate**:
+5. The plan acts as the **state tracker** containing phased checkboxes (`[ ]` $\rightarrow$ `[x]`) for sequential execution.
+6. **🛑 Review Gate (HARD GATE 2 — STOP TURN)**:
    - Stop and present the generated flow development plan to the user with file links.
    - Confirm phase ordering, test scope, affected files, and LLM design decisions.
    - **Do NOT start implementing code (Step 3) until the user explicitly approves the plan.**
@@ -138,3 +159,15 @@ A flow/feature is considered complete when:
 2. All Definition of Done criteria listed in `AGENTS.md` pass (Architecture tests, Unit/Integration tests, E2E tests, Linting, and Typechecking).
 3. For a `/modify-flow` proposal: the slice's `drafts/` are copied into their living docs (links fixed, re-checked against the code, traceability filled in) and deleted, and the slice is marked `Shipped` in the proposal. Every domain-service doc touched by the feature is updated: Part A1–A3 and Part B rows describe the shipped behaviour (Methods status, Traceability with real file/guard/test title), and the feature's row is removed from Part A4 (Pending Changes).
 4. Final verification results have been presented to and approved by the user.
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every applicable item below. If any checkbox for your current stage is FALSE, DO NOT end your turn — return to the failed step and fix the violation first:
+- [ ] **Prerequisite Verified:** Feature specification exists under `docs/product/working-on/active/[change]/features/` (or stopped to run `/create-features`).
+- [ ] `Step 1` executed: Feature spec, parent flow doc, domain models, cross-context `INV-*` invariants, `AGENTS.md`, and ADRs read; numbered edge-case & trap catalogue built.
+- [ ] **Template Read Verified (Step 2):** `read_file` was called on `templates/flow-development-plan.md` before writing `implementation-plan-sN.md`.
+- [ ] **Schema Compliance Verified (Step 2):** `implementation-plan-sN.md` preserves all headings and tables from `templates/flow-development-plan.md`.
+- [ ] **Halt Gate 2 Respected:** Stopped turn after generating `implementation-plan-sN.md` to wait for user approval before writing code.
+- [ ] **Phase-by-Phase TDD Respected (Step 3):** Failing test written first $\rightarrow$ minimal code to pass $\rightarrow$ architecture check $\rightarrow$ lint & typecheck $\rightarrow$ plan checkboxes updated.
+</self_validation_gate>

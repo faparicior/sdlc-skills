@@ -11,15 +11,31 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Inception Workshop Skill — Level 3 Execution Protocol
+# PROTOCOL: INCEPTION-WORKSHOP (EXECUTION LEVEL 3)
 
-## 🚨 EXECUTION PROTOCOL & WORKFLOW CONTROL (NON-NEGOTIABLE)
+<state_machine>
+CURRENT_STEP                 -> REQUIRED_TOOL                                        -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Step 1: Vision & Boundaries  -> read_file(templates/1-*.md, references/1-*.md)       -> docs/inception/1-product-vision-and-boundaries.md       -> 🛑 HALT TURN in facilitate mode
+Step 2: Tradeoffs            -> read_file(templates/2-*.md, references/2.2-*.md)     -> docs/inception/2-tradeoffs.md (7 X marks Golden Rule)   -> 🛑 HALT TURN in facilitate mode
+Step 3: Personas             -> read_file(templates/3-*.md, references/3-*.md)       -> docs/inception/3-personas/                              -> 🛑 HALT TURN in facilitate mode
+Step 4: Empathy Map          -> read_file(templates/4-*.md, references/4-*.md)       -> docs/inception/4-empathy-map.md                         -> 🛑 HALT TURN in facilitate mode
+Step 5: User Journey         -> read_file(templates/5-*.md, references/5-*.md)       -> docs/inception/5-user-journeys/                         -> 🛑 HALT TURN in facilitate mode
+Step 6: Brainstorming        -> read_file(templates/6-*.md, references/6-*.md)       -> docs/inception/6-brainstorming.md                       -> 🛑 HALT TURN in facilitate mode
+Step 7: Features/Sequencing  -> read_file(templates/7-*.md, references/7-*.md)       -> docs/inception/7-features-and-sequencing.md             -> 🛑 HALT TURN in facilitate mode
+Step 8: MVP Canvas           -> read_file(templates/8-*.md, references/8-*.md)       -> docs/inception/8-mvp-canvas.md                          -> 🛑 HALT TURN (Present workshop output)
+</state_machine>
 
-1. **Workflow Structure is Immutable; Step Reasoning is Flexible**:
-   - Facilitate Lean Inception workshops through the 8 structured steps according to the scenario run-order table (`Greenfield` vs. `Brownfield`) without skipping steps or inventing custom layouts (`workflow structure = immutable | step reasoning = flexible`).
-2. **Strict Template `OUTPUT CONTRACT`**:
-   - Before generating any step artifact (`1-product-vision-and-boundaries.md` through `8-mvp-canvas.md`), you **MUST call `read_file`** on the corresponding template in `templates/` and validator in `references/` (see Step Mapping table).
-   - Preserve every structural heading, table column, and Mermaid chart schema from the template verbatim while stripping all instructional meta-commentary. Never reconstruct an inception template from memory.
+<execution_invariants>
+1. WORKFLOW IMMUTABILITY: Facilitate Lean Inception workshops through the 8 structured steps according to the scenario run-order table (`Greenfield` vs. `Brownfield`) without skipping steps or inventing custom layouts (`workflow structure = immutable | step reasoning = flexible`).
+2. TEMPLATE LOCK: Before generating any step artifact (`1-product-vision-and-boundaries.md` through `8-mvp-canvas.md`), you MUST call `read_file` on the corresponding template in `templates/` and validator in `references/`. Never reconstruct an inception template from memory.
+3. STRIP INSTRUCTIONAL META-TEXT: Output documents must preserve 100% of structural headings, tables, and diagrams from the template while stripping all AI instructions, format guidelines, and validation checklists.
+</execution_invariants>
+
+<output_contract>
+- TARGET_DIR: `docs/inception/` (honouring `.sdlc/config.json` overrides)
+- SOURCE_TEMPLATES: `templates/1-product-vision-and-boundaries.md` through `templates/8-mvp-canvas-definition.md` (MUST call `read_file` before writing each step)
+- VALIDATOR_RUBRICS: `references/1-product-vision-boundary-validator.md` through `references/8-mvp-canvas-definition-validator.md`
+</output_contract>
 
 **Critical Quality Rules:**
 - **Product Name Consistency**: Use the exact product name consistently throughout all documents. Include it in titles, introductions, and key sections. After establishing context, use pronouns or "the system" naturally. Focus on clarity, not forced repetition.
@@ -609,7 +625,16 @@ All flows include:
 
 ---
 
-**Version:** 3.5.0  
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
+- [ ] **Template & Validator Read Verified:** `read_file` was called on the active step's `templates/*.md` and `references/*-validator.md` files before writing.
+- [ ] **Schema Compliance Verified:** Output preserves all template tables, sections, and Mermaid diagrams with zero leaked instructional commentary.
+- [ ] **Quality Rules Verified:** Step 1 has ≥4 items per boundary column (`IS`, `IS NOT`, `DOES`, `DOES NOT`); Step 2 has exactly 7 `X` marks (one per column).
+</self_validation_gate>
+
+---
+
+**Version:** 3.6.0 (Level 3 Execution Protocol)  
 **Last Updated:** 2026-09-08  
 **Changes from v3.4:**
 - Swapped Step 5 and Step 6: User Journey is now Step 5, Brainstorming is now Step 6. Templates, validators, and output folders renamed accordingly (`5-user-journey-mapping.md`, `5-user-journeys/`, `6-brainstorming.md`). Greenfield facilitation now runs in sequential step order with no swaps. Brownfield is the scenario that diverges (Step 6 before Step 5).
