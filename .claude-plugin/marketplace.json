@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "faparicior",
+  "version": "0.3.1",
+  "description": "Universal SDLC agent skills for real engineering: Lean Inception, Story Mapping, Flow & Feature Specs, Domain-Driven Design (DDD), TDD implementation, ADR governance, and Living Documentation auditing.",
+  "owner": {
+    "name": "Fernando Aparicio",
+    "url": "https://github.com/faparicior"
+  },
+  "plugins": [
+    {
+      "name": "sdlc-skills",
+      "description": "Universal SDLC agent skills for real engineering: Lean Inception, Story Mapping, Flow & Feature Specs, Domain-Driven Design (DDD), TDD implementation, ADR governance, and Living Documentation auditing. Plug-and-play across agents.",
+      "version": "0.3.1",
+      "author": {
+        "name": "Fernando Aparicio",
+        "url": "https://github.com/faparicior"
+      },
+      "source": "./"
+    }
+  ]
+}
+

@@ -34,7 +34,7 @@ This repository uses [Changesets](https://github.com/changesets/changesets) for 
    - Consume pending changesets.
    - Update `package.json` version.
    - Update `CHANGELOG.md`.
-   - Automatically sync the version into `.claude-plugin/plugin.json` via `scripts/sync-versions.js`.
+   - Automatically sync the version into `.claude-plugin/plugin.json` and marketplace manifests (`.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`) via `scripts/sync-versions.js`.
 3. **Commit, Tag & Publish**:
    ```bash
    git add .
