@@ -21,6 +21,11 @@ Step 3-5: Initialize  -> write_file / mkdir / cp guidelines                   ->
 2. GUIDELINE COPY RULE: Copy `business-rules-vs-invariants.md`, `flow-documentation-structure.md`, and `adr-naming-conventions.md` into the target `guidelinesDir`, but NEVER copy `traceability.md` or `execution-protocol.md` (they remain in the skills pack).
 </execution_invariants>
 
+<output_contract>
+- TARGET_CONFIG: `.sdlc/config.json` conforming to `schemas/sdlc-config.schema.json`
+- TARGET_DIRECTORIES: `docs/inception/`, `docs/user-story-mapping/`, `docs/product/bounded-contexts/`, `docs/product/guidelines/`, `docs/product/working-on/active/`, `docs/product/working-on/grace-period/`, `docs/adr/` (or user-configured equivalents)
+</output_contract>
+
 Configure your repository to use the full Spec-Driven, DDD & TDD Software Development Life Cycle (SDLC).
 
 ## Workflow
@@ -73,3 +78,12 @@ Configure your repository to use the full Spec-Driven, DDD & TDD Software Develo
    - For a brand new project: Run `/inception-workshop` or `/user-story-mapping`.
    - For an existing project needing documentation: Run `/reverse-engineer-domain`.
    - For a general overview: Run `/sdlc-guide`.
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
+- [ ] **User Confirmation Verified:** Directory paths were confirmed with the developer before writing `.sdlc/config.json`.
+- [ ] **Config & Directories Verified:** `.sdlc/config.json` and the required SDLC directories were created.
+- [ ] **Guideline Copy Rule Verified:** `traceability.md` and `execution-protocol.md` were NOT copied into the target repository's `docs/product/guidelines/`.
+</self_validation_gate>

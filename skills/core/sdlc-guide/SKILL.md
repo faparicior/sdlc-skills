@@ -7,6 +7,22 @@ description: >-
 disable-model-invocation: false
 ---
 
+# PROTOCOL: SDLC-GUIDE (EXECUTION LEVEL 3)
+
+<state_machine>
+CURRENT_STEP          -> REQUIRED_TOOL                                        -> REQUIRED_OUTPUT                                         -> MANDATORY_HALT
+Step 1: Classify Goal -> match user intent against Flow Router (Categories A-F)-> Recommended `/skill-name` command + rationale           -> 🛑 HALT TURN (Or read target SKILL.md if executing)
+</state_machine>
+
+<execution_invariants>
+1. ROUTER-ONLY INVARIANT: `sdlc-guide` is a wayfinder and router skill. Never improvise or execute a downstream workflow (such as drafting an ADR, flow doc, proposal, or entity lifecycle) from memory inside `sdlc-guide`.
+2. DELEGATION LOCK: If the user wants you to execute the recommended skill immediately, you MUST call `read_file` on that skill's `SKILL.md` and follow its `<state_machine>` and `<output_contract>`.
+</execution_invariants>
+
+<output_contract>
+- OUTPUT_TYPE: Exact skill recommendation (`/skill-name`) mapped from the Flow Router tree (`A` through `F`) with a brief explanation of why it fits the user's current stage.
+</output_contract>
+
 # SDLC Skills Guide & Wayfinder
 
 I help you choose the right skill for your current task within the Spec-Driven, DDD & TDD Software Development Life Cycle.
@@ -49,3 +65,11 @@ What is your immediate goal?
 ## How to interact
 
 Tell me what you are working on or what stage of development you are in, and I will recommend the exact skill command and parameters to invoke.
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
+- [ ] **Router Discipline Verified:** Recommended the exact SDLC skill from the Flow Router tree without improvising downstream artifacts from memory.
+- [ ] **Skill Load Verified (if executing):** If transitioning directly into executing a target skill, `read_file` was called on that skill's `SKILL.md` first.
+</self_validation_gate>

@@ -23,6 +23,12 @@ Step 2: Execute Mode  -> read_file(templates/validation-checklist.md)         ->
 2. SPECIFICITY RULE: Every rule written to `AGENTS.md` must be concrete, verifiable, and grounded in this repo's real commands and architecture.
 </execution_invariants>
 
+<output_contract>
+- TARGET_FILE: `AGENTS.md` (when in Update or Generate mode) or structured Audit/Validation report
+- SOURCE_TEMPLATES: `templates/agents-sections.md` and `templates/validation-checklist.md` (MUST call `read_file` before producing output)
+- SCHEMA_INVARIANCE: Preserve all 10 required `AGENTS.md` sections (`Commands`, `Boundaries`, `Project Structure`, `Code Style`, `Testing Guidelines`, `Definition of Done`, `Documentation`, `Architecture Principles`, `Karpathy Principles`, `Git Workflow`).
+</output_contract>
+
 A specialized skill for maintaining, updating, and optimizing the `AGENTS.md` file to ensure it stays aligned with industry best practices and project needs.
 
 ## 🎯 Purpose
@@ -212,3 +218,12 @@ A complete `AGENTS.md` should include:
 
 **Skill Owner**: Technical Team  
 **Last Updated**: 2026-06-25
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
+- [ ] **Template Read Verified:** `read_file` was called on `templates/agents-sections.md` and `templates/validation-checklist.md`.
+- [ ] **Specificity Verified:** All rules and commands in `AGENTS.md` are concrete and verified against the repository's real scripts and architecture.
+- [ ] **Required Sections Verified:** All 10 required `AGENTS.md` sections are accounted for.
+</self_validation_gate>

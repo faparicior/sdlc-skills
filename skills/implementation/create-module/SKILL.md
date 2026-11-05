@@ -26,6 +26,15 @@ Step 6: Validate      -> run_command (npm install, typecheck, build)          ->
 2. NO OVERWRITE: Never overwrite an existing module under `packages/modules/{context}/`.
 </execution_invariants>
 
+<output_contract>
+- TARGET_FILES:
+  1. `packages/modules/{context}/package.json`
+  2. `packages/modules/{context}/tsconfig.json`
+  3. `packages/modules/{context}/.gitignore`
+  4. `packages/modules/{context}/src/container.ts`
+- SCHEMA_INVARIANCE: Match the 4 embedded templates in `## 📄 Templates` verbatim (substituting `{context}` and `{Context}`).
+</output_contract>
+
 Scaffold a new DDD module as a buildable Turborepo workspace package.
 
 This skill creates exactly four files in `packages/modules/{context}/`.
@@ -308,3 +317,12 @@ After this skill runs, the module is:
 
 **Last Updated:** 2026-07-14  
 **Version:** 1.0
+
+---
+
+<self_validation_gate>
+Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
+- [ ] **4-File Scope Verified:** Only `package.json`, `tsconfig.json`, `.gitignore`, and `src/container.ts` were created under `packages/modules/{context}/` (no domain code added prematurely).
+- [ ] **Template Fidelity Verified:** `"private": true`, `"type": "module"`, granular `exports`, and `"composite": true` match the embedded templates verbatim.
+- [ ] **Build & Typecheck Verified:** Workspace install, `typecheck`, and `build` succeeded for the new module.
+</self_validation_gate>
