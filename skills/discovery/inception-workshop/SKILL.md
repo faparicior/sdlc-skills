@@ -11,9 +11,15 @@ description: >-
 disable-model-invocation: true
 ---
 
-# Inception Workshop Skill
+# Inception Workshop Skill — Level 3 Execution Protocol
 
-Facilitate Lean Inception workshops through 8 structured steps: Product Vision -> Tradeoffs -> Personas -> Empathy Map -> Brainstorming -> User Journey -> Features & Sequencing -> MVP Canvas.
+## 🚨 EXECUTION PROTOCOL & WORKFLOW CONTROL (NON-NEGOTIABLE)
+
+1. **Workflow Structure is Immutable; Step Reasoning is Flexible**:
+   - Facilitate Lean Inception workshops through the 8 structured steps according to the scenario run-order table (`Greenfield` vs. `Brownfield`) without skipping steps or inventing custom layouts (`workflow structure = immutable | step reasoning = flexible`).
+2. **Strict Template `OUTPUT CONTRACT`**:
+   - Before generating any step artifact (`1-product-vision-and-boundaries.md` through `8-mvp-canvas.md`), you **MUST call `read_file`** on the corresponding template in `templates/` and validator in `references/` (see Step Mapping table).
+   - Preserve every structural heading, table column, and Mermaid chart schema from the template verbatim while stripping all instructional meta-commentary. Never reconstruct an inception template from memory.
 
 **Critical Quality Rules:**
 - **Product Name Consistency**: Use the exact product name consistently throughout all documents. Include it in titles, introductions, and key sections. After establishing context, use pronouns or "the system" naturally. Focus on clarity, not forced repetition.
