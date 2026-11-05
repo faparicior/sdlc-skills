@@ -1,11 +1,16 @@
 # Implementation Plan: [Change Title]
 
+<!--
+Everything in [brackets] is a placeholder: replace with this repo's real files, commands, and names.
+Remove all HTML comments (<!-- ... -->) in the delivered document.
+-->
+
 * **Status:** 📋 Planned | 🔄 In Progress | ✅ Complete
 * **Proposal:** [proposal.md](./proposal.md)
 
 ### Resolved Open Questions
 
-Carry each row over from the proposal's Open Questions table with its resolution filled in — if any are still unresolved, resolve them before starting.
+<!-- Carry each row over from the proposal's Open Questions table with its resolution filled in — if any are still unresolved, resolve them before starting. -->
 
 | # | Question | Resolution |
 | :---: | :--- | :--- |
@@ -16,7 +21,7 @@ Carry each row over from the proposal's Open Questions table with its resolution
 
 ## 0. Cross-Repo Dependencies
 
-Fill this section only if the Scope of Change table in `proposal.md` spans more than one repository. Leave it blank (or remove the table) for single-repo changes.
+<!-- Fill this section only if the Scope of Change table in proposal.md spans more than one repository. Leave it blank (or remove the table) for single-repo changes. -->
 
 | # | Repo | Role in this change | Deploy first? |
 | :---: | :--- | :--- | :---: |
@@ -24,7 +29,7 @@ Fill this section only if the Scope of Change table in `proposal.md` spans more 
 | 2 | `[repo-name or path]` | [What changes there and why] | — |
 | 3 | this repo | [What changes here] | — |
 
-> **Deploy order note:** describe any hard ordering constraint (e.g. "repo 2 must be deployed before this repo — the new event payload references a template ID that must exist in repo 2 first").
+> **Deploy order note:** [Describe any hard ordering constraint, e.g. "repo 2 must be deployed before this repo — the new event payload references a template ID that must exist in repo 2 first".]
 
 ---
 
@@ -40,7 +45,7 @@ Fill this section only if the Scope of Change table in `proposal.md` spans more 
 
 ## 2. Phases
 
-Derive phases from the proposal's **Scope of Change** table — one phase per file/component cluster, ordered inside-out (core/domain logic → orchestration/application logic → infrastructure/persistence → interfaces), matching **this repo's actual layering**, whatever that is — do not impose a generic module template if the codebase is organized differently.
+<!-- Derive phases from the proposal's Scope of Change table — one phase per file/component cluster, ordered inside-out (core/domain logic -> orchestration/application logic -> infrastructure/persistence -> interfaces), matching this repo's actual layering. -->
 
 ### Phase 1: [Core / domain logic change]
 
@@ -80,7 +85,7 @@ Derive phases from the proposal's **Scope of Change** table — one phase per fi
 
 ## 3. Validation
 
-Use this repo's actual test/lint/typecheck commands — check its README or contributor guide (e.g. `CLAUDE.md`, `AGENTS.md`) rather than assuming a stack:
+<!-- Use this repo's actual test/lint/typecheck commands — check its README or contributor guide (e.g. CLAUDE.md, AGENTS.md) rather than assuming a stack. -->
 
 - [ ] `[repo's unit test command]` passes
 - [ ] `[repo's integration/e2e test command]` passes
@@ -91,7 +96,7 @@ Use this repo's actual test/lint/typecheck commands — check its README or cont
 
 ## 4. Documentation Update (after implementation ships)
 
-Execute the "Impact on Existing Documentation" table from `proposal.md`. Update the existing files in place using whichever mechanism this repo already uses to author that kind of doc — do not create new doc files for a change to an already-documented flow/entity/rule.
+<!-- Execute the "Impact on Existing Documentation" table from proposal.md. Update the existing files in place using whichever mechanism this repo already uses to author that kind of doc — do not create new doc files for a change to an already-documented flow/entity/rule. -->
 
 | Doc | How to update | Status |
 | :--- | :--- | :---: |

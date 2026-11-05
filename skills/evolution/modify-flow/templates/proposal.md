@@ -1,5 +1,10 @@
 # Proposal: [Change Title]
 
+<!--
+Everything in [brackets] is a placeholder: replace with this repo's real files, commands, and names.
+Remove all HTML comments (<!-- ... -->) in the delivered document.
+-->
+
 * **Status:** 📋 Draft | 🔄 In Review | ✅ Approved | ⏸ Parked | 🔄 Partially Shipped (slice N/M) | 🚀 Implemented (Grace Period) | 🧹 Ready to Purge
 * **Shipped Date:** [YYYY-MM-DD or Pending]
 * **Last checked against code:** [YYYY-MM-DD @ commit `abc1234` — update every time the proposal is resumed]
@@ -26,19 +31,21 @@
 
 | Aspect | Detail |
 | :--- | :--- |
-| Relation to existing feature | [Does this reverse, extend, or replace a feature from `5-brainstorming.md`? Link it.] |
+| Relation to existing feature | [Does this reverse, extend, or replace a feature from `6-brainstorming.md`? Link it.] |
 | Business driver | [Why now — commercial, legal, operational reason] |
 | Trade-off accepted | [What gets worse or narrower in exchange for the benefit — be explicit] |
 
 ### Known Gaps Introduced
 
-- [Any new gap this change creates that isn't yet solved — mirror the "Gap" callouts used in journey docs. Omit this section if none.]
+<!-- Omit this H3 subsection if this change introduces no new gaps. -->
+
+- [Any new gap this change creates that isn't yet solved — mirror the "Gap" callouts used in journey docs.]
 
 ---
 
 ## 2. Current Behaviour
 
-[Describe what the system does today. Cite real file paths, class/function/method names — not placeholders. Pull from the actual flow doc / entity doc / business rule doc being changed, and verify against the source code, not just the docs (docs can be stale).]
+<!-- Describe what the system does today. Cite real file paths, class/function/method names — not placeholders. Pull from the actual flow doc / entity doc / business rule doc being changed, and verify against the source code (docs can be stale). -->
 
 | Step | Method / Component | Behaviour |
 | :--- | :--- | :--- |
@@ -49,7 +56,7 @@
 
 ## 3. Desired Behaviour
 
-[Describe the target state. Use a before/after table — it's the clearest way to show a delta.]
+<!-- Describe the target state using a before/after table. For a Parallel Change (staged deprecation), prepend the two Mermaid diagrams from the Appendix of templates/parallel-change-plan.md. -->
 
 | Aspect | Today | After This Change |
 | :--- | :--- | :--- |
@@ -58,7 +65,7 @@
 
 ## 4. 🛡️ Concurrency, TOCTOU & Invariant Integrity Analysis
 
-[Evaluate whether this modification introduces or changes race conditions, check-then-act vulnerabilities, aggregate boundaries, or invariant protections.]
+<!-- Evaluate whether this modification introduces or changes race conditions, check-then-act vulnerabilities, aggregate boundaries, boundary-value couplings (Step 1.10), or invariant protections. -->
 
 | Concurrency / Invariant Scenario (TOCTOU) | Potential Risk in Modified Flow | Guard / Mitigation Strategy | Enforcement Mechanism |
 | :--- | :--- | :--- | :--- |
@@ -84,7 +91,7 @@
 
 ## 6. Scope of Change
 
-List every real file touched, not generic module paths. Grep the codebase for the classes/methods involved before finalizing this table — this section is what the implementation plan is built from.
+<!-- List every real file touched, not generic module paths. Grep the codebase for the classes/methods involved before finalizing this table — this section is what the implementation plan is built from. -->
 
 | File | In/Out | Change |
 | :--- | :---: | :--- |
@@ -95,22 +102,22 @@ List every real file touched, not generic module paths. Grep the codebase for th
 
 ## 7. Cross-Repo Dependencies
 
-Fill this section only if the Scope of Change table spans more than one repository. Remove it for single-repo changes.
+<!-- Fill this section only if the Scope of Change table spans more than one repository. Remove it for single-repo changes. -->
 
 | # | Repo | Role in this change | Deploy first? |
 | :---: | :--- | :--- | :---: |
 | 1 | `[repo-name or path]` | [What changes there and why] | ✅ / — |
 | 2 | this repo | [What changes here] | — |
 
-> **Deploy order note:** describe any hard ordering constraint (e.g. "repo 1 must deploy before this repo — the new event payload references a contract that must exist in repo 1 first").
+> **Deploy order note:** [Describe any hard ordering constraint, e.g. "repo 1 must deploy before this repo — the new event payload references a contract that must exist in repo 1 first".]
 
 ## 8. Impact on Existing Documentation
 
-List the living docs this change will require updating **after implementation ships** — update them in place, do not create new files alongside them. Assign each row to the slice (Section 9) whose shipping makes the doc true; a doc is only edited when its slice ships. If this repo has upstream product docs (journeys, personas, brainstorming/feature-scoping) behind its derived flow/entity/BR docs, split the impact into two groups — a derived doc rarely repeats its upstream source's full content, so the upstream doc can independently go stale even after the derived doc is fixed.
+<!-- List the living docs this change will require updating after implementation ships — update them in place, do not create new files alongside them. Assign each row to the slice (Section 9) whose shipping makes the doc true; a doc is only edited when its slice ships. -->
 
 ### 8.1 Derived Bounded-Context / Flow Docs
 
-The living docs are **not** edited until their slice ships. Write the planned text as a file in `drafts/` (with a `drafts/README.md` row: draft → destination → slice); in the PR that ships the slice, copy it into the destination and delete the draft.
+<!-- The living docs are NOT edited until their slice ships. Write the planned text as a file in drafts/ (with a drafts/README.md row: draft -> destination -> slice); in the PR that ships the slice, copy it into the destination and delete the draft. -->
 
 | Doc (destination) | Draft | Slice | Change |
 | :--- | :--- | :---: | :--- |
@@ -121,19 +128,20 @@ The living docs are **not** edited until their slice ships. Write the planned te
 
 ### 8.2 Upstream Product Docs
 
-Only include this subsection if this repo has upstream journey/persona/brainstorming docs. For each one linked from the derived docs above, decide which bucket it falls into — don't skip a doc just because it's "upstream":
+<!-- Only include this subsection if this repo has upstream journey/persona/brainstorming docs. For each one linked from the derived docs above, decide which bucket it falls into — don't skip a doc just because it's "upstream". -->
 
 | Doc | Stale Content | Change |
 | :--- | :--- | :--- |
-| [journey-name.md](../../../inception/6-user-journeys/journey-name.md) | [The specific line/step/table cell that states the old behaviour as present-tense fact] | [Edit to reflect the new behaviour] |
-| [5-brainstorming.md](../../../inception/5-brainstorming.md) | [The feature description that scoped the original, now-partially-reversed behaviour] | **Do not rewrite** — frozen record of the original decision. Leave as historical record; the derived doc's History & Evolution entry (7.1) is the forward-link documenting the reversal |
+| [journey-name.md](../../../inception/5-user-journeys/journey-name.md) | [The specific line/step/table cell that states the old behaviour as present-tense fact] | [Edit to reflect the new behaviour] |
+| [6-brainstorming.md](../../../inception/6-brainstorming.md) | [The feature description that scoped the original, now-partially-reversed behaviour] | **Do not rewrite** — frozen record of the original decision. Leave as historical record; the derived doc's History & Evolution entry (8.1) is the forward-link documenting the reversal |
 | [3-personas/*.md](../../../inception/3-personas/) | [State explicitly whether any persona doc needs a change, even if the answer is "no change needed"] | [Edit, or confirm no change needed] |
 
 ## 9. Delivery Slices
 
-The ledger for incremental delivery. Group the change into slices that can ship independently; each slice is implemented, verified and documented on its own, possibly in a different conversation or weeks later. Single-pass changes use one row (S1). Update this table whenever a slice changes state — it is the first thing read when the proposal is resumed.
-
-Detail level: **Outline** (intent only) → **Specified** (detailed spec in `features/`) → **In progress** → **Shipped**; or **Discarded / Superseded** (keep the row with a one-line reason and date). Specify a slice in detail only when it is about to start; ask "still wanted?" when resuming.
+<!--
+The ledger for incremental delivery. Group the change into slices that can ship independently; each slice is implemented, verified, and documented on its own. Single-pass changes use one row (S1). Update this table whenever a slice changes state — it is the first thing read when the proposal is resumed.
+Detail level: Outline (intent only) -> Specified (detailed spec in features/) -> In progress -> Shipped; or Discarded / Superseded (keep the row with a one-line reason and date). Specify a slice in detail only when it is about to start; ask "still wanted?" when resuming.
+-->
 
 | Slice | Features / Scope | Blocked by (Open Question #) | Detail | Status | Shipped | Ticket / PR |
 | :---: | :--- | :---: | :---: | :--- | :---: | :--- |
@@ -151,6 +159,6 @@ Detail level: **Outline** (intent only) → **Specified** (detailed spec in `fea
 
 ## 🔗 Related Documentation
 
-- [Journey: Name](../../../inception/6-user-journeys/journey-name.md)
+- [Journey: Name](../../../inception/5-user-journeys/journey-name.md)
 - [Flow NN: Name](../../bounded-contexts/[context]/flows/flow-NN-name.md)
 - [BR-XXX: Name](../../bounded-contexts/[context]/business-rules/BR-XXX-name.md)

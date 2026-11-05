@@ -1,19 +1,20 @@
 # Journey [XX]: [Feature/Flow Title]
 
-## 🛡️ ADR Compliance Checklist
-After generating the flow document, review the project's Architecture Decision Records (ADRs) to ensure alignment with established architectural decisions.
-
-- [ ] Entity mutations use domain methods rather than direct property setters
-- [ ] State transitions match entity lifecycle state machine
-- [ ] Domain events are published on state changes
-- [ ] Repository pattern is used for data access
-- [ ] Input validation uses schema validation
+<!--
+AI AGENT INSTRUCTIONS (Strip all HTML comments in the delivered document):
+- Review the project's Architecture Decision Records (ADRs) to ensure alignment:
+  - Entity mutations use domain methods rather than direct property setters
+  - State transitions match entity lifecycle state machine
+  - Domain events are published on state changes
+  - Repository pattern is used for data access
+  - Input validation uses schema validation
+-->
 
 ## 📋 Overview
 * **As a:** [User Role / Persona]
 * **I want to:** [Action they want to take]
 * **So that:** [The value or outcome they receive]
-* **Source:** Inception Step 6 - User Journey Mapping (Journey [X])
+* **Source:** Inception Step 5 - User Journey Mapping (Journey [X])
 * **Related Feature:** [Feature Name] from Wave [X] ([MVP/Phase])
 * **Impacted Entities:** 
   * [Entity Name 1](../entities/entity-name-1.md) (e.g., `Order` changes from `Draft` -> `Pending`)
@@ -22,8 +23,19 @@ After generating the flow document, review the project's Architecture Decision R
 
 ---
 
+## 📜 Governing Business Rules & Domain Invariants (PM Summary)
+
+<!-- Summarize all business rules and invariants governing this flow so Product Managers can review policies upfront. -->
+
+| ID | Type | Title | Summary / Policy | Owning Context |
+| :--- | :---: | :--- | :--- | :--- |
+| [BR-XXX](../business-rules/BR-XXX-name.md) | Business Rule | [Short Rule Title] | [When X, then Y, otherwise Z] | `[context]` |
+| [INV-XXX](../invariants/INV-XXX-name.md) | Domain Invariant | [Short Invariant Title] | [Absolute constraint that must always hold] | `[context]` |
+
+---
+
 ## 🗺️ Visual Flow & Sequence
-*Maps the sequence of user actions, domain behavior, and system reactions for this journey. Follows DDD patterns per ADR-009. **Must include error paths and alternative flows**, not just happy path.*
+<!-- Maps the sequence of user actions, domain behavior, and system reactions for this journey. Must include error paths and alternative flows in colored rect blocks, not just happy path. -->
 
 ```mermaid
 sequenceDiagram
@@ -270,17 +282,14 @@ Response: 201 Created
 
 ---
 
-## 📝 Diagram & Walkthrough Consistency
-
-This flow document follows consistency guidelines:
-
-1. **Step Numbering:** Each step in the walkthrough table corresponds to a logical action in the sequence diagram
-2. **Sequence Alignment:** The order of steps matches the sequence shown in the Mermaid diagram
-3. **Completeness:** Every major action in the Mermaid diagram has a corresponding step in the walkthrough
-4. **Detail Level:** The walkthrough provides additional detail for each Mermaid interaction
-5. **Error Paths:** All error scenarios are shown with colored `rect` blocks in the sequence diagram
-
----
+<!--
+AI AGENT CONSISTENCY CHECK (Remove this comment in the delivered document):
+1. Step Numbering: Each step in the walkthrough table corresponds to a logical action in the sequence diagram
+2. Sequence Alignment: The order of steps matches the sequence shown in the Mermaid diagram
+3. Completeness: Every major action in the Mermaid diagram has a corresponding step in the walkthrough
+4. Detail Level: The walkthrough provides additional detail for each Mermaid interaction
+5. Error Paths: All error scenarios are shown with colored `rect` blocks in the sequence diagram
+-->
 
 ## 🔗 Linked Documentation
 
