@@ -25,9 +25,11 @@ Step 3: Report        -> Completeness Gate verification                       ->
 </state_machine>
 
 <execution_invariants>
-1. READ-ONLY INVARIANT: You are strictly forbidden from modifying any documentation or source file during an audit. This skill produces a drift report only.
-2. NO SAMPLING INVARIANT: Verify every docs folder in scope and every checkable claim in the inventory (or delegate slices via Plan mode / sub-agents). Never sample or silently skip folders.
-3. CODE IS TRUTH: Open and read the actual source file and line before confirming (`✅`) or flagging (`⚠️` / `❌`) any claim.
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to trace code paths and evaluate claims, but you are strictly forbidden from skipping steps (`workflow structure = immutable | step reasoning = flexible`).
+2. READ-ONLY INVARIANT: You are strictly forbidden from modifying any documentation or source file during an audit. This skill produces a drift report only.
+3. NO SAMPLING INVARIANT: Verify every docs folder in scope and every checkable claim in the inventory (or delegate slices via Plan mode / sub-agents). Never sample or silently skip folders.
+4. CODE IS TRUTH: Open and read the actual source file and line before confirming (`✅`) or flagging (`⚠️` / `❌`) any claim.
+5. ESCAPE HATCH: If the repository's documentation layout does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

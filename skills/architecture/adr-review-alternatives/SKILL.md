@@ -22,6 +22,7 @@ Step 4: Write Reports -> read_file(templates/TEMPLATE-*.md)                 -> A
 1. WORKFLOW IMMUTABILITY: Execute all steps in strict order (`workflow structure = immutable | step reasoning = flexible`).
 2. MANDATORY ACTIVE WEB SEARCH: Never rely solely on pretraining memory; execute live `search_web` queries for 2026 benchmarks and adoption.
 3. TEMPLATE LOCK: You MUST call `read_file` on `templates/TEMPLATE-ADR_ALTERNATIVES_ANALYSIS.md` and `templates/TEMPLATE-EXECUTIVE_SUMMARY.md` before writing the report artifacts.
+4. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

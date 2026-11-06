@@ -26,6 +26,7 @@ Step 6: Development Strategy  -> read_file(templates/6-*.md, references/6-*.md) 
 1. WORKFLOW IMMUTABILITY: Execute the 6 structured User Story Mapping steps in strict order (`workflow structure = immutable | step reasoning = flexible`).
 2. TEMPLATE LOCK: Before generating any step document in `docs/user-story-mapping/`, you MUST call `read_file` on the corresponding template in `templates/` (and `*-inception-mapping.md` when in `from-inception` mode, plus `references/*-validator.md` when validating). Never reconstruct USM templates from memory.
 3. STORY CARD & FAKE-STORY BAN: Every MVP story card must follow the 4-part format (`Title`, `Narrative`, `Acceptance Criteria`, `Design/Technical Notes`). Never create standalone technical stories.
+4. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

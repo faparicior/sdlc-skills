@@ -43,6 +43,7 @@ Encapsulates the non-negotiable rules that reasoning models are strictly forbidd
 2. STOP GATES ARE ABSOLUTE (WITH EXPLICIT FAST-TRACK OVERRIDE): When a step ends with `🛑 HALT TURN`, you MUST stop your response immediately and wait for the user — unless the user explicitly requested unattended/batch execution or a Light-tier fast-track in their prompt.
 3. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory or prose descriptions is strictly forbidden. You MUST call `read_file` on the skill's `templates/*.md` file before generating any artifact.
 4. NO PROACTIVE BUSINESS DECISIONS: If an open question or ambiguity exists, record it in the Open Questions / Lack of Information table, stop, and wait for the user.
+5. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 ```
 

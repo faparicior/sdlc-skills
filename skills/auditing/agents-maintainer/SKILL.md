@@ -19,8 +19,10 @@ Step 2: Execute Mode  -> read_file(templates/validation-checklist.md)         ->
 </state_machine>
 
 <execution_invariants>
-1. TEMPLATE LOCK: Before auditing, validating, or generating `AGENTS.md` sections, you MUST call `read_file` on `templates/agents-sections.md` and `templates/validation-checklist.md` (and `references/best-practices.md` when benchmarking).
-2. SPECIFICITY RULE: Every rule written to `AGENTS.md` must be concrete, verifiable, and grounded in this repo's real commands and architecture.
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to analyze repository conventions and agent failure modes, but you are strictly forbidden from skipping steps (`workflow structure = immutable | step reasoning = flexible`).
+2. TEMPLATE LOCK: Before auditing, validating, or generating `AGENTS.md` sections, you MUST call `read_file` on `templates/agents-sections.md` and `templates/validation-checklist.md` (and `references/best-practices.md` when benchmarking).
+3. SPECIFICITY RULE: Every rule written to `AGENTS.md` must be concrete, verifiable, and grounded in this repo's real commands and architecture.
+4. ESCAPE HATCH: If the repository's structure does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

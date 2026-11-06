@@ -26,6 +26,7 @@ Step 5: Review Gate   -> present summary & Lack of Information Log     -> User r
 2. STOP GATES ARE ABSOLUTE (WITH EXPLICIT BATCH OVERRIDE): After generating feature specification file(s) in Step 4/5, you MUST halt your turn immediately and wait for user approval before invoking `/create-entity-lifecycle` or `/implement-flow` — unless the user explicitly requested unattended batch execution in their prompt.
 3. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory is strictly forbidden. You MUST call `read_file` on `templates/feature-specification.md` before writing any feature specification file.
 4. STRICT OUTPUT LOCATION: Save feature specifications exclusively under `docs/product/working-on/active/[change]/features/feature-NN-[name].md` (or `.sdlc/config.json` override), NEVER in the living `bounded-contexts/` tree.
+5. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

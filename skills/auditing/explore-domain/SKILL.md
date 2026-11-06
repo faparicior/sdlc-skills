@@ -22,9 +22,11 @@ Step 2: Verify Code   -> read_file / grep (docs + real source files)          ->
 </state_machine>
 
 <execution_invariants>
-1. READ-ONLY INVARIANT: Never create, edit, or delete any file.
-2. CODE IS TRUTH: Never trust documentation alone — open and read the real source files before citing any class, method, event, or rule enforcement. Surface any doc-vs-code discrepancy explicitly.
-3. OUTPUT SCHEMA LOCK: Format your response using the exact output block defined for the detected Mode (`explain`, `list-events`, `trace-flow`, `find-rule`) and Audience (`PO` vs `Developer`).
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to trace domain concepts, events, and rules across the codebase, but you are strictly forbidden from skipping steps (`workflow structure = immutable | step reasoning = flexible`).
+2. READ-ONLY INVARIANT: Never create, edit, or delete any file.
+3. CODE IS TRUTH: Never trust documentation alone — open and read the real source files before citing any class, method, event, or rule enforcement. Surface any doc-vs-code discrepancy explicitly.
+4. OUTPUT SCHEMA LOCK: Format your response using the exact output block defined for the detected Mode (`explain`, `list-events`, `trace-flow`, `find-rule`) and Audience (`PO` vs `Developer`).
+5. ESCAPE HATCH: If the user's question or codebase does not fit any of the 4 modes, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

@@ -15,12 +15,15 @@ Step 1: Classify Goal -> match user intent against Flow Router (Categories A-F)-
 </state_machine>
 
 <execution_invariants>
-1. ROUTER-ONLY INVARIANT: `sdlc-guide` is a wayfinder and router skill. Never improvise or execute a downstream workflow (such as drafting an ADR, flow doc, proposal, or entity lifecycle) from memory inside `sdlc-guide`.
-2. DELEGATION LOCK: If the user wants you to execute the recommended skill immediately, you MUST call `read_file` on that skill's `SKILL.md` and follow its `<state_machine>` and `<output_contract>`.
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE Step 1 to understand the user's project stage and goal, but the routing contract is fixed (`workflow structure = immutable | step reasoning = flexible`).
+2. ROUTER-ONLY INVARIANT: `sdlc-guide` is a wayfinder and router skill. Never improvise or execute a downstream workflow (such as drafting an ADR, flow doc, proposal, or entity lifecycle) from memory inside `sdlc-guide`.
+3. DELEGATION LOCK: If the user wants you to execute the recommended skill immediately, you MUST call `read_file` on that skill's `SKILL.md` and follow its `<state_machine>` and `<output_contract>`.
+4. ESCAPE HATCH: If the user's goal does not fit any branch in the Flow Router, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>
 - OUTPUT_TYPE: Exact skill recommendation (`/skill-name`) mapped from the Flow Router tree (`A` through `F`) with a brief explanation of why it fits the user's current stage.
+- ESCAPE_HATCH: If the request spans multiple stages, list the ordered sequence of `/skill-name` commands and ask the user which stage to start with.
 </output_contract>
 
 # SDLC Skills Guide & Wayfinder

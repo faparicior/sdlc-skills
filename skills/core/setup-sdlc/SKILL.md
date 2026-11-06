@@ -17,8 +17,10 @@ Step 3-5: Initialize  -> write_file / mkdir / cp guidelines                   ->
 </state_machine>
 
 <execution_invariants>
-1. INTERACTIVE CONFIRMATION: Confirm the 5 directory paths with the developer before writing `.sdlc/config.json` (unless the user explicitly requested default/unattended initialization in their prompt).
-2. GUIDELINE COPY RULE: Copy `business-rules-vs-invariants.md`, `flow-documentation-structure.md`, and `adr-naming-conventions.md` into the target `guidelinesDir`, but NEVER copy `traceability.md` or `execution-protocol.md` (they remain in the skills pack).
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to inspect the repository's real workspace layout (monorepo vs single-app, existing doc folders, architecture style), but you must execute the onboarding steps in order (`workflow structure = immutable | step reasoning = flexible`).
+2. INTERACTIVE CONFIRMATION: Confirm the 5 directory paths with the developer before writing `.sdlc/config.json` (unless the user explicitly requested default/unattended initialization in their prompt).
+3. GUIDELINE COPY RULE: Copy `business-rules-vs-invariants.md`, `flow-documentation-structure.md`, and `adr-naming-conventions.md` into the target `guidelinesDir`, but NEVER copy `traceability.md` or `execution-protocol.md` (they remain in the skills pack).
+4. ESCAPE HATCH: If the repository's structure does not fit the standard SDLC layout, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

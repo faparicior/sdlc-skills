@@ -21,6 +21,7 @@ Workflow B (Validate) -> read_file(references/prd-validator.md)             -> 5
 2. TEMPLATE LOCK:
    - Workflow A (Draft PRD): You MUST call `read_file` on `templates/template-prd.md` before writing the PRD, preserve every section heading and table schema verbatim, and strip all instructional meta-commentary.
    - Workflow B (Review PRD): You MUST call `read_file` on `references/prd-validator.md` before scoring and follow its exact 5-dimension evaluation rubric.
+3. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

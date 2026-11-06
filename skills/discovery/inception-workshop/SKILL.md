@@ -29,6 +29,7 @@ Step 8: MVP Canvas           -> read_file(templates/8-*.md, references/8-*.md)  
 1. WORKFLOW IMMUTABILITY: Facilitate Lean Inception workshops through the 8 structured steps according to the scenario run-order table (`Greenfield` vs. `Brownfield`) without skipping steps or inventing custom layouts (`workflow structure = immutable | step reasoning = flexible`).
 2. TEMPLATE LOCK: Before generating any step artifact (`1-product-vision-and-boundaries.md` through `8-mvp-canvas.md`), you MUST call `read_file` on the corresponding template in `templates/` and validator in `references/`. Never reconstruct an inception template from memory.
 3. STRIP INSTRUCTIONAL META-TEXT: Output documents must preserve 100% of structural headings, tables, and diagrams from the template while stripping all AI instructions, format guidelines, and validation checklists.
+4. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

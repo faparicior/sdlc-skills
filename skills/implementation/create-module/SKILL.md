@@ -22,8 +22,10 @@ Step 6: Validate      -> run_command (npm install, typecheck, build)          ->
 </state_machine>
 
 <execution_invariants>
-1. EXACT 4-FILE SCOPE: Create only `package.json`, `tsconfig.json`, `.gitignore`, and `src/container.ts` under `packages/modules/{context}/` using the exact templates in this skill. Do NOT add domain entities, value objects, or handlers in this skill.
-2. NO OVERWRITE: Never overwrite an existing module under `packages/modules/{context}/`.
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to inspect the repository's workspace conventions, shared packages, and tsconfig references, but you must execute the scaffolding steps in order (`workflow structure = immutable | step reasoning = flexible`).
+2. EXACT 4-FILE SCOPE: Create only `package.json`, `tsconfig.json`, `.gitignore`, and `src/container.ts` under `packages/modules/{context}/` using the exact templates in this skill. Do NOT add domain entities, value objects, or handlers in this skill.
+3. NO OVERWRITE: Never overwrite an existing module under `packages/modules/{context}/`.
+4. ESCAPE HATCH: If the repository's workspace or module architecture does not fit the 4-file Turborepo contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

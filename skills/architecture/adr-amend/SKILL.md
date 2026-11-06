@@ -22,6 +22,7 @@ Step 4: Sync Catalog  -> edit_file (docs/adr/README.md)               -> Updated
 1. WORKFLOW IMMUTABILITY: Execute all 4 steps in strict order (`workflow structure = immutable | step reasoning = flexible`).
 2. NON-DESTRUCTIVE GOLDEN RULE: Never silently edit or overwrite an accepted ADR's historical body. Any modification must be a separate file (`0XX-01-*-amendment-*.md` or `0XX-02-*-analysis-*.md`), with only the `Amended By:` link added to the base ADR's header.
 3. TEMPLATE LOCK: Reconstructing template headers from memory is strictly forbidden. You MUST call `read_file` on `templates/TEMPLATE-AMENDMENT.md` (or `templates/TEMPLATE-ANALYSIS.md`) before writing.
+4. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

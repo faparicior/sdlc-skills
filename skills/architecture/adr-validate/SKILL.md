@@ -19,6 +19,7 @@ Step 3: Score Report  -> format using TEMPLATE-ADR_VALIDATOR.md             -> S
 <execution_invariants>
 1. WORKFLOW IMMUTABILITY: Execute all 3 steps and all 7 rubric criteria in strict order (`workflow structure = immutable | step reasoning = flexible`).
 2. TEMPLATE LOCK: You MUST call `read_file` on `templates/TEMPLATE-ADR_VALIDATOR.md` before producing the validation report and preserve its exact rubric sections and weighted scoring structure.
+3. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

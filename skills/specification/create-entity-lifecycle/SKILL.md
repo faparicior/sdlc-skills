@@ -23,6 +23,7 @@ Step 3: Extract Rules -> read_file(templates/business-rules.md, invariants) -> B
 1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to inspect domain classes, value objects, and state transitions, but you are strictly forbidden from skipping reading the real source code (`Code Is Truth`), skipping rule extraction, or improvising document structure (`workflow structure = immutable | step reasoning = flexible`).
 2. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory is strictly forbidden. You MUST call `read_file` on `templates/entity-lifecycle.md` (or `templates/value-object.md` / `templates/domain-service.md`) and `templates/business-rules.md` / `templates/invariants.md` before writing.
 3. EARNED STATUS INVARIANT (`Code Is Truth`): Open and read the real domain class, value objects, repository port, and domain events before writing any row. Never mark a row `✅ Built` without reading the code, and always write `⏳ Planned` rows in the future tense.
+4. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

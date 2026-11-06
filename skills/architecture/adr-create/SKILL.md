@@ -21,6 +21,7 @@ Step 6: Write & Sync  -> read_file(templates/TEMPLATE.md)   -> docs/adr/0XX-*.md
 1. WORKFLOW IMMUTABILITY: Execute all 6 steps in strict order (`workflow structure = immutable | step reasoning = flexible`).
 2. TEMPLATE LOCK: Reconstructing the ADR template from memory is strictly forbidden. You MUST call `read_file` on `templates/TEMPLATE.md` before writing `docs/adr/0XX-*.md`.
 3. CATALOG SYNC: Every new ADR must be added to `docs/adr/README.md` with sequential 3-digit numbering (`0XX`) and incremented statistics.
+4. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

@@ -24,6 +24,7 @@ Step 4: Update Index  -> edit_file (flows/README.md)                        -> U
 1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to map user actions, backend reactions, and entity state transitions, but you are strictly forbidden from skipping steps, omitting any of the 3 required Mermaid diagrams, or improvising document structure (`workflow structure = immutable | step reasoning = flexible`).
 2. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory is strictly forbidden. You MUST call `read_file` on `templates/flows.md`, `templates/business-rules.md`, and `templates/invariants.md` before generating those files.
 3. BIDIRECTIONAL TRACEABILITY: Every governing `BR-XXX` and `INV-XXX` must be extracted to its owning bounded context with both ends of the `Traceability` section completed (`../guidelines/traceability.md`).
+4. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

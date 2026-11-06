@@ -34,6 +34,7 @@ STEP_06: Grace/Purge  -> mv / rm                               -> Grace-period l
 3. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory or prose rules is strictly forbidden. You MUST call `read_file` on `templates/proposal.md` before `STEP_02`, and `read_file` on `templates/implementation-plan.md` (or `templates/parallel-change-plan.md`) before `STEP_03`.
 4. NO PROACTIVE BUSINESS DECISIONS: If an open question exists, record it in Section 10 (`Open Questions`) of `proposal.md`, stop, and wait. Never resolve open questions or self-select `Light` tier without explicit user confirmation.
 5. NEVER CREATE PARALLEL LIVING DOCS: Living docs under `bounded-contexts/` describe currently shipped code only. Until `STEP_04` ships, all proposals, slice specs, drafts, and plans live exclusively under `docs/product/working-on/active/[change-name]/`.
+6. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

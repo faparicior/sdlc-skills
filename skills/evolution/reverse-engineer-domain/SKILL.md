@@ -24,6 +24,7 @@ Step 3: Write Rules   -> read_file(templates/business-rules.md, invariants) -> S
 3. MANDATORY TRIAGE ROUTING:
    - High-confidence bounded context -> `docs/product/bounded-contexts/{context}/{business-rules,invariants}/`
    - Ambiguous/tangled legacy -> `docs/product/discovered/{business-rules,invariants}/` with `BR-RAW-XXX` / `INV-RAW-XXX` IDs and exact `file:line` pointers.
+4. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>

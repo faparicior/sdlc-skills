@@ -25,6 +25,7 @@ Step 3: Phased TDD    -> edit_file / run_command (Test->Code->Arch->Lint)  -> Wo
    - Gate 2 (Plan Approval): You are strictly forbidden from executing Step 3 (writing code) in the same turn as Step 2 (writing `implementation-plan-sN.md`) — unless the user explicitly requested unattended/batch execution in their prompt.
    - Gate 3 (Per-Phase TDD Checkpoints): Execute one phase at a time (`Test -> Code -> Arch Check -> Lint/Typecheck`), update plan checkboxes, and halt for user confirmation before the next phase (unless the user explicitly requested multi-phase batch execution).
 3. TEMPLATE LOCK: Reconstructing `flow-development-plan.md` from memory is strictly forbidden. You MUST call `read_file` on `templates/flow-development-plan.md` before writing the plan in Step 2.
+4. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>
