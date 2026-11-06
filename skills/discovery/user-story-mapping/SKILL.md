@@ -32,6 +32,7 @@ Step 6: Development Strategy  -> read_file(templates/6-*.md, references/6-*.md) 
 - TARGET_DIR: `docs/user-story-mapping/` (honouring `.sdlc/config.json` overrides)
 - SOURCE_TEMPLATES: `templates/1-frame-the-problem.md` through `templates/6-slice-out-a-development-strategy.md` (plus `*-inception-mapping.md` in Bridge mode; MUST call `read_file` before writing)
 - SCHEMA_INVARIANCE: Preserve all structural headings, tables, and 4-part story card schemas verbatim; strip all instructional meta-commentary.
+- ESCAPE_HATCH: Never silently omit or invent template sections. If a section genuinely does not apply, preserve the heading and write `"N/A — [1-line rationale]"`, or halt and ask the user before deviating.
 </output_contract>
 
 This skill operates in 3 distinct modes:
@@ -188,8 +189,8 @@ When run in validation mode, the skill audits target documents and scores them a
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
-- [ ] **Template Read Verified:** `read_file` was called on the target step's `templates/*.md` file (and `*-inception-mapping.md` if converting from inception) before writing.
-- [ ] **Schema Compliance Verified:** Output matches the template headings and 4-part Story Card format verbatim with zero leaked instructional text.
-- [ ] **No Fake Technical Stories:** Technical chores are nested under Design/Technical Notes inside user story cards, never as standalone stories.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — fix the violation first:
+- [ ] **Template Read Evidence:** Exact `templates/*.md` (and `*-inception-mapping.md` / `references/*-validator.md`) path(s) passed to `read_file`: `<paths>`
+- [ ] **Output & Story Card Evidence:** Exact `docs/user-story-mapping/*.md` path(s) written and number of 4-part Story Cards (`Title`, `Narrative`, `Acceptance Criteria`, `Design/Technical Notes`) generated: `<paths, N cards>`
+- [ ] **No Fake Stories Evidence:** Confirm 0 standalone technical stories were created (all technical chores nested under `Design/Technical Notes`): `<0 fake stories>`
 </self_validation_gate>

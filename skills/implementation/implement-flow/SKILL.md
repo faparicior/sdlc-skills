@@ -20,10 +20,10 @@ Step 3: Phased TDD    -> edit_file / run_command (Test->Code->Arch->Lint)  -> Wo
 
 <execution_invariants>
 1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to analyze invariants, edge cases, and TDD implementation details, but you are strictly forbidden from skipping steps, bypassing review gates, or reordering phases (`workflow structure = immutable | step reasoning = flexible`).
-2. STOP GATES ARE ABSOLUTE:
-   - Gate 1 (Missing Feature Specs): If `docs/product/working-on/active/[change]/features/feature-XX-*.md` does not exist, STOP and invoke `/create-features` first.
-   - Gate 2 (Plan Approval): You are strictly forbidden from executing Step 3 (writing code) in the same turn as Step 2 (writing `implementation-plan-sN.md`). Halt your turn and wait for user approval.
-   - Gate 3 (Per-Phase TDD Checkpoints): Execute one phase at a time (`Test -> Code -> Arch Check -> Lint/Typecheck`), update plan checkboxes, and halt for user confirmation before the next phase.
+2. STOP GATES ARE ABSOLUTE (WITH EXPLICIT FAST-TRACK / BATCH OVERRIDE):
+   - Gate 1 (Missing Feature Specs): If `docs/product/working-on/active/[change]/features/feature-XX-*.md` does not exist, STOP and invoke `/create-features` first (unless executing a Light-tier 1-file hotfix confirmed by the user).
+   - Gate 2 (Plan Approval): You are strictly forbidden from executing Step 3 (writing code) in the same turn as Step 2 (writing `implementation-plan-sN.md`) — unless the user explicitly requested unattended/batch execution in their prompt.
+   - Gate 3 (Per-Phase TDD Checkpoints): Execute one phase at a time (`Test -> Code -> Arch Check -> Lint/Typecheck`), update plan checkboxes, and halt for user confirmation before the next phase (unless the user explicitly requested multi-phase batch execution).
 3. TEMPLATE LOCK: Reconstructing `flow-development-plan.md` from memory is strictly forbidden. You MUST call `read_file` on `templates/flow-development-plan.md` before writing the plan in Step 2.
 </execution_invariants>
 
@@ -31,6 +31,7 @@ Step 3: Phased TDD    -> edit_file / run_command (Test->Code->Arch->Lint)  -> Wo
 - TARGET_PATH: `docs/product/working-on/active/[change]/implementation-plan-sN.md` (or `implementation-plan.md` for single-slice changes; never in the living tree)
 - SOURCE_TEMPLATE: `templates/flow-development-plan.md` (MUST call `read_file` before writing)
 - SCHEMA_INVARIANCE: Preserve every H1/H2/H3 heading, `🔗 Cross-Repo Dependencies` table, `🧠 Agent Design Decisions & Assumptions` table, and phased checkbox structure verbatim.
+- ESCAPE_HATCH: Never silently omit or invent template sections or phases. If a phase genuinely does not apply to this slice (e.g., `Phase 4: Interfaces / Controllers` for a pure domain event handler), preserve the phase heading and write `"N/A — [1-line rationale]"`, or halt and ask the user before deviating.
 </output_contract>
 
 > **Single Source of Truth**:
@@ -163,11 +164,10 @@ A flow/feature is considered complete when:
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every applicable item below. If any checkbox for your current stage is FALSE, DO NOT end your turn — return to the failed step and fix the violation first:
-- [ ] **Prerequisite Verified:** Feature specification exists under `docs/product/working-on/active/[change]/features/` (or stopped to run `/create-features`).
-- [ ] `Step 1` executed: Feature spec, parent flow doc, domain models, cross-context `INV-*` invariants, `AGENTS.md`, and ADRs read; numbered edge-case & trap catalogue built.
-- [ ] **Template Read Verified (Step 2):** `read_file` was called on `templates/flow-development-plan.md` before writing `implementation-plan-sN.md`.
-- [ ] **Schema Compliance Verified (Step 2):** `implementation-plan-sN.md` preserves all headings and tables from `templates/flow-development-plan.md`.
-- [ ] **Halt Gate 2 Respected:** Stopped turn after generating `implementation-plan-sN.md` to wait for user approval before writing code.
-- [ ] **Phase-by-Phase TDD Respected (Step 3):** Failing test written first $\rightarrow$ minimal code to pass $\rightarrow$ architecture check $\rightarrow$ lint & typecheck $\rightarrow$ plan checkboxes updated.
+Before ending your turn, verify every applicable item below with concrete evidence (not just a checkmark). If any item for your current stage cannot be cited with real evidence from this turn, DO NOT end your turn — return to the failed step and fix the violation first:
+- [ ] **Prerequisite & Step 1 Evidence:** Exact feature spec path (`working-on/active/[change]/features/feature-XX-*.md`), flow doc, and `INV-*` files read via `read_file`: `<paths>`
+- [ ] **Template Read Evidence (Step 2):** Exact path passed to `read_file` (`templates/flow-development-plan.md`): `<path>`
+- [ ] **Plan Output & Schema Evidence (Step 2):** Exact plan path written (`working-on/active/[change]/implementation-plan*.md`) with all sections/phases preserved (noting any `"N/A — [rationale]"` phase): `<path>`
+- [ ] **Halt Gate 2 Evidence:** Confirm 0 production/test code files modified in the Plan turn (or cite explicit user batch override): `<0 code edits or batch override>`
+- [ ] **Phased TDD Evidence (Step 3):** Exact test file written first, implementation file edited, and verification commands (`test`, `arch`, `lint`, `typecheck`) executed with exit code `0`: `<files & commands>`
 </self_validation_gate>

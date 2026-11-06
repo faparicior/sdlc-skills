@@ -39,33 +39,34 @@ Encapsulates the non-negotiable rules that reasoning models are strictly forbidd
 
 ```xml
 <execution_invariants>
-1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step, but you are strictly forbidden from skipping, merging, reordering, or replacing steps.
-2. STOP GATES ARE ABSOLUTE: When a step ends with `🛑 HALT TURN`, you MUST stop your response immediately and wait for the user. Never execute the next step in the same turn.
+1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step, but you are strictly forbidden from skipping, merging, reordering, or replacing steps (`workflow structure = immutable | step reasoning = flexible`).
+2. STOP GATES ARE ABSOLUTE (WITH EXPLICIT FAST-TRACK OVERRIDE): When a step ends with `🛑 HALT TURN`, you MUST stop your response immediately and wait for the user — unless the user explicitly requested unattended/batch execution or a Light-tier fast-track in their prompt.
 3. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory or prose descriptions is strictly forbidden. You MUST call `read_file` on the skill's `templates/*.md` file before generating any artifact.
 4. NO PROACTIVE BUSINESS DECISIONS: If an open question or ambiguity exists, record it in the Open Questions / Lack of Information table, stop, and wait for the user.
 </execution_invariants>
 ```
 
 ### C. `<output_contract>`
-Binds each deliverable path to its mandatory `templates/*.md` file and structural invariance rules:
+Binds each deliverable path to its mandatory `templates/*.md` file, structural invariance rules, and an explicit Escape Hatch:
 
 ```xml
 <output_contract>
 - TARGET_PATH: Exact path where the artifact must be written (honouring `.sdlc/config.json` overrides).
 - SOURCE_TEMPLATE: Relative path under `templates/*.md` that MUST be read via `read_file` prior to writing.
 - SCHEMA_INVARIANCE: Preserve 100% of H1/H2/H3 headings, numbered section order, metadata bullets, and Markdown table column schemas verbatim. Strip all instructional meta-commentary.
+- ESCAPE_HATCH: Never silently omit or invent template sections. If a template section genuinely does not apply to this domain context, preserve the heading and write `"N/A — [1-line rationale]"`, or halt and ask the user before deviating.
 </output_contract>
 ```
 
-### D. `<self_validation_gate>`
-Placed at the bottom of `SKILL.md` so the model must verify compliance before emitting its final response:
+### D. `<self_validation_gate>` (Evidence-Based, Not Self-Report Theatre)
+Placed at the bottom of `SKILL.md` so the model must verify compliance with **concrete evidence citations** (`tool call + exact file path + section/rubric count`) rather than passive boolean checkboxes before emitting its final response:
 
 ```xml
 <self_validation_gate>
-Before ending your turn, verify every applicable condition below. If any checkbox is FALSE, DO NOT produce your final answer — return to the failed step and fix it first:
-- [ ] Did I execute every required step in `<state_machine>` up to the current gate without skipping or reordering?
-- [ ] Did I call `read_file` on the required `templates/*.md` file during this session before writing the artifact?
-- [ ] Does the written file preserve 100% of the template's H1/H2/H3 headings and table columns in exact order?
-- [ ] Did I halt at the `🛑 HALT TURN` gate without leaking into the next step?
+Before ending your turn, verify every applicable condition below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final answer — return to the failed step and fix it first:
+- [ ] **Template Read Evidence:** Exact `templates/*.md` path passed to `read_file` in this turn: `<path>`
+- [ ] **Output Path Evidence:** Exact artifact path written via `write_file`/`edit_file`: `<path>`
+- [ ] **Schema & Escape-Hatch Evidence:** Confirm 100% of template headings are present verbatim, or list any section marked `"N/A — [rationale]"`: `<status>`
+- [ ] **Halt Gate Evidence:** Confirm turn stops at the active `🛑 HALT TURN` gate (or cite the user's explicit batch/fast-track instruction): `<status>`
 </self_validation_gate>
 ```

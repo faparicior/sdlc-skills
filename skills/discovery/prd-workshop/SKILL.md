@@ -26,7 +26,8 @@ Workflow B (Validate) -> read_file(references/prd-validator.md)             -> 5
 <output_contract>
 - DRAFT PRD SOURCE_TEMPLATE: `templates/template-prd.md` (MUST call `read_file` before writing)
 - REVIEW PRD SOURCE_RUBRIC: `references/prd-validator.md` (MUST call `read_file` before scoring)
-- SCHEMA_INVARIANCE: Preserve all template headings and tables verbatim; strip all instructional meta-commentary.
+- SCHEMA_INVARIANCE: Preserve all 10 numbered template headings and tables verbatim; strip all instructional meta-commentary.
+- ESCAPE_HATCH: Never silently omit or invent PRD sections. If one of the 10 sections genuinely does not apply, preserve the numbered heading and write `"N/A — [1-line rationale]"`, or halt and ask the user before deviating.
 </output_contract>
 
 ---
@@ -79,7 +80,7 @@ Workflow B (Validate) -> read_file(references/prd-validator.md)             -> 5
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
-- [ ] **Template/Rubric Read Verified:** `read_file` was called on `templates/template-prd.md` (Workflow A) or `references/prd-validator.md` (Workflow B) before producing output.
-- [ ] **Schema Compliance Verified:** Output preserves all template headings and tables with zero leaked instructional commentary.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — fix the violation first:
+- [ ] **Template/Rubric Read Evidence:** Exact path passed to `read_file` (`templates/template-prd.md` for Workflow A or `references/prd-validator.md` for Workflow B): `<path>`
+- [ ] **Schema & Escape-Hatch Evidence:** Confirm all 10 numbered PRD sections (`1`–`10`) or all 5 validation rubric dimensions are present verbatim (noting any `"N/A — [rationale]"` section): `<10/10 or 5/5 status>`
 </self_validation_gate>

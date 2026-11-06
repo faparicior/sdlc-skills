@@ -33,6 +33,7 @@ Step 3: Extract Rules -> read_file(templates/business-rules.md, invariants) -> B
 - BUSINESS RULES & INVARIANTS:
   - TARGET_PATHS: `docs/product/bounded-contexts/{context}/business-rules/BR-[XXX]-[rule-name].md` and `invariants/INV-[XXX]-[invariant-name].md`
   - SOURCE_TEMPLATES: `templates/business-rules.md` and `templates/invariants.md` (MUST call `read_file` before writing)
+- ESCAPE_HATCH: Never silently omit or invent template sections. If a section genuinely does not apply (e.g., `## 🛠️ Repository Interface *(aggregate roots only)*` on a child entity, or `## 📣 Domain Events` when the entity emits zero events), preserve the heading and write `"N/A — [1-line rationale]"` (e.g., `"N/A — Child entity persisted via parent aggregate root"`).
 </output_contract>
 
 > **Paths**: the locations shown are the pack defaults; if `.sdlc/config.json` exists (written by `/setup-sdlc`), honour its `docsRoot` / `productDocsDir` / `adrDir` overrides.
@@ -228,12 +229,11 @@ Two parts, so a PM can stop after Part A:
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — return to the failed step and fix the violation first:
-- [ ] **Code Read Verified (`Code Is Truth`):** Real domain class, value objects, repository port, and domain events were read before writing any table row (or confirmed not yet built and marked `⏳ Planned` in future tense).
-- [ ] **Template Read Verified:** `read_file` was called on `templates/entity-lifecycle.md`, `templates/value-object.md`, or `templates/domain-service.md` (plus `templates/business-rules.md` / `templates/invariants.md`) before writing.
-- [ ] **Schema Compliance Verified:** Output preserves all template headings, section order, and `Status` columns verbatim.
-- [ ] **State Machine Parity Verified:** Mermaid state diagram, State Transition Matrix, and State Definitions match 100%.
-- [ ] **Bidirectional Traceability Verified:** Extracted `BR-XXX` and `INV-XXX` files have complete `Traceability` tables (`Traces up to`, `Enforced by`, `Verified by`) AND the entity/VO/service doc has its matching `Enforcement & tests` reverse edge.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — return to the failed step and fix the violation first:
+- [ ] **Code Read Evidence (`Code Is Truth`):** List the exact domain class, value object, repository port, and event source files opened via `read_file` (or state `"Greenfield — all rows marked ⏳ Planned in future tense"`): `<source paths>`
+- [ ] **Template Read Evidence:** Exact `templates/*.md` paths passed to `read_file` in this turn: `<paths>`
+- [ ] **Output & State Parity Evidence:** Exact doc path written and number of states/transitions matched 1:1 across Mermaid diagram, Transition Matrix, and State Definitions: `<path, N states>`
+- [ ] **Bidirectional Traceability Evidence:** List the `BR-XXX` and `INV-XXX` files created/updated with complete `Traceability` tables (`Traces up to`, `Enforced by`, `Verified by`) AND matching rows in `### Enforcement & tests`: `<BR/INV paths>`
 </self_validation_gate>
 
 ---

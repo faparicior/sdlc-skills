@@ -35,6 +35,7 @@ Step 8: MVP Canvas           -> read_file(templates/8-*.md, references/8-*.md)  
 - TARGET_DIR: `docs/inception/` (honouring `.sdlc/config.json` overrides)
 - SOURCE_TEMPLATES: `templates/1-product-vision-and-boundaries.md` through `templates/8-mvp-canvas-definition.md` (MUST call `read_file` before writing each step)
 - VALIDATOR_RUBRICS: `references/1-product-vision-boundary-validator.md` through `references/8-mvp-canvas-definition-validator.md`
+- ESCAPE_HATCH: Never silently omit or invent template sections or tables. If a section genuinely does not apply to the product context, preserve the heading and write `"N/A — [1-line rationale]"`, or halt and ask the user before deviating.
 </output_contract>
 
 **Critical Quality Rules:**
@@ -626,10 +627,10 @@ All flows include:
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
-- [ ] **Template & Validator Read Verified:** `read_file` was called on the active step's `templates/*.md` and `references/*-validator.md` files before writing.
-- [ ] **Schema Compliance Verified:** Output preserves all template tables, sections, and Mermaid diagrams with zero leaked instructional commentary.
-- [ ] **Quality Rules Verified:** Step 1 has ≥4 items per boundary column (`IS`, `IS NOT`, `DOES`, `DOES NOT`); Step 2 has exactly 7 `X` marks (one per column).
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — fix the violation first:
+- [ ] **Template & Validator Read Evidence:** Exact `templates/*.md` and `references/*-validator.md` paths passed to `read_file` in this turn: `<paths>`
+- [ ] **Output & Schema Evidence:** Exact `docs/inception/*.md` path(s) written with 100% of template tables/diagrams preserved and 0 leaked AI instructions: `<paths>`
+- [ ] **Quality Rules Evidence:** Step 1 boundary counts per column (`IS: N, IS NOT: N, DOES: N, DOES NOT: N` — each `≥4`); Step 2 `X` mark count (`7/7`, one per column).
 </self_validation_gate>
 
 ---

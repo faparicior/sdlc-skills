@@ -30,7 +30,7 @@ STEP_06: Grace/Purge  -> mv / rm                               -> Grace-period l
 
 <execution_invariants>
 1. WORKFLOW IMMUTABILITY: You are free to reason deeply INSIDE each step, but you are strictly forbidden from skipping, merging, reordering, or replacing steps (`workflow structure = immutable | step reasoning = flexible`).
-2. STOP GATES ARE ABSOLUTE: You are strictly forbidden from executing `STEP_03` (Plan) or `STEP_04` (Code) in the same turn as `STEP_02` (Proposal). You MUST halt your turn at every `🛑 HALT TURN` gate and wait for explicit user approval.
+2. STOP GATES ARE ABSOLUTE (WITH LIGHT-TIER / EXPLICIT BATCH OVERRIDE): In `Standard` and `Full` tiers, you are strictly forbidden from executing `STEP_03` (Plan) or `STEP_04` (Code) in the same turn as `STEP_02` (Proposal) — unless the user explicitly confirmed `Light` tier in `STEP_00B` or requested unattended batch execution in their prompt.
 3. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory or prose rules is strictly forbidden. You MUST call `read_file` on `templates/proposal.md` before `STEP_02`, and `read_file` on `templates/implementation-plan.md` (or `templates/parallel-change-plan.md`) before `STEP_03`.
 4. NO PROACTIVE BUSINESS DECISIONS: If an open question exists, record it in Section 10 (`Open Questions`) of `proposal.md`, stop, and wait. Never resolve open questions or self-select `Light` tier without explicit user confirmation.
 5. NEVER CREATE PARALLEL LIVING DOCS: Living docs under `bounded-contexts/` describe currently shipped code only. Until `STEP_04` ships, all proposals, slice specs, drafts, and plans live exclusively under `docs/product/working-on/active/[change-name]/`.
@@ -45,6 +45,7 @@ STEP_06: Grace/Purge  -> mv / rm                               -> Grace-period l
   - TARGET_PATH: `docs/product/working-on/active/[change-name]/implementation-plan.md` (or `implementation-plan-sN.md`)
   - SOURCE_TEMPLATE: `templates/implementation-plan.md` (or `templates/parallel-change-plan.md` when Section 4.1 marks a contract as `Deprecation` with staged coexistence; MUST call `read_file` first)
   - SCHEMA_INVARIANCE: Preserve `### Resolved Open Questions`, `## 0. Cross-Repo Dependencies`, `## 1. Pre-Implementation Checklist`, `## 2. Phases`, `## 3. Validation`, `## 4. Documentation Update`, `## 5. Rollout Notes`, and `## 🔗 Related Documentation` verbatim.
+- ESCAPE_HATCH: Never silently omit or invent template sections. If a section or subsection genuinely does not apply to this change (e.g., `4.3 Feature Flags` when no flag is needed), preserve the heading and write `"N/A — [1-line rationale]"`, or halt and ask the user before deviating.
 </output_contract>
 
 ---
@@ -298,26 +299,23 @@ Execute **only after** `STEP_05` is complete for the **last** slice of the propo
 ---
 
 <self_validation_gate>
-Before producing your final response at ANY turn, verify every applicable item below. If any checkbox for your current gate is FALSE, DO NOT end your turn — return to the failed step and fix the violation first:
+Before producing your final response at ANY turn, verify every applicable item below with concrete evidence (not just a checkmark). If any item for your current gate cannot be cited with real evidence from this turn, DO NOT end your turn — return to the failed step and fix the violation first:
 
 ### Gate 1 Validation (End of Turn 1 — Proposal Phase)
-- [ ] `STEP_00` executed: Repo conventions, real test commands, and cross-repo dependencies discovered from actual files.
-- [ ] `STEP_00B` executed: Triage tier (`Light` / `Standard` / `Full`) explicitly stated and justified.
-- [ ] `STEP_01` executed: Real source code read, upstream docs checked for staleness, active invariants (`INV-*`) cross-checked across all bounded contexts, existing tests verified, and boundary-values check (`STEP_01.10`) completed.
-- [ ] **Template Read Verified:** `read_file` was called on `templates/proposal.md` before writing `proposal.md`.
-- [ ] **Path Compliance Verified:** Proposal saved strictly at `docs/product/working-on/active/[change-name]/proposal.md` (or `.sdlc/config.json` equivalent).
-- [ ] **Schema Compliance Verified:** `proposal.md` contains all numbered sections (`1` through `10` + `🔗 Related Documentation`) and exact table schemas from `templates/proposal.md` with zero `[Placeholder]` leftovers.
-- [ ] **Halt Gate Respected:** No `implementation-plan.md` written and no production/test code modified before user approves `proposal.md` and resolves Section 10 Open Questions.
+- [ ] **`STEP_00` & `STEP_00B` Evidence:** Discovered docs/source paths + selected Triage tier (`Light` / `Standard` / `Full`) with rationale: `<paths, tier>`
+- [ ] **`STEP_01` Grounding Evidence:** List the exact source files (`file:line`), `INV-*` invariants across bounded contexts, and tests opened via `read_file`: `<files>`
+- [ ] **Template Read Evidence:** Exact path passed to `read_file` (`templates/proposal.md`): `<path>`
+- [ ] **Output & Schema Evidence:** Exact path written (`docs/product/working-on/active/[change-name]/proposal.md`) with all sections `1`–`10` present (noting any `"N/A — [rationale]"` section): `<path, 10/10 sections>`
+- [ ] **Halt Gate Evidence:** Confirm 0 `implementation-plan.md` files written and 0 production/test files modified in Turn 1: `<0 code/plan edits>`
 
 ### Gate 2 Validation (End of Turn 2 — Implementation Plan Phase)
-- [ ] **Template Read Verified:** `read_file` was called on `templates/implementation-plan.md` (or `templates/parallel-change-plan.md` for staged deprecations).
-- [ ] **Schema Compliance Verified:** Plan contains `Resolved Open Questions`, `0. Cross-Repo Dependencies`, `1. Pre-Implementation Checklist`, `2. Phases`, `3. Validation` (with real repo commands), `4. Documentation Update`, and `5. Rollout Notes`.
-- [ ] **Halt Gate Respected:** Plan presented to user for approval before executing `STEP_04` code changes.
+- [ ] **Template Read Evidence:** Exact path passed to `read_file` (`templates/implementation-plan.md` or `templates/parallel-change-plan.md`): `<path>`
+- [ ] **Output & Schema Evidence:** Exact plan path written (`working-on/active/[change-name]/*-plan*.md`) containing `Resolved Open Questions` and Sections `0`–`5`: `<path, 0-5 sections>`
+- [ ] **Halt Gate Evidence:** Confirm 0 production/test files modified before user approves the plan: `<0 code edits>`
 
 ### Gate 3 Validation (Post-Implementation & Living Docs Phase)
-- [ ] Full unit, architecture, integration, and lint suites executed and passing.
-- [ ] Living docs (both 8.1 derived and 8.2 living upstream) updated in place for the shipped slice only.
-- [ ] Bidirectional traceability links (`Enforced by` / `Verified by` / `Traces up to`) verified via grep.
+- [ ] **Verification Suite Evidence:** Exact test, arch, and lint commands executed and exit codes (`0`): `<commands>`
+- [ ] **Living Docs & Traceability Evidence:** List the exact `bounded-contexts/` files (`8.1` derived + `8.2` upstream) updated in place and verified via `grep`: `<paths>`
 </self_validation_gate>
 
 ---

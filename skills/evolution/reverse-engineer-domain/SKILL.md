@@ -30,6 +30,7 @@ Step 3: Write Rules   -> read_file(templates/business-rules.md, invariants) -> S
 - TARGET_PATHS: `docs/product/bounded-contexts/{context}/{business-rules,invariants}/` OR `docs/product/discovered/{business-rules,invariants}/`
 - SOURCE_TEMPLATES: `templates/business-rules.md` and `templates/invariants.md` (MUST call `read_file` before writing)
 - SCHEMA_INVARIANCE: Preserve every H1/H2/H3 heading, metadata field, Gherkin scenario structure, and Traceability table verbatim, and strip all instructional meta-commentary.
+- ESCAPE_HATCH: Never silently omit or invent template sections. If an upstream flow/journey link (`Traces up to`) does not exist yet in a brownfield repo, preserve the bullet and write `"None documented yet (brownfield extraction)"`.
 </output_contract>
 
 ---
@@ -93,9 +94,8 @@ This skill is conversational and automatically infers your intent:
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — return to the failed step and fix the violation first:
-- [ ] **Source Code Read Verified:** Target source files were read and exact `file:line` enforcement sites recorded.
-- [ ] **Template Read Verified:** `read_file` was called on `templates/business-rules.md` and/or `templates/invariants.md` before writing any output file.
-- [ ] **Schema Compliance Verified:** Every generated file preserves the exact headings and `Traceability` tables of `templates/business-rules.md` or `templates/invariants.md` with all instructional comments stripped.
-- [ ] **Triage Path Verified:** Files saved strictly under `bounded-contexts/{context}/` (high confidence) or `discovered/` with `RAW` prefix (ambiguous context).
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — return to the failed step and fix the violation first:
+- [ ] **Source Code Read Evidence:** List the exact source files and `file:line` enforcement sites read via `read_file`: `<file:line list>`
+- [ ] **Template Read Evidence:** Exact `templates/business-rules.md` and/or `templates/invariants.md` paths passed to `read_file`: `<paths>`
+- [ ] **Triage & Output Evidence:** Exact output paths written (`bounded-contexts/{ctx}/` vs `discovered/` with `RAW` prefix) and confirmation that all 6 (`BR`) or 7 (`INV`) sections are present: `<paths>`
 </self_validation_gate>

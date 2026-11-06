@@ -28,6 +28,7 @@ Step 4: Write Reports -> read_file(templates/TEMPLATE-*.md)                 -> A
 - TARGET_PATHS: `docs/adr/_reports/ADR_ALTERNATIVES_ANALYSIS.md` and `docs/adr/_reports/EXECUTIVE_SUMMARY.md`
 - SOURCE_TEMPLATES: `templates/TEMPLATE-ADR_ALTERNATIVES_ANALYSIS.md` and `templates/TEMPLATE-EXECUTIVE_SUMMARY.md` (MUST call `read_file` before writing)
 - SCHEMA_INVARIANCE: Preserve every H1/H2/H3 section heading and summary table schema verbatim.
+- ESCAPE_HATCH: Never silently omit or invent template sections. If a section genuinely does not apply, preserve the heading and write `"N/A — [1-line rationale]"`, or halt and ask the user before deviating.
 </output_contract>
 
 ---
@@ -88,8 +89,8 @@ If the analysis recommends an architectural modification:
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
-- [ ] Active web search queries executed (not relying solely on pretraining weights).
-- [ ] **Template Read Verified:** `read_file` was called on `templates/TEMPLATE-ADR_ALTERNATIVES_ANALYSIS.md` and `templates/TEMPLATE-EXECUTIVE_SUMMARY.md` before writing.
-- [ ] **Schema Compliance Verified:** Reports conform strictly to the templates with Tech Radar classifications (`Adopt` / `Trial` / `Assess` / `Hold`).
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — fix the violation first:
+- [ ] **Web Search Evidence:** Exact `search_web` queries executed in this turn and URLs cited: `<N queries, M sources>`
+- [ ] **Template Read Evidence:** Exact paths passed to `read_file` (`templates/TEMPLATE-ADR_ALTERNATIVES_ANALYSIS.md` & `templates/TEMPLATE-EXECUTIVE_SUMMARY.md`): `<paths>`
+- [ ] **Output & Schema Evidence:** Exact report paths written (`docs/adr/_reports/*.md`) with Tech Radar classifications (`Adopt` / `Trial` / `Assess` / `Hold`) and any `"N/A — [rationale]"` sections noted: `<paths>`
 </self_validation_gate>

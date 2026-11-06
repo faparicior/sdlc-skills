@@ -27,6 +27,7 @@ Step 6: Write & Sync  -> read_file(templates/TEMPLATE.md)   -> docs/adr/0XX-*.md
 - TARGET_PATH: `docs/adr/0XX-decision-title.md`
 - SOURCE_TEMPLATE: `templates/TEMPLATE.md` (MUST call `read_file` before writing)
 - SCHEMA_INVARIANCE: Preserve every H1/H2/H3 section heading, metadata field, option pros/cons structure, and mandatory `🤖 AI & Agentic Ergonomics (AX)` section verbatim.
+- ESCAPE_HATCH: Never silently omit or invent template sections. If a section genuinely does not apply, preserve the heading and write `"N/A — [1-line rationale]"`, or halt and ask the user before deviating.
 </output_contract>
 
 ---
@@ -80,9 +81,9 @@ Every ADR must document AI friction under `## Decision Outcome` -> `### 🤖 AI 
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
-- [ ] `docs/adr/README.md` inspected first to assign the next gapless 3-digit number (`0XX`).
-- [ ] **Template Read Verified:** `read_file` was called on `templates/TEMPLATE.md` before writing.
-- [ ] **Schema Compliance Verified:** Generated ADR matches `templates/TEMPLATE.md` headings verbatim, includes ≥2–3 options with pros/cons, and includes `🤖 AI & Agentic Ergonomics (AX)`.
-- [ ] `docs/adr/README.md` updated with the new ADR entry and incremented count.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — fix the violation first:
+- [ ] **Sequence Evidence:** Highest existing ADR in `docs/adr/README.md` (`0XX`) and new gapless number assigned: `<0XX -> 0YY>`
+- [ ] **Template Read Evidence:** Exact path passed to `read_file` (`templates/TEMPLATE.md`): `<path>`
+- [ ] **Output & Schema Evidence:** Exact ADR file written (`docs/adr/0YY-*.md`), number of options analyzed (`≥2–3`), and `🤖 AI & Agentic Ergonomics (AX)` table populated: `<path, N options>`
+- [ ] **Catalog Sync Evidence:** `docs/adr/README.md` updated with new row and incremented total count: `<old count -> new count>`
 </self_validation_gate>

@@ -33,6 +33,7 @@ Step 6: Validate      -> run_command (npm install, typecheck, build)          ->
   3. `packages/modules/{context}/.gitignore`
   4. `packages/modules/{context}/src/container.ts`
 - SCHEMA_INVARIANCE: Match the 4 embedded templates in `## 📄 Templates` verbatim (substituting `{context}` and `{Context}`).
+- ESCAPE_HATCH: If the repository uses a different workspace scope or shared package prefix than `@sessioflow/*` (discovered from `AGENTS.md` or existing `packages/modules/*/package.json`), adapt the scope prefix to match the repository's real workspace naming and declare the adaptation in your response.
 </output_contract>
 
 Scaffold a new DDD module as a buildable Turborepo workspace package.
@@ -321,8 +322,8 @@ After this skill runs, the module is:
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
-- [ ] **4-File Scope Verified:** Only `package.json`, `tsconfig.json`, `.gitignore`, and `src/container.ts` were created under `packages/modules/{context}/` (no domain code added prematurely).
-- [ ] **Template Fidelity Verified:** `"private": true`, `"type": "module"`, granular `exports`, and `"composite": true` match the embedded templates verbatim.
-- [ ] **Build & Typecheck Verified:** Workspace install, `typecheck`, and `build` succeeded for the new module.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — fix the violation first:
+- [ ] **4-File Scope Evidence:** List the exact 4 file paths written under `packages/modules/{context}/` (confirming 0 domain files added prematurely): `<4 paths>`
+- [ ] **Template Fidelity Evidence:** Confirm `"private": true`, `"type": "module"`, granular `exports`, and `"composite": true` are present: `<confirmed>`
+- [ ] **Build & Typecheck Evidence:** Exact `typecheck` and `build` commands executed and exit codes (`0`): `<commands>`
 </self_validation_gate>

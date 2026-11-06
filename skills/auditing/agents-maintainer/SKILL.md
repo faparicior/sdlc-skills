@@ -27,6 +27,7 @@ Step 2: Execute Mode  -> read_file(templates/validation-checklist.md)         ->
 - TARGET_FILE: `AGENTS.md` (when in Update or Generate mode) or structured Audit/Validation report
 - SOURCE_TEMPLATES: `templates/agents-sections.md` and `templates/validation-checklist.md` (MUST call `read_file` before producing output)
 - SCHEMA_INVARIANCE: Preserve all 10 required `AGENTS.md` sections (`Commands`, `Boundaries`, `Project Structure`, `Code Style`, `Testing Guidelines`, `Definition of Done`, `Documentation`, `Architecture Principles`, `Karpathy Principles`, `Git Workflow`).
+- ESCAPE_HATCH: Never silently omit or invent required sections. If a section genuinely does not apply to the repository, preserve the heading and write `"N/A — [1-line rationale]"`, or halt and ask the user before deviating.
 </output_contract>
 
 A specialized skill for maintaining, updating, and optimizing the `AGENTS.md` file to ensure it stays aligned with industry best practices and project needs.
@@ -222,8 +223,8 @@ A complete `AGENTS.md` should include:
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
-- [ ] **Template Read Verified:** `read_file` was called on `templates/agents-sections.md` and `templates/validation-checklist.md`.
-- [ ] **Specificity Verified:** All rules and commands in `AGENTS.md` are concrete and verified against the repository's real scripts and architecture.
-- [ ] **Required Sections Verified:** All 10 required `AGENTS.md` sections are accounted for.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — fix the violation first:
+- [ ] **Template Read Evidence:** Exact paths passed to `read_file` (`templates/agents-sections.md`, `templates/validation-checklist.md`): `<paths>`
+- [ ] **Specificity Evidence:** Concrete repo files (`package.json`, `Makefile`, `ARCHITECTURE.md`) read to ground commands and boundaries: `<paths>`
+- [ ] **Required Sections Evidence:** Confirm all 10 required `AGENTS.md` sections are present (or list any `"N/A — [rationale]"` section): `<10/10 status>`
 </self_validation_gate>

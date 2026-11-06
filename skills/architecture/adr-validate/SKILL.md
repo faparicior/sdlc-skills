@@ -24,6 +24,7 @@ Step 3: Score Report  -> format using TEMPLATE-ADR_VALIDATOR.md             -> S
 <output_contract>
 - SOURCE_TEMPLATE: `templates/TEMPLATE-ADR_VALIDATOR.md` (MUST call `read_file` before producing report)
 - SCHEMA_INVARIANCE: Preserve all 7 validation criteria sections, the weighted Quality Score Summary table (`3.0` scale), and the Validation Summary verbatim.
+- ESCAPE_HATCH: Never silently omit or invent rubric sections. If a section (such as `Batch Validation Summary` when auditing a single ADR) does not apply, preserve the heading and write `"N/A — Single ADR audit"`, or omit only sections explicitly marked `(Multiple ADRs)`.
 </output_contract>
 
 ---
@@ -84,8 +85,8 @@ Score each of the 7 criteria (`High = 3`, `Medium = 2`, `Low = 1`), compute the 
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
-- [ ] Target ADR file and `docs/adr/README.md` were read via `read_file`.
-- [ ] **Template Read Verified:** `read_file` was called on `templates/TEMPLATE-ADR_VALIDATOR.md`.
-- [ ] All 7 rubric criteria evaluated and scored using the template's exact weighted structure.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — fix the violation first:
+- [ ] **Target Read Evidence:** Exact target ADR path(s) and `docs/adr/README.md` read via `read_file`: `<paths>`
+- [ ] **Template Read Evidence:** Exact path passed to `read_file` (`templates/TEMPLATE-ADR_VALIDATOR.md`): `<path>`
+- [ ] **Rubric Score Evidence:** All 7 weighted criteria scored (`[X]/7` at High level, weighted total `[Y]/3.0`): `<scores>`
 </self_validation_gate>

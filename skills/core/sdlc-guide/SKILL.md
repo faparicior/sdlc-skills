@@ -69,7 +69,7 @@ Tell me what you are working on or what stage of development you are in, and I w
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
-- [ ] **Router Discipline Verified:** Recommended the exact SDLC skill from the Flow Router tree without improvising downstream artifacts from memory.
-- [ ] **Skill Load Verified (if executing):** If transitioning directly into executing a target skill, `read_file` was called on that skill's `SKILL.md` first.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — fix the violation first:
+- [ ] **Router Discipline Evidence:** State the matched Flow Router branch (`A`–`F`) and recommended `/skill-name` command: `<branch -> /skill>`
+- [ ] **Delegation Lock Evidence (if executing):** Exact target `skills/<category>/<skill>/SKILL.md` path passed to `read_file` before executing any downstream step: `<path or Router-Only>`
 </self_validation_gate>

@@ -33,6 +33,7 @@ Step 3: Report        -> Completeness Gate verification                       ->
 <output_contract>
 - OUTPUT_TYPE: Read-only `# Documentation Audit Report` in chat (or in an external audit directory in Plan mode; NEVER modify files inside `<docs root>`)
 - SCHEMA_INVARIANCE: Preserve the exact report header (`Date`, `Scope`, `Docs root`, `Folders audited`, `Folders NOT audited`, `Mechanical checks`), `## Summary` table, `## Findings by Bounded Context` tables, `## Claim Sweep Results` table, and `## Recommended Actions`.
+- ESCAPE_HATCH: Never silently omit a docs folder or report section. If a folder is excluded or a mechanical script cannot run, declare it explicitly in `Folders NOT audited:` or `Mechanical checks: <name> not run — <reason>`.
 </output_contract>
 
 You are a Technical Auditor for a codebase with living DDD-style documentation — flows, entity
@@ -487,8 +488,8 @@ link, diagram and claim-sweep checks, with helper scripts in `scripts/` and `ref
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
-- [ ] **Read-Only Verified:** Zero documentation or source files were modified.
-- [ ] **Completeness Gate Verified:** Every checkbox in the `## Completeness Gate` section above is satisfied, and `Folders NOT audited` is explicitly stated.
-- [ ] **Evidence & Sweep Verified:** Every `⚠️ Stale` or `❌ Missing` verdict cites `file:line`, and every wrong claim has a row in `## Claim Sweep Results`.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — fix the violation first:
+- [ ] **Read-Only Evidence:** Confirm 0 `write_file`/`edit_file` calls were made inside `<docs root>` or source directories: `<0 edits>`
+- [ ] **Completeness Gate Evidence:** Exact counts of folders audited (`<N folders, M docs>`), folders not audited (`<list or none>`), and claims inventoried vs answered (`<N inventoried, N answered>`).
+- [ ] **Evidence & Sweep Citations:** Confirm every `⚠️ Stale` / `❌ Missing` row cites `file:line` and every wrong claim has a row in `## Claim Sweep Results`: `<N wrong claims swept>`
 </self_validation_gate>

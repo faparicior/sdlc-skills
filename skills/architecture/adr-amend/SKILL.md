@@ -28,6 +28,7 @@ Step 4: Sync Catalog  -> edit_file (docs/adr/README.md)               -> Updated
 - TARGET_PATH: `docs/adr/0XX-01-{topic}-amendment-{type}.md` (or `0XX-02-{topic}-analysis-{subtype}.md`)
 - SOURCE_TEMPLATE: `templates/TEMPLATE-AMENDMENT.md` or `templates/TEMPLATE-ANALYSIS.md` (MUST call `read_file` before writing)
 - SCHEMA_INVARIANCE: Preserve every section heading and metadata field from the template verbatim.
+- ESCAPE_HATCH: Never silently omit or invent template sections. If a section genuinely does not apply, preserve the heading and write `"N/A — [1-line rationale]"`, or halt and ask the user before deviating.
 </output_contract>
 
 ---
@@ -75,9 +76,9 @@ Both documents must reference each other to preserve navigation:
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
-- [ ] **Template Read Verified:** `read_file` was called on `templates/TEMPLATE-AMENDMENT.md` (or `templates/TEMPLATE-ANALYSIS.md`) before writing.
-- [ ] **Non-Destructive Rule Verified:** Base ADR's historical body was NOT overwritten.
-- [ ] **Two-Way Links Verified:** `Amends:` header added to new amendment file AND `Amended By:` header added to base ADR file.
-- [ ] `docs/adr/README.md` updated with the new record.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — fix the violation first:
+- [ ] **Template Read Evidence:** Exact path passed to `read_file` (`templates/TEMPLATE-AMENDMENT.md` or `templates/TEMPLATE-ANALYSIS.md`): `<path>`
+- [ ] **Non-Destructive Evidence:** Base ADR path (`docs/adr/0XX-*.md`) whose historical body was preserved untouched: `<path>`
+- [ ] **Two-Way Links Evidence:** `Amends:` link in new file (`<path>`) + `Amended By:` link added to base ADR header (`<path>`).
+- [ ] **Catalog Sync & Escape-Hatch Evidence:** `docs/adr/README.md` row added, count incremented, and any `"N/A — [rationale]"` sections explicitly noted.
 </self_validation_gate>

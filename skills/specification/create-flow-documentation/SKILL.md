@@ -34,6 +34,7 @@ Step 4: Update Index  -> edit_file (flows/README.md)                        -> U
 - BUSINESS RULES & INVARIANTS:
   - TARGET_PATHS: `docs/product/bounded-contexts/{owning-bounded-context}/business-rules/BR-[XXX]-[rule-name].md` and `invariants/INV-[XXX]-[invariant-name].md`
   - SOURCE_TEMPLATES: `templates/business-rules.md` and `templates/invariants.md` (MUST call `read_file` before writing)
+- ESCAPE_HATCH: Never silently omit or invent template sections or any of the 3 required Mermaid diagrams. If a technical note subsection genuinely does not apply (e.g., `HTTP Endpoint` for a cron-triggered flow), preserve the heading and write `"N/A — [1-line rationale]"`.
 </output_contract>
 
 > **Paths**: the locations shown are the pack defaults; if `.sdlc/config.json` exists (written by `/setup-sdlc`), honour its `docsRoot` / `productDocsDir` / `adrDir` overrides.
@@ -228,12 +229,11 @@ Once the flow specification document (`journey-XX-[name].md`) is created and app
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — return to the failed step and fix the violation first:
-- [ ] **Template Read Verified:** `read_file` was called on `templates/flows.md` (and `templates/business-rules.md` / `templates/invariants.md` for extracted rules) before writing.
-- [ ] **Schema Compliance Verified:** Generated flow doc matches `templates/flows.md` headings and section order verbatim.
-- [ ] **3 Mermaid Diagrams Verified:** Sequence diagram (with green happy-path and red error `rect` blocks), Flowchart, and State diagram are all embedded in the flow doc and aligned with the Step-by-Step Walkthrough table.
-- [ ] **BR/INV Extraction & Traceability Verified:** Governing `BR-XXX` and `INV-XXX` files created/updated in their owning bounded context with complete bidirectional `Traceability` (`Traces up to`, `Enforced by`, `Verified by`).
-- [ ] **Master Index Updated:** `docs/product/flows/README.md` (or repo index) updated with the new/modified flow.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — return to the failed step and fix the violation first:
+- [ ] **Template Read Evidence:** Exact `templates/flows.md`, `templates/business-rules.md`, and `templates/invariants.md` paths passed to `read_file`: `<paths>`
+- [ ] **Flow Output & 3-Diagram Evidence:** Exact flow doc path written and step counts matched across Sequence Diagram, Flowchart, State Diagram, and Step-by-Step Walkthrough table: `<path, N steps>`
+- [ ] **BR/INV Extraction & Traceability Evidence:** List all `BR-XXX` and `INV-XXX` files created/updated in their owning bounded context with bidirectional `Traceability` (`Traces up to`, `Enforced by`, `Verified by`): `<BR/INV paths>`
+- [ ] **Master Index Evidence:** Exact index file (`docs/product/flows/README.md` or equivalent) updated via `edit_file`: `<path>`
 </self_validation_gate>
 
 ---

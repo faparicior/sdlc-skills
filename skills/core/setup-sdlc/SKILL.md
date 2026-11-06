@@ -17,13 +17,14 @@ Step 3-5: Initialize  -> write_file / mkdir / cp guidelines                   ->
 </state_machine>
 
 <execution_invariants>
-1. INTERACTIVE CONFIRMATION: Confirm the 5 directory paths with the developer before writing `.sdlc/config.json`.
+1. INTERACTIVE CONFIRMATION: Confirm the 5 directory paths with the developer before writing `.sdlc/config.json` (unless the user explicitly requested default/unattended initialization in their prompt).
 2. GUIDELINE COPY RULE: Copy `business-rules-vs-invariants.md`, `flow-documentation-structure.md`, and `adr-naming-conventions.md` into the target `guidelinesDir`, but NEVER copy `traceability.md` or `execution-protocol.md` (they remain in the skills pack).
 </execution_invariants>
 
 <output_contract>
 - TARGET_CONFIG: `.sdlc/config.json` conforming to `schemas/sdlc-config.schema.json`
 - TARGET_DIRECTORIES: `docs/inception/`, `docs/user-story-mapping/`, `docs/product/bounded-contexts/`, `docs/product/guidelines/`, `docs/product/working-on/active/`, `docs/product/working-on/grace-period/`, `docs/adr/` (or user-configured equivalents)
+- ESCAPE_HATCH: If any target directory already exists with files, preserve existing files untouched and report them in the summary.
 </output_contract>
 
 Configure your repository to use the full Spec-Driven, DDD & TDD Software Development Life Cycle (SDLC).
@@ -82,8 +83,8 @@ Configure your repository to use the full Spec-Driven, DDD & TDD Software Develo
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — fix the violation first:
-- [ ] **User Confirmation Verified:** Directory paths were confirmed with the developer before writing `.sdlc/config.json`.
-- [ ] **Config & Directories Verified:** `.sdlc/config.json` and the required SDLC directories were created.
-- [ ] **Guideline Copy Rule Verified:** `traceability.md` and `execution-protocol.md` were NOT copied into the target repository's `docs/product/guidelines/`.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — fix the violation first:
+- [ ] **User Confirmation Evidence:** Confirm developer approved the 5 paths (or halted at Step 2 waiting for answers): `<status>`
+- [ ] **Config & Directories Evidence:** Exact `.sdlc/config.json` path written and list of directories created: `<paths>`
+- [ ] **Guideline Copy Evidence:** List the 3 guideline files copied to `guidelinesDir` and confirm `traceability.md` & `execution-protocol.md` were excluded: `<3 files copied>`
 </self_validation_gate>

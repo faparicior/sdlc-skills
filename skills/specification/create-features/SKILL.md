@@ -23,7 +23,7 @@ Step 5: Review Gate   -> present summary & Lack of Information Log     -> User r
 
 <execution_invariants>
 1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to analyze flows, concurrency, and cross-context invariants, but you are strictly forbidden from skipping, reordering, or merging steps (`workflow structure = immutable | step reasoning = flexible`).
-2. STOP GATES ARE ABSOLUTE: After generating feature specification file(s) in Step 4/5, you MUST halt your turn immediately and wait for user approval before invoking `/create-entity-lifecycle` or `/implement-flow`.
+2. STOP GATES ARE ABSOLUTE (WITH EXPLICIT BATCH OVERRIDE): After generating feature specification file(s) in Step 4/5, you MUST halt your turn immediately and wait for user approval before invoking `/create-entity-lifecycle` or `/implement-flow` — unless the user explicitly requested unattended batch execution in their prompt.
 3. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory is strictly forbidden. You MUST call `read_file` on `templates/feature-specification.md` before writing any feature specification file.
 4. STRICT OUTPUT LOCATION: Save feature specifications exclusively under `docs/product/working-on/active/[change]/features/feature-NN-[name].md` (or `.sdlc/config.json` override), NEVER in the living `bounded-contexts/` tree.
 </execution_invariants>
@@ -32,6 +32,7 @@ Step 5: Review Gate   -> present summary & Lack of Information Log     -> User r
 - TARGET_PATH: `docs/product/working-on/active/[change]/features/feature-NN-[name].md`
 - SOURCE_TEMPLATE: `templates/feature-specification.md` (MUST call `read_file` before writing)
 - SCHEMA_INVARIANCE: Preserve every H1/H2/H3 section heading, metadata field, requirement ID format (`F[X]-R[Y]`), HTTP Error Contract table, Concurrency/TOCTOU table, Layer Scope, and `🧠 Agent Design Decisions & Assumptions` table verbatim.
+- ESCAPE_HATCH: Never silently omit or invent template sections. If a section genuinely does not apply to a slice (e.g., `HTTP Error Contract` for an internal cron/queue worker), preserve the heading and write `"N/A — [1-line rationale]"`, or halt and ask the user before deviating.
 </output_contract>
 
 > **Paths**: the locations shown are the pack defaults; if `.sdlc/config.json` exists (written by `/setup-sdlc`), honour its `docsRoot` / `productDocsDir` / `adrDir` overrides.
@@ -165,12 +166,9 @@ For each feature slice, conduct a thorough technical analysis:
 ---
 
 <self_validation_gate>
-Before ending your turn, verify every item below. If any checkbox is FALSE, DO NOT produce your final response — return to the failed step and fix the violation first:
-- [ ] `Step 1` executed: Target flow spec, `AGENTS.md`/`CLAUDE.md`, architecture docs, and ADRs read.
-- [ ] `Step 2` executed: Edge cases, concurrency/TOCTOU risks, and active invariants (`INV-*` across **all** bounded contexts) cross-checked.
-- [ ] `Step 3` executed: Functional/non-functional requirements (`F[X]-R[Y]`) and HTTP Error Contract table defined.
-- [ ] **Template Read Verified:** `read_file` was called on `templates/feature-specification.md` before writing.
-- [ ] **Path Compliance Verified:** Files saved strictly under `docs/product/working-on/active/[change]/features/feature-NN-[name].md` (never in living `bounded-contexts/`).
-- [ ] **Schema Compliance Verified:** Output conforms 100% to `templates/feature-specification.md` with all sections and tables intact.
-- [ ] **Halt Gate Respected:** Turn stops at Step 5 for user review without writing production code.
+Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — return to the failed step and fix the violation first:
+- [ ] **Step 1 & 2 Grounding Evidence:** List the flow doc, `AGENTS.md`, ADRs, and cross-context `INV-*` files read via `read_file`: `<paths>`
+- [ ] **Template Read Evidence:** Exact path passed to `read_file` (`templates/feature-specification.md`): `<path>`
+- [ ] **Output & Schema Evidence:** Exact `docs/product/working-on/active/[change]/features/feature-NN-[name].md` path(s) written, number of `F[X]-R[Y]` requirements defined, and any `"N/A — [rationale]"` section noted: `<paths, N requirements>`
+- [ ] **Halt Gate Evidence:** Confirm turn stops at Step 5 for user review with 0 production code edits (or cite explicit user batch override): `<0 code edits>`
 </self_validation_gate>

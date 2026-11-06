@@ -19,8 +19,8 @@ Welcome! You are working on the `sdlc-skills` repository, which houses the unive
 - Skills must remain modular, decoupled from any single proprietary codebase, and configurable via `.sdlc/config.json`.
 - **Level 3 Execution Protocol (`guidelines/execution-protocol.md`)**:
   - Every workflow/template-producing skill MUST open with XML control-plane blocks (`<state_machine>`, `<execution_invariants>`, `<output_contract>`) that enforce `workflow structure = immutable | step reasoning = flexible`.
-  - Every reference to a file in `templates/*.md` MUST be locked inside `<output_contract>` requiring an explicit `read_file` tool call on the template before generating output (never reconstructing templates from prose or memory).
-  - Multi-stage skills MUST enforce explicit `🛑 HALT TURN` boundaries and end with a `<self_validation_gate>` self-audit block so reasoning models (GPT-6.x / Terra / Sol, Claude, Gemini) cannot skip steps or improvise formats.
+  - Every reference to a file in `templates/*.md` MUST be locked inside `<output_contract>` requiring an explicit `read_file` tool call on the template before generating output (never reconstructing templates from prose or memory), plus an explicit `ESCAPE_HATCH` (`"N/A — [1-line rationale]"` or ask the user; never silently omit or invent sections).
+  - Multi-stage skills MUST enforce explicit `🛑 HALT TURN` boundaries (with an explicit fast-track override when the user requests batch/Light execution) and end with an **evidence-based** `<self_validation_gate>` block that requires citing exact tool calls, file paths, and section counts rather than passive boolean checkboxes.
 
 ## Verifying Skills
 
