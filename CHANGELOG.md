@@ -1,5 +1,14 @@
 # sdlc-skills
 
+## 0.4.1
+
+### Patch Changes
+
+- Add Greenfield maturity status and anti-hallucination execution invariants to create-flow-documentation skill and template:
+  - Add `EARNED STATUS & GREENFIELD TRUTH INVARIANT` (Invariant 3) and `NO PROACTIVE BUSINESS DECISIONS` (Invariant 4) to `<execution_invariants>` in `create-flow-documentation/SKILL.md`.
+  - Add `Maturity & Greenfield Evidence` check to `<self_validation_gate>`.
+  - Add `Maturity Status` metadata badge (`⏳ Planned` | `⚠️ In Progress` | `✅ Built`) and instructions for handling unmodeled entities and tentative technical notes in `templates/flows.md`.
+
 ## 0.4.0
 
 ### Minor Changes
