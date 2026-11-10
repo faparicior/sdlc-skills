@@ -2,6 +2,9 @@
 
 <!--
 AI AGENT INSTRUCTIONS (Strip all HTML comments in the delivered document):
+- Greenfield vs Brownfield:
+  - If code or entity docs already exist: verify them with read_file before documenting (Earned Status: ✅ Built).
+  - If Greenfield (new feature / no code): set "Maturity Status: ⏳ Planned (Proposed Design)". DO NOT hallucinate concrete DB columns, tables, or production schemas as established facts. Mark unmodeled entities as "⏳ Planned — Pending Phase 2c modeling" and technical notes as "⏳ Proposed Contract (Draft)".
 - Review the project's Architecture Decision Records (ADRs) to ensure alignment:
   - Entity mutations use domain methods rather than direct property setters
   - State transitions match entity lifecycle state machine
@@ -11,13 +14,14 @@ AI AGENT INSTRUCTIONS (Strip all HTML comments in the delivered document):
 -->
 
 ## 📋 Overview
+* **Maturity Status:** [⏳ Planned (Proposed Design) | ⚠️ In Progress | ✅ Built (Verified against code)]
 * **As a:** [User Role / Persona]
 * **I want to:** [Action they want to take]
 * **So that:** [The value or outcome they receive]
 * **Source:** Inception Step 5 - User Journey Mapping (Journey [X])
 * **Related Feature:** [Feature Name] from Wave [X] ([MVP/Phase])
 * **Impacted Entities:** 
-  * [Entity Name 1](../entities/entity-name-1.md) (e.g., `Order` changes from `Draft` -> `Pending`)
+  * [Entity Name 1](../entities/entity-name-1.md) (e.g., `Order` changes from `Draft` -> `Pending`) <!-- If entity doc does not exist yet: Entity Name 1 (⏳ Planned — to be modeled in Phase 2c) -->
   * [Entity Name 2](../entities/entity-name-2.md) (e.g., `Inventory` item quantity decrements)
 * **Bounded Context:** [Bounded Context Name]
 
@@ -200,6 +204,12 @@ stateDiagram-v2
 
 ## 🛠️ Technical Notes & Validation Rules
 
+<!--
+AI AGENT INSTRUCTIONS FOR TECHNICAL NOTES:
+- BROWNFIELD (Code exists): Verify real routes, schemas, and entities with read_file before documenting.
+- GREENFIELD (New/unimplemented feature): Label technical notes explicitly as tentative design proposals (e.g., `⏳ Proposed Contract (Draft)`). DO NOT assert fictitious DB tables, columns, or schemas as established facts. If specific DB constraints or tables are unknown at flow time, preserve the heading and write "N/A — Database schema to be defined during Phase 2c (create-entity-lifecycle) / Phase 3".
+-->
+
 ### API Endpoint / Interface Specification
 
 ```
@@ -265,6 +275,7 @@ Response: 201 Created
 ### Implementation & tests
 
 *Concrete entry points, so a reader changing a rule above can find what to edit.*
+<!-- If Greenfield (not yet implemented in code), mark rows as "⏳ Planned — <expected-path>" instead of asserting existing files -->
 
 | Concern | Where |
 | ------- | ----- |

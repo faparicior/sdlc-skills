@@ -23,8 +23,10 @@ Step 4: Update Index  -> edit_file (flows/README.md)                        -> U
 <execution_invariants>
 1. WORKFLOW IMMUTABILITY: You may reason freely INSIDE each step to map user actions, backend reactions, and entity state transitions, but you are strictly forbidden from skipping steps, omitting any of the 3 required Mermaid diagrams, or improvising document structure (`workflow structure = immutable | step reasoning = flexible`).
 2. TEMPLATE LOCK: Reconstructing template headers or tables from internal memory is strictly forbidden. You MUST call `read_file` on `templates/flows.md`, `templates/business-rules.md`, and `templates/invariants.md` before generating those files.
-3. BIDIRECTIONAL TRACEABILITY: Every governing `BR-XXX` and `INV-XXX` must be extracted to its owning bounded context with both ends of the `Traceability` section completed (`../guidelines/traceability.md`).
-4. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
+3. EARNED STATUS & GREENFIELD TRUTH INVARIANT: If the flow represents new or unimplemented functionality (Greenfield), or references entities/endpoints that do not exist yet in code or in `docs/product/bounded-contexts/`, you are strictly forbidden from hallucinating concrete database tables, column schemas, DTOs, or existing paths as established facts. You MUST set `Maturity Status: ⏳ Planned (Proposed Design)` in the Overview, mark unmodeled entities as `[EntityName] (⏳ Planned — Pending Phase 2c modeling)`, and treat technical notes as tentative design drafts (`⏳ Proposed Contract`). If database constraints or schemas are not yet known, write `"N/A — Database schema to be defined during Phase 2c / Phase 3"`. Only mark items `✅ Built` if verified by reading real code with `read_file`.
+4. NO PROACTIVE BUSINESS DECISIONS: If an open question, missing payload field, or business ambiguity exists that was not in the source journey/USM/PRD, do not silently invent the rule or data structure. Record it in an Open Questions note or ask the user.
+5. BIDIRECTIONAL TRACEABILITY: Every governing `BR-XXX` and `INV-XXX` must be extracted to its owning bounded context with both ends of the `Traceability` section completed (`../guidelines/traceability.md`).
+6. ESCAPE HATCH: If the situation does not fit the contract, do not silently improvise and do not force-fit: declare the deviation in one line and ask.
 </execution_invariants>
 
 <output_contract>
@@ -232,6 +234,7 @@ Once the flow specification document (`journey-XX-[name].md`) is created and app
 <self_validation_gate>
 Before ending your turn, verify every item below with concrete evidence (not just a checkmark). If any item cannot be cited with real evidence from this turn, DO NOT produce your final response — return to the failed step and fix the violation first:
 - [ ] **Template Read Evidence:** Exact `templates/flows.md`, `templates/business-rules.md`, and `templates/invariants.md` paths passed to `read_file`: `<paths>`
+- [ ] **Maturity & Greenfield Evidence:** State whether this flow is `Greenfield (⏳ Planned)` or `Brownfield (✅ Built)`. If Greenfield, confirm unmodeled entities are labeled `⏳ Planned`, technical notes are marked as proposed drafts, and no phantom code/DB structures are asserted as existing: `<status & evidence>`
 - [ ] **Flow Output & 3-Diagram Evidence:** Exact flow doc path written and step counts matched across Sequence Diagram, Flowchart, State Diagram, and Step-by-Step Walkthrough table: `<path, N steps>`
 - [ ] **BR/INV Extraction & Traceability Evidence:** List all `BR-XXX` and `INV-XXX` files created/updated in their owning bounded context with bidirectional `Traceability` (`Traces up to`, `Enforced by`, `Verified by`): `<BR/INV paths>`
 - [ ] **Master Index Evidence:** Exact index file (`docs/product/flows/README.md` or equivalent) updated via `edit_file`: `<path>`
