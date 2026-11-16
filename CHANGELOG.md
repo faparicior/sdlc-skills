@@ -1,5 +1,12 @@
 # sdlc-skills
 
+## 0.4.2
+
+### Patch Changes
+
+- Declare explicit `skills` array in `.claude-plugin/plugin.json`:
+  - Enumerate all 19 skill directory paths explicitly (`./skills/<category>/<skill-name>`) to ensure native auto-discovery and loading by Claude Code when installed as a plugin from the marketplace, preserving the logical categorized directory layout.
+
 ## 0.4.1
 
 ### Patch Changes
