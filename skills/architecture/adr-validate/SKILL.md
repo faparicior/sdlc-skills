@@ -42,7 +42,8 @@ Locate the file in `docs/adr/` specified by the user (or prompt for the path if 
 - [ ] Date field present (`YYYY-MM-DD` format).
 - [ ] Decision makers identified.
 - [ ] `Supersedes` / `Amended By` (or `Amends`) fields completed with two-way links where applicable.
-- [ ] ADR follows standard template structure and 3-digit sequential numbering (`0XX`).
+- [ ] ADR follows one of the two standard templates (`TEMPLATE-STRUCTURAL.md` or `TEMPLATE-PROBLEM-DRIVEN.md` in `adr-create`) with every heading of that template present, and 3-digit sequential numbering (`0XX`).
+- [ ] `## Summary` table is present and agrees with the rest of the ADR.
 
 #### Criteria 2: Context & Problem Statement (Weight: 20%)
 - [ ] Context is clear and unbiased (value-neutral).
@@ -50,6 +51,8 @@ Locate the file in `docs/adr/` specified by the user (or prompt for the path if 
 - [ ] References specific pain points or constraints.
 - [ ] Decision drivers are explicitly stated.
 - [ ] Links back to inception artifacts or business requirements.
+- [ ] Problem-driven ADR: `### Measurements` cites source, period and date for every figure, and figures quoted elsewhere (Summary, comparison table) match it.
+- [ ] Structural ADR: every rule in `### Enforceable Rules` names its verifier, or is marked `— manual review` with a reason.
 
 #### Criteria 3: Options & Analysis (Weight: 20%)
 - [ ] At least 2–3 viable alternatives considered.

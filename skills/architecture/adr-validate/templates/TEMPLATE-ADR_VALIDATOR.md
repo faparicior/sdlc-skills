@@ -30,7 +30,8 @@ This validator assesses the quality of Architecture Decision Records (ADRs) agai
 - [ ] Date field present (YYYY-MM-DD format)
 - [ ] Decision makers identified
 - [ ] Supersedes/Amended By fields completed (even if N/A)
-- [ ] ADR follows standard template structure
+- [ ] ADR follows one of the two standard templates (structural or problem-driven) with every heading present
+- [ ] `## Summary` table is present and agrees with the rest of the ADR
 
 **Scoring:**
 - **High:** All metadata fields complete and correct
@@ -55,6 +56,8 @@ This validator assesses the quality of Architecture Decision Records (ADRs) agai
 - [ ] References specific pain points or constraints
 - [ ] Decision drivers are explicitly stated
 - [ ] Links back to inception artifacts or business requirements
+- [ ] Problem-driven ADR: Measurements cite source, period and date, and quoted figures match across sections
+- [ ] Structural ADR: every enforceable rule names its verifier or is marked as manual review with a reason
 
 **Scoring:**
 - **High:** Context is crystal clear, problem well-defined, drivers explicit
